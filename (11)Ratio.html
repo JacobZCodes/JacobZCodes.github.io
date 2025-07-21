@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ratio Test Interactive</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <style>
+    @font-face {
+      font-family: 'TangoSans_Bold';
+      src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+    }
+    body {
+      background-color: #000;
+      color: #00ccff;
+      font-family: 'TangoSans_Bold', sans-serif;
+      text-align: center;
+      padding: 2em;
+    }
+
+    h2 {
+      text-align: center;
+      color: #00ccff;
+    }
+
+    label {
+      display: block;
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 1em;
+    }
+
+    input[type="range"] {
+      display: block;
+      margin: 0 auto 2em auto;
+      width: 60%;
+    }
+
+
+      input[type="text"] {
+        background-color: #111;
+        /* dark input background */
+        color: #00ccff;
+        /* cyan text color */
+        border: 1px solid #00ccff;
+        /* cyan border */
+        border-radius: 4px;
+        /* rounded corners */
+        padding: 10px 12px;
+        font-size: 16px;
+        width: 20%;
+        height: 5px;
+        box-shadow: 0 0 8px #00ccff33;
+        /* subtle cyan glow */
+        outline: none;
+        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        position: relative;
+        bottom: 30px;
+        left: 70px;
+      }
+
+      input[type="text"]:focus {
+        border-color: #33ffff;
+        box-shadow: 0 0 12px #33ffff;
+      }    .case-container {
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      flex-wrap: wrap;
+      /* opacity: 0; */
+    }
+
+    .case-box {
+      border: 2px solid #00ccff;
+      border-radius: 10px;
+      padding: 1.5em;
+      background-color: #111;
+      width: 320px;
+      box-sizing: border-box;
+      font-size: 18px;
+      line-height: 1.6em;
+      opacity: 0;
+    }
+
+    .case-box strong {
+      color: #88ff00;
+    }
+
+    .case-box em {
+      color: #ff4444;
+    }
+
+    .ratio-output {
+      margin-top: 1em;
+      font-size: 16px;
+      color: #00ccff;
+    }
+
+    .student-output {
+      z-index: 10px;
+      position: relative;
+      bottom: 30px;
+    }
+
+    button {
+      margin-top: 1em;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+      background-color: #00ccff;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      /* animation: fadeIn 1s forwards; */
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00ccff;
+      /* animation: fadeIn 1s forwards; */
+    }
+
+    button:active {
+      transform: scale(0.95);
+      /* animation: fadeIn 1s forwards; */
+    }  
+    .next-lesson {
+  width: 300px;
+  padding: 18px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 8px; /* make it rectangular instead of round */
+  margin-top: 4rem;   /* space it further down */
+  opacity: 0;
+
+}
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+</head>
+<body>
+  <h2>Ratio Test</h2>
+  <h3>The ratio test allows us to quickly identify the end behavior of a series by comparing the ratio of successive terms,
+      \(a_{n+1}, a_n\) as n grows infinitely large. There are three cases of this comparison.
+
+  </h3>
+
+  <div id="slider-container" style="opacity: 0;">
+    <label for="n-slider">Choose \( n \): <span id="n-value">1</span></label>
+    <input type="range" id="n-slider" min="1" max="150" value="1" />
+  </div>
+
+  <div class="case-container">
+    <!-- CASE I -->
+    <div id="top1" class="case-box">
+      Let \( a_n = \frac{2^n}{n!} \)<br>
+      <div class="ratio-output" id="out1"></div>
+    </div>
+
+    <!-- CASE II -->
+    <div id="top2" class="case-box">
+      Let \( a_n = n! \)<br>
+      <div class="ratio-output" id="out2"></div>
+    </div>
+
+    <!-- CASE III -->
+    <div id="top3" class="case-box">
+      Let \( a_n = \frac{1}{n} \)<br>
+      <div class="ratio-output" id="out3"></div>
+    </div>
+  </div>
+
+  <!-- STUDENT INPUTS HERE -->
+  <div class="case-container">
+    <!-- CASE I -->
+    <div id="bot1" class="case-box">
+      Let \( a_n = \frac{2^n}{n!} \)<br>
+      <input type="text" id="input4">
+      <div class="ratio-output student-output" id="out4"></div>
+      <button id="btn-out4">Submit</button>
+    </div>
+
+    <!-- CASE II -->
+    <div id="bot2" class="case-box">
+      Let \( a_n = n! \)<br>
+      <input type="text" id="input5">      
+      <div class="ratio-output student-output" id="out5"></div>
+      <button id="btn-out5">Submit</button>
+    </div>
+
+    <!-- CASE III -->
+    <div id="bot3" class="case-box">
+      Let \( a_n = \frac{1}{n} \)<br>
+      <input type="text" id="input6">      
+      <div class="ratio-output student-output" id="out6"></div>
+      <button id="btn-out6">Submit</button>
+    </div>
+  </div>
+  <div>
+    <button id="nl" class="next-lesson" onclick="window.location.href=`(12)PowerSeries.html`">Next Lesson</button>
+  </div>
+  <script>
+    alert("If you see no buttons, push 'Enter' to progress");
+    let hasHitEnter = false;
+    document.addEventListener('keydown', function(event) {
+      if (event.key == "Enter") {
+        if (!hasHitEnter) {
+          console.log("calling");
+          fadeIn(document.getElementById("slider-container"));
+          fadeIn(document.getElementById("top1"));
+          fadeIn(document.getElementById("bot1"));
+          hasHitEnter = true;
+        }
+
+      }
+    }) 
+    let input4 = document.getElementById("input4");
+    let input5 = document.getElementById("input5");
+    let input6 = document.getElementById("input6");
+    let btn_out4 = document.getElementById("btn-out4");
+    let btn_out5 = document.getElementById("btn-out5");
+    let btn_out6 = document.getElementById("btn-out6");
+
+    let revealOut4Inequality = false;
+    let revealOut5Inequality = false;
+    let revealOut6Inequality = false;
+
+    let out4_function;
+    let out5_function;
+    let out6_function;
+    btn_out4.addEventListener("click", function() {
+      out4_function = returnInputStringAsFunction(input4.value);
+      console.log("Function, ", out4_function);
+     
+      // if function valid
+      if (isConvergingAbsolutely(out4_function)) {
+        revealOut4Inequality = true;
+        makeButtonRight(btn_out4,"Converges Absolutely");
+        let n = nVal.textContent;
+        let num = out4_function(n+1);
+        let denom = out4_function(n);
+        let r4 = num / denom;
+        let n_1 = parseInt(n) + 1;
+        let inequalityToShow = `$$0 \\leq \\left| \\frac{a_{${n_1}}}{a_${n}} \\right| = \\textcolor{#00ccff}{${r4.toFixed(4)}} < 1$$`;
+        out4.innerHTML = inequalityToShow;
+        MathJax.typeset();
+      
+
+        // reveal next stuff
+        fadeIn(document.getElementById("top2"));
+        fadeIn(document.getElementById("bot2"));
+      }
+        // show inequality
+        // remove submit button
+      // else
+      else {
+        makeButtonWrong(btn_out4);
+      }
+        // turn button red
+    })
+
+    btn_out5.addEventListener("click", function() {
+      out5_function = returnInputStringAsFunction(input5.value);
+     
+      // if function valid
+      if (isDiverging(out5_function)) {
+        revealOut5Inequality = true;
+        console.log("about to fire");
+        makeButtonRight(btn_out5,"Diverges");
+        // reveal next stuff
+        fadeIn(document.getElementById("top3"));
+        fadeIn(document.getElementById("bot3")); 
+        let n = nVal.textContent;
+        let num = out5_function(n+1);
+        let denom = out5_function(n);
+        let r5 = num / denom;
+        let n_1 = parseInt(n) + 1;
+        let inequalityToShow = `$$\\left| \\frac{a_{${n_1}}}{a_${n}} \\right| = \\color{#00ccff}{${r5.toFixed(4)}} > 1 $$`;
+        out5.innerHTML = inequalityToShow;
+        MathJax.typeset();
+      }
+        // show inequality
+        // remove submit button
+      // else
+      else {
+
+        makeButtonWrong(btn_out5);
+      }
+    })
+
+    btn_out6.addEventListener("click", function() {
+      console.log("we go clicked");
+      out6_function = returnInputStringAsFunction(input6.value);
+     
+      // if function valid
+      if (isInconclusive(out6_function)) {
+        revealOut6Inequality = true;
+        makeButtonRight(btn_out6,"Inconclusive");
+                let n = nVal.textContent;
+
+        let num = out6_function(n+1);
+        let denom = out6_function(n);
+        let r6 = num / denom;
+                let n_1 = parseInt(n) + 1;
+
+        let inequalityToShow = `$$\\left| \\frac{a_{${n_1}}}{a_${n}} \\right| =\\color{#00ccff}{${r6.toFixed(4)}} = 1$$`;
+        out6.innerHTML = inequalityToShow;
+        // show next lesson btn
+        fadeIn(document.getElementById("nl"));
+        
+        MathJax.typeset();
+      }
+        // show inequality
+        // remove submit button
+      // else
+      else {
+
+        makeButtonWrong(btn_out6);
+      }
+    })
+
+    function makeButtonWrong(btn) {
+      btn.innerText = "Try Again";
+      btn.style.color = "red";
+    }
+
+    function makeButtonRight(btn, text) {
+      btn.innerText = text;
+      btn.style.color = "green";
+      btn.disabled = true;
+    }    
+    
+    function fadeIn(el) {
+    el.style.opacity = "0";    
+
+el.style.animation = "fadeIn 0.6s forwards";
+}
+    const slider = document.getElementById("n-slider");
+    const nVal = document.getElementById("n-value");
+
+    
+    function isConvergingAbsolutely(f) {
+      let numerator = f(151);
+      let denominator = f(150);
+      let quotientResult = numerator/denominator
+      if (quotientResult < 0.99) {
+        return true
+      }
+      return false
+    }
+
+    function isDiverging(f) {
+      let numerator = f(151);
+      let denominator = f(150);
+      let quotientResult = numerator/denominator
+      if (quotientResult > 1) {
+        return true
+      }
+      return false    }
+    
+    function isInconclusive(f) {
+      let numerator = f(151);
+      let denominator = f(150);
+      let quotientResult = numerator/denominator
+      if (quotientResult > 0.99 && quotientResult < 1.005) {
+        return true
+      }
+      return false      
+    }    
+    function returnInputStringAsFunction(inputString) {
+      console.log("reading: ", inputString);
+      return new Function("n", `return ${inputString};`);
+    }
+    function factorial(k) {
+      return k <= 1 ? 1 : k * factorial(k - 1);
+    }
+
+    function updateAll(n) {
+      nVal.textContent = n;
+
+      // CASE I: a_n = 2^n / n!
+      let a1 = Math.pow(2, n) / factorial(n);
+      let a1p = Math.pow(2, n + 1) / factorial(n + 1);
+      let r1 = a1p / a1;
+      document.getElementById("out1").innerHTML =
+      `$$0 \\leq \\left| \\frac{a_{${n + 1}}}{a_${n}} \\right| = \\textcolor{#00ccff}{${r1.toFixed(4)}} < 1$$`;
+      document.getElementById("out1").innerHTML += `Converges Absolutely`;
+
+
+      // CASE II: a_n = 2^n
+      let a2 = factorial(n);
+      let a2p = factorial(n+1);
+      let r2 = a2p / a2;
+      document.getElementById("out2").innerHTML =
+        `$$\\left| \\frac{a_{${n + 1}}}{a_${n}} \\right| = \\color{#00ccff}{${r2.toFixed(4)}} > 1 $$`;
+        document.getElementById("out2").innerHTML +=
+        `Diverges`;
+
+      // CASE III: a_n = 1/n
+      let a3 = 1 / n;
+      let a3p = 1 / (n + 1);
+      let r3 = a3p / a3;
+      document.getElementById("out3").innerHTML =
+        `$$\\left| \\frac{a_{${n + 1}}}{a_${n}} \\right| =\\color{#00ccff}{${r3.toFixed(4)}} = 1$$`;
+
+      document.getElementById("out3").innerHTML +=
+        `Inconclusive`;
+
+      if (revealOut4Inequality) {
+        let num = out4_function(n+1);
+        let denom = out4_function(n);
+        let r4 = num / denom;
+        let inequalityToShow = `$$0 \\leq \\left| \\frac{a_{${n + 1}}}{a_${n}} \\right| = \\textcolor{#00ccff}{${r4.toFixed(4)}} < 1$$`;
+        out4.innerHTML = inequalityToShow;
+      }
+
+      if (revealOut5Inequality) {
+        let num = out5_function(n+1);
+        let denom = out5_function(n);
+        let r5 = num / denom;
+        let inequalityToShow = `$$\\left| \\frac{a_{${n + 1}}}{a_${n}} \\right| = \\color{#00ccff}{${r5.toFixed(4)}} > 1 $$`;
+        out5.innerHTML = inequalityToShow;
+      }      
+      if (revealOut6Inequality) {
+        let num = out6_function(n+1);
+        let denom = out6_function(n);
+        let r6 = num / denom;
+        let inequalityToShow = `$$\\left| \\frac{a_{${n + 1}}}{a_${n}} \\right| =\\color{#00ccff}{${r3.toFixed(4)}} = 1$$`;
+        out6.innerHTML = inequalityToShow;
+      }      
+      
+      // out4.innerHTML = `$$\\left| \\frac{a_{${n + 1}}}{a_${n}} \\right| =\\color{#00ccff}{${r3.toFixed(4)}} = 1$$`;
+      // out4.innerHTML += `<button id="btn-out4" type="submit">Submit</button>`;
+
+      // out5.innerHTML = `$$\\left| \\frac{a_{${n + 1}}}{a_${n}} \\right| =\\color{#00ccff}{${r3.toFixed(4)}} = 1$$`;
+      // out5.innerHTML += `out5`;      
+      
+      // out6.innerHTML = `$$\\left| \\frac{a_{${n + 1}}}{a_${n}} \\right| =\\color{#00ccff}{${r3.toFixed(4)}} = 1$$`;
+      // out6.innerHTML += `out6`;
+        
+        
+      MathJax.typesetPromise();
+    }
+
+    slider.addEventListener("input", () => updateAll(parseInt(slider.value)));
+    updateAll(parseInt(slider.value)); // Initial render
+  </script>
+</body>
+</html>

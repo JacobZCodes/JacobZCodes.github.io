@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Integral Test</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ['$', '$'],
+            ['\\(', '\\)']
+          ]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <style>
+    @font-face {
+      font-family: 'TangoSans_Bold';
+      src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+    }
+    body {
+      background-color: #000;
+      color: #00ccff;
+      font-family: 'TangoSans_Bold', sans-serif;
+      text-align: center;
+      padding: 2em;
+    }
+
+
+      h2,
+      h3 {
+        color: #00ccff;
+      }
+
+      #plots-container {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+
+      .plot-box {
+        flex: 1 1 45%;
+        min-width: 300px;
+        border: 1px solid #00ccff;
+        background-color: #111;
+        padding: 1em;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #00ccff44;
+      }
+
+      #animate-button {
+        margin-top: 30px;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #000;
+        background-color: #00ccff;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+      }
+
+      #animate-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px #00ccff;
+      }
+
+      #animate-button:active {
+        transform: scale(0.95);
+      }
+
+      p {
+        color: #00ccff;
+      }
+
+      em {
+        color: #66ddee;
+      }
+
+     
+      #inequality2 {
+        margin-top: 1em;
+        font-size: 18px;
+      }
+
+      .height-input {
+        width: 35px;
+      }
+
+      .width-input {
+        width: 20px;
+      }    
+      
+      .heights {
+        opacity: 0;
+      }
+
+      .widths {
+        opacity: 0;
+      }
+
+  button {
+    margin-top: 1em;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    background-color: #00ccff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00ccff;
+  }
+
+  button:active {
+    transform: scale(0.95);
+  }
+      
+      </style>
+  </head>
+  <body>
+    <h2>Integral Test</h2>
+    <div id="plots-container">
+      <div class="plot-box">
+        <div style="position: relative; text-align: center;">
+          <!-- Explanation box floats far left -->
+          <div id="explanation-box" style="
+            display: none;
+            position: absolute;
+            left: -5px;  /* Push far to the left */
+            z-index: 10;
+            top: 0;
+            border: 1px solid #00ccff;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #111;
+            color: #00ccff;
+            max-width: 250px;
+            text-align: left;
+          ">
+            <p id="explanation-text" style="margin: 0;"></p>
+          </div>
+        </div>
+        <h3 id="plot1-title" style="margin: 0; max-width: 600px; display: inline-block"> 
+          The integral test allows us to use integrals to help us classify series. 
+          Let us examine the series \(\sum_{n=1}^\infty\frac{1}{n}\). We'll plot the first 6 terms of the series. </h3>
+        <div style="position: relative;">
+            <div id="plot1"></div>
+            <div id="heights1" class="heights">
+              <input class="height-input" type="text" id="a1" placeholder="" style="
+              position: absolute;
+              top: 180px;    /* adjust this */
+              left: 150px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">
+              <input class="height-input" type="text" id="a2" placeholder="" style="
+              position: absolute;
+              top: 240px;    /* adjust this */
+              left: 230px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">
+              <input class="height-input" type="text" id="a3" placeholder="" style="
+              position: absolute;
+              top: 260px;    /* adjust this */
+              left: 305px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">
+              <input class="height-input" type="text" id="a4" placeholder="" style="
+              position: absolute;
+              top: 275px;    /* adjust this */
+              left: 375px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">
+              <input class="height-input" type="text" id="a5" placeholder="" style="
+              position: absolute;
+              top: 280px;    /* adjust this */
+              left: 450px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">        
+            </div>
+          <div id="widths1" class="widths">
+              <input class="width-input" type="text" id="width-a1" placeholder="" style="
+              position: absolute;
+              top: 320px;    /* adjust this */
+              left: 170px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">
+              <input class="width-input" type="text" id="width-a2" placeholder="" style="
+              position: absolute;
+              top: 320px;    /* adjust this */
+              left: 245px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">
+              <input class="width-input" type="text" id="width-a3" placeholder="" style="
+              position: absolute;
+              top: 320px;    /* adjust this */
+              left: 320px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">
+              <input class="width-input" type="text" id="width-a4" placeholder="" style="
+              position: absolute;
+              top: 320px;    /* adjust this */
+              left: 390px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">
+              <input class="width-input" type="text" id="width-a5" placeholder="" style="
+              position: absolute;
+              top: 320px;    /* adjust this */
+              left: 465px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">        
+              <button id="rectangles" style="
+                  position: relative;
+                  right: 350px;
+                  bottom: 30px;
+              ">Submit Dimensions</button>
+            </div>          
+          </div>        
+      </div>
+      <div class="plot-box" id="plot3-box" style="display: none;">
+        <div style="position: relative; text-align: center;">
+          <!-- Explanation box floats far left -->
+          <div id="explanation-box3" style="
+    display: none;
+    position: absolute;
+    left: -5px;  /* Push far to the left */
+    z-index: 10;
+    top: 0;
+    border: 1px solid #00ccff;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #111;
+    color: #00ccff;
+    max-width: 250px;
+    text-align: left;
+  ">
+            <p id="explanation-text3" style="margin: 0;"></p>
+          </div>
+          <h3 id="plot3-title">We willl now reconsider our same graph but with right endpoint rectanlges </h3>
+        <div style="position: relative;">
+            <div id="plot3"></div>
+            <div id="heights2" class="heights">
+              <input class="height-input" type="text" id="a2-" placeholder="" style="
+              position: absolute;
+              top: 260px;    /* adjust this */
+              left: 225px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">              
+              <input class="height-input" type="text" id="a3-" placeholder="" style="
+              position: absolute;
+              top: 270px;    /* adjust this */
+              left: 300px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">         
+              <input class="height-input" type="text" id="a4-" placeholder="" style="
+              position: absolute;
+              top: 280px;    /* adjust this */
+              left: 375px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">        
+              <input class="height-input" type="text" id="a5-" placeholder="" style="
+              position: absolute;
+              top: 290px;    /* adjust this */
+              left: 445px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">              
+              <input class="height-input" type="text" id="a6-" placeholder="" style="
+              position: absolute;
+              top: 295px;    /* adjust this */
+              left: 515px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">            </div>
+          <div id="widths2" class="widths">
+              <input class="width-input" type="text" id="width-a2-" placeholder="" style="
+              position: absolute;
+              top: 320px;    /* adjust this */
+              left: 170px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">              <input class="width-input" type="text" id="width-a3-" placeholder="" style="
+              position: absolute;
+              top: 320px;    /* adjust this */
+              left: 245px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">
+              <input class="width-input" type="text" id="width-a4-" placeholder="" style="
+              position: absolute;
+              top: 320px;    /* adjust this */
+              left: 320px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">
+              <input class="width-input" type="text" id="width-a5-" placeholder="" style="
+              position: absolute;
+              top: 320px;    /* adjust this */
+              left: 390px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">
+              <input class="width-input" type="text" id="width-a6-" placeholder="" style="
+              position: absolute;
+              top: 320px;    /* adjust this */
+              left: 465px;   /* adjust this */
+              z-index: 20;
+              background-color: #000;
+              color: #00ccff;
+              border: 1px solid #00ccff;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'TangoSans_Bold', sans-serif;
+              ">        
+              <button id="rectangles-">Submit</button>
+            </div>          
+          </div>        
+        </div>
+
+      </div>
+    </div>
+    <div id="bottom-text" style="margin-top: 2em;">
+      <p id="step13-text" style="display: none; font-size: 1.1em; color: #00ccff;"></p>
+      <div id="step14-15-wrapper" style="display: flex; justify-content: center; align-items: flex-start; gap: 30px; flex-wrap: wrap;">
+        <p id="step14-text" style="display: none; font-size: 1.1em; color: #00ccff; max-width: 400px; text-align: left;"></p>
+        <div id="step15-text" style="display: none;"></div>
+      </div>
+    </div>
+
+
+
+<script>
+      alert("If you see no button, press 'Enter' to progress")
+
+  let button1 = document.getElementById("rectangles");
+  let button2 = document.getElementById("rectangles-");
+
+
+
+  const darkThemeLayout = {
+    width: 800,
+    height: 400,
+    paper_bgcolor: '#111',
+    plot_bgcolor: '#111',
+    font: {
+      color: '#00ccff',
+      family: 'sans-serif'
+    },
+    xaxis: {
+      title: 'x',
+      range: [0, 7],
+      gridcolor: '#333',
+      zerolinecolor: '#555'
+    },
+    yaxis: {
+      title: 'f(x)',
+      range: [0, 1.2],
+      gridcolor: '#333',
+      zerolinecolor: '#555'
+    },
+    margin: { t: 20 },
+    legend: {
+      font: { color: '#00ccff' },
+      bgcolor: '#111'
+    }
+  };
+
+
+  const SeriesDarkThemeLayout = {
+    width: 800,
+    height: 400,
+    paper_bgcolor: '#111',
+    plot_bgcolor: '#111',
+    font: {
+      color: '#00ccff',
+      family: 'sans-serif'
+    },
+    xaxis: {
+      title: 'n',
+      range: [0, 7],
+      gridcolor: '#333',
+      zerolinecolor: '#555'
+    },
+    yaxis: {
+      title: 'a_n',
+      range: [0, 1.2],
+      gridcolor: '#333',
+      zerolinecolor: '#555'
+    },
+    margin: { t: 20 },
+    legend: {
+      font: { color: '#00ccff' },
+      bgcolor: '#111'
+    }
+  };
+  let clickCount = 0;
+  const intX = [], intY = [];
+  for (let i = 1; i <= 6; i++) {
+    intX.push(i);
+    intY.push(1 / i);
+  }
+
+  Plotly.newPlot('plot1', [{
+    x: intX,
+    y: intY,
+    mode: 'markers',
+    name: "1/n, n ∈ ℕ",
+    marker: { size: 8, color: 'blue' },
+    type: 'scatter'
+  }], SeriesDarkThemeLayout);
+        // MathJax.typeset();
+
+  function checkRectangles() {
+    let isCorrect = true;
+    let correcta1value = 1;
+    let correcta2value = 0.5;
+    let correcta3value = 0.33;
+    let correcta4value = 0.25;
+    let correcta5value = 0.2;
+    let a1 = document.getElementById("a1");
+    let a2 = document.getElementById("a2");
+    let a3 = document.getElementById("a3");
+    let a4 = document.getElementById("a4");
+    let a5 = document.getElementById("a5");
+    let widtha1 = document.getElementById("width-a1");
+    let widtha2 = document.getElementById("width-a2");
+    let widtha3 = document.getElementById("width-a3");
+    let widtha4 = document.getElementById("width-a4");
+    let widtha5 = document.getElementById("width-a5");
+    let inputsToCheck = [a1,a2,a3,a4,a5,widtha1,widtha2,widtha3,widtha4, widtha5]
+
+    // loop thru inputs to check and see if they're right
+    for (let i=0; i<inputsToCheck.length; ++i) {
+      // i [1,5] map to an
+      let currentInputValue = parseFloat(inputsToCheck[i].value);
+      switch (i) {
+        case 0:
+          if (currentInputValue != correcta1value) {
+            // update isCorrect status to false
+            isCorrect = false;
+            // change text to red
+            a1.style.color = 'red';
+          }
+          else {
+            // change text to green
+            a1.style.color = 'green';
+          }
+          break;
+        case 1:
+          if (currentInputValue != correcta2value) {
+            // update isCorrect status to false
+            isCorrect = false;
+            // change text to red
+            a2.style.color = 'red';
+          }
+          else {
+            // change text to green
+            a2.style.color = 'green';
+          }
+          break;
+        case 2:
+          if (currentInputValue != correcta3value) {
+            // update isCorrect status to false
+            isCorrect = false;
+            // change text to red
+            a3.style.color = 'red';
+          }
+          else {
+            // change text to green
+            a3.style.color = 'green';
+          }
+          break;
+        case 3:
+          if (currentInputValue != correcta4value) {
+            // update isCorrect status to false
+            isCorrect = false;
+            // change text to red
+            a4.style.color = 'red';
+          }
+          else {
+            // change text to green
+            a4.style.color = 'green';
+          }
+          break;
+        case 4:
+          if (currentInputValue != correcta5value) {
+            // update isCorrect status to false
+            isCorrect = false;
+            // change text to red
+            a5.style.color = 'red';
+          }
+          else {
+            // change text to green
+            a5.style.color = 'green';
+          }
+          break;
+        default: // all the widths need to be 1
+          if (currentInputValue != 1) {
+            isCorrect = false;
+            inputsToCheck[i].style.color = 'red';
+          }
+          else {
+            inputsToCheck[i].style.color = 'green';
+          }
+          break;
+      }
+    }
+
+    if (isCorrect) {
+      return [true, inputsToCheck]
+    }
+    return false
+  }
+
+  function checkRectangles2() {
+    let isCorrect = true;
+    let correcta2value = 0.5;
+    let correcta3value = 0.33;
+    let correcta4value = 0.25;
+    let correcta5value = 0.2;
+    let correcta6value = 0.17;
+
+    let a2 = document.getElementById("a2-");
+    let a3 = document.getElementById("a3-");
+    let a4 = document.getElementById("a4-");
+    let a5 = document.getElementById("a5-");
+    let a6 = document.getElementById("a6-");    
+    
+    let widtha2 = document.getElementById("width-a2-");
+    let widtha3 = document.getElementById("width-a3-");
+    let widtha4 = document.getElementById("width-a4-");
+    let widtha5 = document.getElementById("width-a5-");
+    let widtha6 = document.getElementById("width-a6-");
+
+    let inputsToCheck = [a2,a3,a4,a5,a6,widtha2,widtha3,widtha4, widtha5, widtha6]
+
+    // loop thru inputs to check and see if they're right
+    for (let i=0; i<inputsToCheck.length; ++i) {
+      // i [1,5] map to an
+      let currentInputValue = parseFloat(inputsToCheck[i].value);
+      switch (i) {
+        case 0:
+          if (currentInputValue != correcta2value) {
+            // update isCorrect status to false
+            isCorrect = false;
+            // change text to red
+            a2.style.color = 'red';
+          }
+          else {
+            // change text to green
+            a2.style.color = 'green';
+          }
+          break;
+        case 1:
+          if (currentInputValue != correcta3value) {
+            // update isCorrect status to false
+            isCorrect = false;
+            // change text to red
+            a3.style.color = 'red';
+          }
+          else {
+            // change text to green
+            a3.style.color = 'green';
+          }
+          break;
+        case 2:
+          if (currentInputValue != correcta4value) {
+            // update isCorrect status to false
+            isCorrect = false;
+            // change text to red
+            a4.style.color = 'red';
+          }
+          else {
+            // change text to green
+            a4.style.color = 'green';
+          }
+          break;
+        case 3:
+          if (currentInputValue != correcta5value) {
+            // update isCorrect status to false
+            isCorrect = false;
+            // change text to red
+            a5.style.color = 'red';
+          }
+          else {
+            // change text to green
+            a5.style.color = 'green';
+          }
+          break;
+        case 4:
+          if (currentInputValue != correcta6value) {
+            // update isCorrect status to false
+            isCorrect = false;
+            // change text to red
+            a6.style.color = 'red';
+          }
+          else {
+            // change text to green
+            a6.style.color = 'green';
+          }
+          break;
+        default: // all the widths need to be 1
+          if (currentInputValue != 1) {
+            isCorrect = false;
+            inputsToCheck[i].style.color = 'red';
+          }
+          else {
+            inputsToCheck[i].style.color = 'green';
+          }
+          break;
+      }
+    }
+
+    if (isCorrect) {
+      return [true, inputsToCheck]
+    }
+    return false
+  }
+
+  function labelAndResizeHeights(inputsToCheck) {
+    // an's live from [0-4]
+    for (let i=0; i<5; ++i) {
+      let currentInput = inputsToCheck[i];
+      currentInput.style.width = "55px";
+      currentInput.value = `a${i+1} = ${currentInput.value}`;
+    }
+  }
+  document.getElementById("rectangles").addEventListener("click", function() {
+
+    let [isCorrect, inputsToCheck] = checkRectangles();
+    if (isCorrect) {
+      // update text to an = ...
+      labelAndResizeHeights(inputsToCheck);
+      // call step 4
+      doStep4();
+      // hide button 1
+      button1.style.opacity = 0;
+      button1.disabled = true;
+
+    }
+    else {
+      return;
+    }
+  });
+
+    document.getElementById("rectangles-").addEventListener("click", function() {
+
+    let [isCorrect, inputsToCheck] = checkRectangles2();
+    if (isCorrect) { 
+      // update text to an = ...
+      labelAndResizeHeights(inputsToCheck);
+      // move on 
+      doStep10();
+      // hide button 2
+      button2.style.opacity = 0;
+      button2.disabled = true;
+
+    }
+    else {
+      return;
+    }
+  });
+
+
+  function doStep4() {
+        document.getElementById("plot1-title").innerHTML = `We see that the area of the rectangles is: \\( \\sum_{n=1}^{6} \\frac{1}{n} \\)`;
+        document.getElementById("explanation-box").style.display = "block";
+        document.getElementById("explanation-text").innerHTML = 'Area Rectangles: \\( \\sum_{n=1}^{6} \\frac{1}{n} \\)';
+        MathJax.typeset();
+        clickCount = 4;
+  }
+
+  function doStep10() {
+        document.getElementById("explanation-box3").style.display = "block";
+        document.getElementById("explanation-text3").innerHTML = `Area Rectangles: \\( \\sum_{n=2}^{6} \\frac{1}{n} \\)`;
+        document.getElementById("plot3-title").innerHTML = `We see that the area of the rectangles is: \\( \\sum_{n=2}^{6} \\frac{1}{n} \\)`;
+        document.getElementById("plot3-title").style="margin-left: 120px;";
+        // shift plot3-title over to the right a little bit
+        MathJax.typeset();  
+        clickCount = 10;
+  }
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      if (clickCount === 3) {
+        return;
+      }
+      if (clickCount === 9) {
+        return;
+      }
+      clickCount++;
+
+      // console.log(clickCount);
+
+      if (clickCount === 1) {
+        document.getElementById("plot1-title").innerHTML = `Now we draw the function 1/x which passes through our n points`;
+        const realX = [], realY = [];
+        for (let x = 1; x <= 6; x += 0.05) {
+          realX.push(x);
+          realY.push(1 / x);
+        }
+        Plotly.addTraces('plot1', {
+          x: realX,
+          y: realY,
+          mode: 'lines',
+          name: 'f(x) = 1/x (Curve)',
+          line: { color: 'red' },
+          type: 'scatter'
+        });
+
+      } else if (clickCount === 2) {
+        document.getElementById("plot1-title").innerHTML = `Then we draw our left endpoint rectangles and remove the f(x) for visual clarity`;
+        const plotDiv = document.getElementById('plot1');
+        const traceIndexToRemove = plotDiv.data.findIndex(trace => trace.name === 'f(x) = 1/x (Curve)');
+        if (traceIndexToRemove !== -1) {
+          Plotly.deleteTraces('plot1', traceIndexToRemove);
+        }
+        const barX = [], barY = [];
+        for (let i = 1; i <= 5; i++) {
+          barX.push(i + 0.5);
+          barY.push(1 / i);
+        }
+        Plotly.addTraces('plot1', {
+          x: barX,
+          y: barY,
+          type: 'bar',
+          name: 'Left-Endpoint Rectangles',
+          width: 1,
+          marker: { color: 'green', opacity: 0.4 }
+        });
+
+      } else if (clickCount === 3) {
+        document.getElementById("plot1-title").innerHTML = `Your Turn: Label the heights and widths of these rectangles (enter fractions as decimals to nearest hundreths place).`;
+        let heights = document.getElementById("heights1");
+        let widths = document.getElementById("widths1");
+        heights.style.opacity = 1;
+        widths.style.opacity = 1;
+
+        const verticalTraces = [], labelTraces = [];
+        for (let i = 1; i <= 5; i++) {
+          const yTop = 1 / i;
+          const yMid = yTop / 2;
+          verticalTraces.push({
+            x: [i, i],
+            y: [0, yTop],
+            mode: 'lines',
+            type: 'scatter',
+            line: { color: 'orange', dash: 'dot' },
+            showlegend: false
+          });
+          labelTraces.push({
+            x: [i],
+            y: [yMid],
+            mode: 'markers+text',
+            type: 'scatter',
+            text: [`a_${i}`],
+            textposition: 'middle right',
+            textfont: { size: 14, color: 'orange' },
+            marker: { opacity: 0 },
+            showlegend: false
+          });
+        }
+
+        const horizontalTrace = {
+          x: [1, 2, null, 2, 3, null, 3, 4, null, 4, 5, null, 5, 6],
+          y: Array(14).fill(0),
+          mode: 'lines',
+          type: 'scatter',
+          line: { color: 'orange', dash: 'dot' },
+          showlegend: false
+        };
+
+        const horizontalLabelTrace = {
+          x: [1.5, 2.5, 3.5, 4.5, 5.5],
+          y: [0, 0, 0, 0, 0],
+          mode: 'markers+text',
+          type: 'scatter',
+          text: ['1', '1', '1', '1', '1'],
+          textposition: 'top',
+          textfont: { size: 14, color: 'orange' },
+          marker: { opacity: 0 },
+          showlegend: false
+        };
+
+        Plotly.addTraces('plot1', [...verticalTraces, ...labelTraces, horizontalTrace]);
+
+      } else if (clickCount === 4) {
+        // should never get called
+        document.getElementById("plot1-title").innerHTML = `We see that the area of the rectangles is: \\( \\sum_{n=1}^{6} \\frac{1}{n} \\)`;
+        document.getElementById("explanation-box").style.display = "block";
+        document.getElementById("explanation-text").innerHTML = 'Area Rectangles: \\( \\sum_{n=1}^{6} \\frac{1}{n} \\)';
+        MathJax.typeset();
+
+      } else if (clickCount === 5) {
+        document.getElementById("plot1-title").innerHTML = `Now consider the area under the curve, shaded in purple; it's always less than the area of our rectangles. The area under the curve is \\( \\int_{1}^{6} \\frac{1}{x} \\, dx \\)`;
+        MathJax.typeset();
+        document.getElementById("explanation-text").innerHTML += `Area Under Curve: \\( \\int_{1}^{6} \\frac{1}{x} \\, dx \\)`
+        MathJax.typeset();
+        const xFill = [], yFill = [];
+        for (let x = 1; x <= 6; x += 0.05) {
+          xFill.push(x);
+          yFill.push(1 / x);
+        }
+        Plotly.addTraces('plot1', {
+          x: xFill,
+          y: yFill,
+          type: 'scatter',
+          mode: 'lines',
+          name: 'Area under f(x) = 1/x',
+          fill: 'tozeroy',
+          fillcolor: 'rgba(150, 50, 200, 0.3)',
+          line: { color: 'purple' },
+          showlegend: false
+        });
+
+      } else if (clickCount === 6) {
+        document.getElementById("plot1-title").innerHTML = `We now have the inequality in the left-hand box`;
+        document.getElementById("explanation-text").innerHTML +=` \\( \\int_{1}^{6} \\frac{1}{x} \\, dx \\) < \\( \\sum_{n=1}^{6} \\frac{1}{n} \\)`
+        MathJax.typeset();
+
+      } else if (clickCount === 7) {
+        document.getElementById("plot1-title").textContent = 'Left-endpoint Rectangles';
+        document.getElementById("plot3-box").style.display = 'block';
+        document.getElementById("plot3-title").style.display = 'block';
+        const pointTrace3 = {
+          x: [1, 2, 3, 4, 5, 6],
+          y: [1, 0.5, 1 / 3, 0.25, 0.2, 1 / 6],
+          mode: 'markers',
+          name: "1/n, n ∈ ℕ",
+          marker: { size: 8, color: 'blue' },
+          type: 'scatter'
+        };
+        const curve3 = {
+          x: [], y: [],
+          mode: 'lines',
+          name: 'g(x) = 1/x',
+          line: { color: 'red' },
+          type: 'scatter'
+        };
+        for (let x = 1; x <= 6; x += 0.05) {
+          curve3.x.push(x);
+          curve3.y.push(1 / x);
+        }
+        Plotly.newPlot('plot3', [pointTrace3, curve3], SeriesDarkThemeLayout);
+
+      } else if (clickCount === 8) {
+        document.getElementById("plot3-title").innerHTML = `Now we add right-endpoint rectangles to the curve and remove g(x) for visual clarity.`;
+                const plotDiv = document.getElementById('plot3');
+        const traceIndexToRemove = plotDiv.data.findIndex(trace => trace.name === 'g(x) = 1/x');
+        if (traceIndexToRemove !== -1) {
+          Plotly.deleteTraces('plot3', traceIndexToRemove);
+        }
+        const barX = [], barY = [];
+        for (let i = 2; i <= 6; i++) {
+          barX.push(i - 0.5);
+          barY.push(1 / i);
+        }
+        Plotly.addTraces('plot3', {
+          x: barX,
+          y: barY,
+          type: 'bar',
+          name: 'Right-Endpoint Rectangles',
+          width: 1,
+          marker: { color: 'orange', opacity: 0.4 }
+        });
+
+      } else if (clickCount === 9) { // WORKING HERE
+        document.getElementById("plot3-title").innerHTML = `Your Turn: Label the heights & widths for each rectangle (round fractions to decimals to nearest hundreths place).`;
+        let heights = document.getElementById("heights2");
+        let widths = document.getElementById("widths2");
+        heights.style.opacity = 1;
+        widths.style.opacity = 1;
+        const verticalTraces = [], labelTraces = [];
+        for (let i = 2; i <= 6; i++) {
+          const yTop = 1 / i;
+          const yMid = yTop / 2;
+
+          verticalTraces.push({
+            x: [i, i],
+            y: [0, 1 / i],
+            mode: 'lines+text',
+            type: 'scatter',
+            line: { color: 'green', dash: 'dot' },
+            // text: [`a_${i}`],
+            textposition: 'top right',
+            showlegend: false
+          });
+                    labelTraces.push({
+            x: [i],
+            y: [yMid],
+            mode: 'markers+text',
+            type: 'scatter',
+            text: [`a_${i}`],
+            textposition: 'middle right',
+            textfont: { size: 14, color: 'black' },
+            marker: { opacity: 0 },
+            showlegend: false
+          });
+        }
+
+      
+        const horizontalTrace = {
+          x: [1, 2, null, 2, 3, null, 3, 4, null, 4, 5, null, 5, 6],
+          y: Array(14).fill(0),
+          mode: 'lines+text',
+          type: 'scatter',
+          line: { color: 'green', width: 1 },
+          text: ['1', '1', '', '1', '1', '', '1', '1', '', '1', '1', '', '1', '1'],
+          textposition: 'bottom center',
+          showlegend: false
+        };
+        
+        const horizontalLabelTrace = {
+          x: [1.5,2.5, 3.5, 4.5, 5.5],
+          y: [0,0, 0, 0, 0],
+          mode: 'markers+text',
+          type: 'scatter',
+          text: ['1', '1', '1', '1', '1'],
+          textposition: 'top',
+          textfont: { size: 14, color: 'black' },
+          marker: { opacity: 0 },
+          showlegend: false
+        };
+
+        Plotly.addTraces('plot3', [...verticalTraces,  horizontalTrace]);
+
+      } else if (clickCount === 10) { 
+        document.getElementById("explanation-box3").style.display = "block";
+        document.getElementById("explanation-text3").innerHTML = `Area Rectangles: \\( \\sum_{n=2}^{6} \\frac{1}{n} \\)`;
+        document.getElementById("plot3-title").innerHTML = `We see that the area of the rectangles is: \\( \\sum_{n=2}^{6} \\frac{1}{n} \\)`;
+        document.getElementById("plot3-title").style="margin-left: 120px;";
+
+        // shift plot3-title over to the right a little bit
+        MathJax.typeset();
+
+      } else if (clickCount === 11) {
+        document.getElementById("plot3-title").innerHTML = `Again we shade the region under the curve, which has area  \\( \\int_{1}^{6} \\frac{1}{x} \\, dx \\)`;
+        document.getElementById("explanation-text3").innerHTML += `Area Under Curve:  \\( \\int_{1}^{6} \\frac{1}{x} \\, dx \\)`;
+        document.getElementById("plot3-title").style="margin-left: 270px;";
+        MathJax.typeset();
+        const xFill = [], yFill = [];
+        for (let x = 1; x <= 6; x += 0.05) {
+          xFill.push(x);
+          yFill.push(1 / x);
+        }
+        Plotly.addTraces('plot3', {
+          x: xFill,
+          y: yFill,
+          type: 'scatter',
+          mode: 'lines',
+          name: 'Area under f(x) = 1/x',
+          fill: 'tozeroy',
+          fillcolor: 'rgba(150, 50, 200, 0.3)',
+          line: { color: 'purple' },
+          showlegend: false
+        });
+
+      } else if (clickCount === 12) {
+        document.getElementById("plot3-title").innerHTML = `Now we form this inequality`;
+        document.getElementById("plot3-title").style="margin-left: 120px;";
+        document.getElementById("explanation-text3").innerHTML += '\\( \\sum_{n=2}^{6} \\frac{1}{n} < \\int_{1}^{6} \\frac{1}{x} \\, dx \\)';
+        
+        MathJax.typeset();
+
+      } else if (clickCount === 13) {
+        document.getElementById("plot3-title").innerHTML = `Right-Endpoint Rectangles`;
+        document.getElementById("step13-text").style.display = 'block';
+        document.getElementById("step13-text").innerHTML = 'We combine both inequalities to form: <br>\\( \\int_{1}^{6} \\frac{1}{x} \\, dx < \\sum_{n=1}^{6} \\frac{1}{n} < \\int_{1}^{6} \\frac{1}{x} \\, dx \\)';
+        MathJax.typeset();
+
+      } else if (clickCount === 14) {
+        document.getElementById("step13-text").innerHTML += `<br>We generalize this to form: <br>\\( \\int_{1}^{\\infty} f(x) \\, dx < \\sum_{n=1}^{\\infty} a_n < \\int_{1}^{\\infty} f(x) \\, dx \\)`;
+        MathJax.typeset();
+
+      } else if (clickCount === 15) {
+        document.getElementById("step13-text").innerHTML = `
+  <div style="
+    background-color: #111;
+    border: 1px solid #00ccff;
+    padding: 1em;
+    border-radius: 12px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 0 12px #00ccff44;
+    text-align: center;
+    line-height: 1.6em;
+  ">
+    <style="color: #66ddee; font-size: 1.2em;">Integral Test:<br><br>
+    Let \\( f(x) \\) be a continuous, positive, decreasing function on \\( [1, \\infty) \\) and let \\( a_n = f(n) \\). Then:<br><br>
+    - If \\( \\int_1^\\infty f(x)\\,dx \\) converges, then \\( \\sum_{n=1}^\\infty a_n \\) converges.<br>
+    - If \\( \\int_1^\\infty f(x)\\,dx \\) diverges, then \\( \\sum_{n=1}^\\infty a_n \\) diverges.
+
+      <div style="margin-top: 2em;">
+    <button style="
+      background-color: #00ccff;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 6px #00ccff88;
+    " onclick="window.location.href='(7)SeriesCompTest-LargerSeries.html'">Next Lesson</button>
+  </div>
+  </div>
+`;
+MathJax.typeset();        
+      }
+    }
+  });
+</script>
+</body>
+</html>

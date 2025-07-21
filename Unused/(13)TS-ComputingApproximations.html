@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Taylor Series</title>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ['$', '$'],
+            ['\\(', '\\)']
+          ]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <script>
+      let clickCount = 0;
+      document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("keydown", function(event) {
+          if (event.key === "Enter") {
+            clickCount++;
+            console.log("Enter pressed. clickCount =", clickCount);
+            if (clickCount === 1) { // show first row boxes
+              document.getElementById("row1").style.display = "flex";
+            }
+            if (clickCount === 2) { // show second row boxes
+              document.getElementById("row2").style.display = "flex";
+            }
+            if (clickCount === 3) { // show transition sentence
+              document.getElementById("transition").style.display = "block";
+            }
+
+            if (clickCount === 4) { // show computation box and update degree 2 output
+              document.getElementById("computations").style.display = "block";
+              document.getElementById("degree2").innerText = "\\( f(x) = 1 + x + \\frac{1}{2}x^2 \\)";
+MathJax.typeset(); // Re-render the math
+            }
+
+            if (clickCount === 5) { // move computations over and elaborate
+              computations = document.getElementById("computations");
+              transitionSentence = document.getElementById("transition");
+              computations.style.marginLeft = "200px";
+              transitionSentence.innerHTML = `We start to observe a pattern...let us compute a degree 3 approximation now`;
+            }
+
+            if (clickCount === 6) { // show row 3
+              document.getElementById("row3").style.display = "flex";
+            }
+
+            if (clickCount === 7) { // fin
+              document.getElementById("transition").innerHTML += `<br>Now we ask...how do we generalize this for a degree n polynomial?`
+            }
+
+          }
+        });
+      })
+
+    </script>
+    <style>
+      @font-face {
+        font-family: 'TangoSans_Bold';
+        src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+      }
+
+      body {
+        background-color: #000;
+        color: #00ccff;
+        font-family: 'TangoSans_Bold', sans-serif;
+        text-align: center;
+        padding: 2em;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Taylor Series: Computing Approximations</h2>
+    <div class="lesson">
+      <p>Let us repeat this process for a degree two approximation.</p>
+      <div id = "row1" style="display: none; justify-content: center; align-items: flex-start; gap: 2em; margin-top: 1em;">
+        <div style="width: 300px; border: 2px solid #00ccff; padding: 1em; text-align: left; line-height: 1.8; display: flex; flex-direction: column; justify-content: flex-start;">
+          <div style="padding-bottom: 3em;">
+            <ul style="list-style: none; padding-left: 0; margin: 0;">
+              <li>
+                <h3 style="margin-bottom: 0.5em;">Degree 1 Approximation</h3>
+              </li>
+              <li>\( e^x \approx f(x) = c_0 + c_1 x \)</li>
+            </ul>
+          </div>
+        </div>
+        <div style="width: 300px; border: 2px solid #00ccff; padding: 1em; text-align: left; line-height: 1.8;">
+          <div style="padding-bottom: 0.5em;">
+            <ul style="list-style: none; padding-left: 0; margin: 0;">
+              <li>
+                <h3 style="margin-bottom: 0.5em;">Degree 1 Criteria</h3>
+              </li>
+              <li>\( f(0) = e^0 \)</li>
+              <li>\( f'(0) = \left. \frac{d}{dx} e^x \right|_{x=0} \)</li>
+            </ul>
+          </div>
+        </div>
+        <div style="width: 300px; border: 2px solid #00ccff; padding: 1em; text-align: left; line-height: 1.8;">
+          <div style="padding-bottom: 0.5em;">
+            <ul style="list-style: none; padding-left: 0; margin: 0;">
+              <li>
+                <h3 style="margin-bottom: 0.5em;">Degree 1 Output</h3>
+              </li>
+              <li>\( f(x) = 1+x \)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div id = "row2" style="display: none; justify-content: center; align-items: flex-start; gap: 2em; margin-top: 1em;">
+        <div style="width: 300px; border: 2px solid #00ccff; padding: 1em; text-align: left; line-height: 1.8; display: flex; flex-direction: column; justify-content: flex-start;">
+          <div style="padding-bottom: 3em;">
+            <ul style="list-style: none; padding-left: 0; margin: 0;">
+              <li>
+                <h3 style="margin-bottom: 0.5em;">Degree 2 Approximation</h3>
+              </li>
+              <li>\( e^x \approx f(x) = c_0 + c_1 x + c_2 x^2 \)</li>
+            </ul>
+          </div>
+        </div>
+        <div style="width: 300px; border: 2px solid #00ccff; padding: 1em; text-align: left; line-height: 1.8;">
+          <div style="padding-bottom: 0.5em;">
+            <ul style="list-style: none; padding-left: 0; margin: 0;">
+              <li>
+                <h3 style="margin-bottom: 0.5em;">Degree 2 Criteria</h3>
+              </li>
+              <li>\( f(0) = e^0 \)</li>
+              <li>\( f'(0) = \left. \frac{d}{dx} e^x \right|_{x=0} \)</li>
+              <li>\( f''(0) = \left. \frac{d^2}{dx^2} e^x \right|_{x=0} \)</li>
+            </ul>
+          </div>
+        </div>
+        <div style="width: 300px; border: 2px solid #00ccff; padding: 1em; text-align: left; line-height: 1.8;">
+          <div style="padding-bottom: 0.5em;">
+            <ul style="list-style: none; padding-left: 0; margin: 0;">
+              <li>
+                <h3 style="margin-bottom: 0.5em;">Degree 2 Output</h3>
+              </li>
+              <li id = "degree2">\( f(x) = \text{?} \)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+            <div id = "row3" style="display: none; justify-content: center; align-items: flex-start; gap: 2em; margin-top: 1em;">
+        <div style="width: 300px; border: 2px solid #00ccff; padding: 1em; text-align: left; line-height: 1.8; display: flex; flex-direction: column; justify-content: flex-start;">
+          <div style="padding-bottom: 3em;">
+            <ul style="list-style: none; padding-left: 0; margin: 0;">
+              <li>
+                <h3 style="margin-bottom: 0.5em;">Degree 2 Approximation</h3>
+              </li>
+              <li>\( e^x \approx f(x) = c_0 + c_1 x + c_2 x^2 + c_3 x^3\)</li>
+            </ul>
+          </div>
+        </div>
+        <div style="width: 300px; border: 2px solid #00ccff; padding: 1em; text-align: left; line-height: 1.8;">
+          <div style="padding-bottom: 0.5em;">
+            <ul style="list-style: none; padding-left: 0; margin: 0;">
+              <li>
+                <h3 style="margin-bottom: 0.5em;">Degree 3 Criteria</h3>
+              </li>
+              <li>\( f(0) = e^0 \)</li>
+              <li>\( f'(0) = \left. \frac{d}{dx} e^x \right|_{x=0} \)</li>
+              <li>\( f''(0) = \left. \frac{d^2}{dx^2} e^x \right|_{x=0} \)</li>
+              <li>\( f'''(0) = \left. \frac{d^3}{dx^3} e^x \right|_{x=0} \)</li>
+            </ul>
+          </div>
+        </div>
+        <div style="width: 300px; border: 2px solid #00ccff; padding: 1em; text-align: left; line-height: 1.8;">
+          <div style="padding-bottom: 0.5em;">
+            <ul style="list-style: none; padding-left: 0; margin: 0;">
+              <li>
+                <h3 style="margin-bottom: 0.5em;">Degree 3 Output</h3>
+              </li>
+              <li id = "degree2">\( f(x) = 1 + x + \frac{1}{2}x^2 +  \frac{1}{6}x^3\)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <p id = "transition" style="display:none;">Now we compute the approximation as before...</p>
+    <div id="computations" style="display:none; width: 300px; border: 2px solid #00ccff; padding: 1em; white-space: nowrap; margin-left: 700px; margin-top: 50px;">
+      <div style="transform: scale(0.8); transform-origin: left top;">
+        <h3>Degree 2 Computation</h3>
+        <p>
+          <br />
+          <span class="math display">$$\begin{aligned} e^x &amp;\approx f(x) = c_0 + c_1 x + c_2 x^2 \\ f(0) &amp;= e^0 \\ c_0 &amp;= 1\end{aligned}$$</span>
+        </p>
+        <p>
+          <span class="math display">$$\begin{aligned} f'(x) &amp;= c_1 + 2c_2 x &amp;&amp; \text{and} &amp;&amp; \frac{d}{dx}(e^x) = e^x \\ g'(0) &amp;= c_1 &amp;&amp; \text{and} &amp;&amp; e^0 = 1 \\ \implies c_1 &amp;= 1\end{aligned}$$</span>
+        </p>
+        <p>
+          <span class="math display">$$\begin{aligned} f''(x) &amp;= 2c_2 x &amp;&amp; \text{and} &amp;&amp; \frac{d^2}{dx^2}(e^x) = e^x \\ f''(0) &amp;= 2c_2 &amp;&amp; \text{and} &amp;&amp; e^0 = 1 \\ \implies c_2 &amp;= \frac{1}{2}\end{aligned}$$</span>
+        </p>
+        <p>
+          <span class="math display">$$\begin{aligned} f(x) = 1 + x + \frac{1}{2}x^2\end{aligned}$$</span>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

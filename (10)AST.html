@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AST</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <style>
+    @font-face {
+      font-family: 'TangoSans_Bold';
+      src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+    }
+    body {
+      background-color: #000;
+      color: #00ccff;
+      font-family: 'TangoSans_Bold', sans-serif;
+      text-align: center;
+      padding: 2em;
+    }
+
+
+    h3, h4 {
+      text-align: center;
+      color: #00ccff;
+    }
+
+    label {
+      display: block;
+      text-align: center;
+      margin-bottom: 1em;
+      font-size: 18px;
+    }
+
+    input[type="range"] {
+      display: block;
+      margin: 0 auto 2em auto;
+      width: 60%;
+    }
+
+    #container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .plot-box {
+      width: 45%;
+    }
+
+    #math-container {
+      margin-top: 40px;
+      padding: 0 40px;
+      font-size: 18px;
+      line-height: 1.6em;
+      color: #00ccff;
+    }
+
+    strong {
+      color: #ffcc00;
+    }
+
+    em {
+      color: #88ff00;
+    }
+
+      @font-face {
+        font-family: 'TangoSans_Bold';
+        src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+      }
+
+      body {
+        background-color: #000;
+        color: #00ccff;
+        font-family: 'TangoSans_Bold', sans-serif;
+        text-align: center;
+        padding: 2em;
+      }
+
+      p {
+        margin-top: 1em;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+        }
+      }
+
+      .purple {
+        color: purple;
+      }
+
+      .yellow {
+        color: yellow;
+      }
+
+      .question {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+      }
+
+      input[type="text"] {
+        background-color: #111;
+        /* dark input background */
+        color: #00ccff;
+        /* cyan text color */
+        border: 1px solid #00ccff;
+        /* cyan border */
+        border-radius: 4px;
+        /* rounded corners */
+        padding: 10px 12px;
+        font-size: 16px;
+        width: 20%;
+        height: 3px;
+        box-shadow: 0 0 8px #00ccff33;
+        /* subtle cyan glow */
+        outline: none;
+        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+      }
+
+      input[type="text"]:focus {
+        border-color: #33ffff;
+        box-shadow: 0 0 12px #33ffff;
+      }
+
+.box {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin: 0 auto;
+  align-items: center;
+  row-gap: 1em;
+  border: 2px solid #00ccff;
+  border-radius: 10px;
+  padding: 1.5em;
+  background-color: #111;
+  box-shadow: 0 0 12px #00ccff55;
+  opacity: 0;
+}
+
+
+.lesson-box {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 150px;
+  margin: 0 auto;
+  align-items: center;
+  row-gap: 1em;
+  border: 2px solid #00ccff;
+  border-radius: 10px;
+  padding: 1.5em;
+  background-color: #111;
+  box-shadow: 0 0 12px #00ccff55;
+}
+    .next-lesson {
+  width: 300px;
+  padding: 18px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 8px; /* make it rectangular instead of round */
+  margin-top: 4rem;   /* space it further down */
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+
+    button {
+      margin-top: 1em;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+      background-color: #00ccff;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      animation: fadeIn 1s forwards;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00ccff;
+      /* animation: fadeIn 1s forwards; */
+    }
+
+    button:active {
+      transform: scale(0.95);
+      /* animation: fadeIn 1s forwards; */
+    }
+
+          @keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+   .next-lesson {
+  width: 300px;
+  padding: 18px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 8px; /* make it rectangular instead of round */
+  margin-top: 4rem;   /* space it further down */
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+  </style>
+</head>
+<body>
+  <h3>Alternating Series Test (AST)</h3>
+  <p id="p1">The alternating series test can best be explained through the lens of the alternating harmonic series. The alternating harmonic series
+    is the same as the harmonic series except that its terms alternate between positive and negative: \(\sum_{n=1}^{\infty} (-1)^{n-1} \frac{1}{n} = 1 - 1/2 + 1/3 - 1/4... \) 
+  </p>
+  <p id="p2" style="opacity: 0;">
+    We know that the harmonic series diverges, but the goal of this lesson is to demonstrate why the alternating harmonic series converges, and then generalize
+    this to explain what types of alternating series converge.
+  </p>
+  <div style="display: flex; row-gap: 1em;">
+
+    <div id="quiz" class="box">
+      <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Partial Sums</h3>
+      <div class="question">
+        <label id= "label-s2" for="s2">\(S_2=\)</label>
+        <input id="s2" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-s3" for="s3">\(S_3=\)</label>
+        <input id="s3" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-s4" for="s4">\(S_4=\)</label>
+        <input id="s4" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-s5" for="s5">\(S_5=\)</label>
+        <input id="s5" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-s6" for="s6">\(S_6=\)</label>
+        <input id="s6" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-s7" for="s7">\(S_7=\)</label>
+        <input id="s7" type="text">
+      </div> 
+      <div class="question">
+        <label id= "label-s8" for="s8">\(S_8=\)</label>
+        <input id="s8" type="text">
+      </div>        
+      <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
+        <button id="check-answers-btn" style="position: relative;">Check Answers</button>
+      </div>
+    </div>
+
+    <!-- <div id="quiz2" class="box">
+      <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Differences</h3>
+      <div class="question">
+        <label id= "label-s3-s2" for="s3-s2">\(S_3-S_2=\)</label>
+        <input id="s3-s2" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-s4-s3" for="s4-s3">\(S_4-S_3=\)</label>
+        <input id="s4-s3" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-s5-s4" for="s5-s4">\(S_5-S_4=\)</label>
+        <input id="s5-s4" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-s6-s5" for="s6-s5">\(S_6-S_5=\)</label>
+        <input id="s6-s5" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-s7-s6" for="s7-s6">\(S_7-S_6=\)</label>
+        <input id="s7-s6" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-s8-s7" for="s8-s7">\(S_8-S_7=\)</label>
+        <input id="s8-s7" type="text">
+      </div> 
+      <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
+        <button id="check-answers-btn2" style="position: relative;">Check Answers</button>
+      </div>
+    </div> -->
+
+    <div id="quiz3" class="box">
+      <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Net Change</h3>
+      <div class="question">
+        <label id= "label-netchange1" for="netchange1">\(S_4-S_2=\)</label>
+        <input id="netchange1" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-netchange2" for="netchange2">\(S_6-S_4=\)</label>
+        <input id="netchange2" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-netchange3" for="netchange3">\(S_8-S_6=\)</label>
+        <input id="netchange3" type="text">
+      </div>
+      <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
+        <button id="check-answers-btn3" style="position: relative;">Check Answers</button>
+
+      </div>    
+      <P width="100px">Notice that the difference between pairs of partial sums decreases as \(S_n\) grows. We can intuit here that as \(S_n\) gets infinitely large, the difference
+           between \(S_n\) and \(S_{n+2}\) will shrink to 0, signalling convergence.     
+      </P>
+      <button id="finish" style="position: relative;">Finish</button>
+    </div>
+  </div>
+<div id="conclusions" class="box" style="text-align: left; padding: 1em;">
+  <h3 style="text-align: center; margin-bottom: 0.5em;">Alternating Series Test</h3>
+  <p>An alternating series of the form \(\sum_{n=1}^{\infty}(-1)^{n-1} a_n\) converges if and only if</p>
+  <ul style="list-style-type: disc; padding-left: 1.5em;">
+    <li>The sequence is non-increasing, i.e. \(a_n \leq a_{n+1}\) </li>
+    <li>\(\lim_{{n \to \infty}} a_n = 0\)</li>
+  </ul>
+  <button id="next-lesson" onclick="window.location.href=`(11)Ratio.html`">Next Lesson</button>
+</div>
+
+  <script>
+    // MathJax.typeset();
+    alert("If you see no button, push 'Enter' to progress");
+    let clickCount = 0;
+    let labels2 = document.getElementById("s2");
+    let labels3 = document.getElementById("s3");
+    let labels4 = document.getElementById("s4");
+    let labels5 = document.getElementById("s5");
+    let labels6 = document.getElementById("s6");
+    let labels7 = document.getElementById("s7");
+    let labels8 = document.getElementById("s8");
+    let labelList = [labels2, labels3, labels4, labels5, labels6, labels7, labels8];
+
+    let labels3s2 = document.getElementById("s3-s2");
+    let labels4s3 = document.getElementById("s4-s3");
+    let labels5s4 = document.getElementById("s5-s4");
+    let labels6s5 = document.getElementById("s6-s5");
+    let labels7s6 = document.getElementById("s7-s6");
+    let labels8s7 = document.getElementById("s8-s7");
+    
+    let labelList2 = [labels3s2, labels4s3, labels5s4, labels6s5, labels7s6, labels8s7];
+
+    let labelnetchange1 = document.getElementById("netchange1");
+    let labelnetchange2 = document.getElementById("netchange2");
+    let labelnetchange3 = document.getElementById("netchange3");
+
+    let labelList3 = [labelnetchange1, labelnetchange2, labelnetchange3];
+
+    let checkAnswersBtn = document.getElementById("check-answers-btn");
+    let checkAnswersBtn2 = document.getElementById("check-answers-btn2");
+    let checkAnswersBtn3 = document.getElementById("check-answers-btn3");
+
+    const slider = document.getElementById('termsSlider');
+    const termCountDisplay = document.getElementById('termCount');
+    let wrongAnswers1 = [0,0,0,0,0,0,0];
+    const correctAnswers1 = [3,5,3.5,4.7,3.7,4.6,3.8];
+
+      function changeCheckAnswersButtonToWrong(btn) {
+        setElementColor(btn, "red");
+        setElementText(btn, "Try Again");
+      }
+
+      function changeCheckAnswersButtonToCorrect(btn) {
+        setElementColor(btn, "green");
+        setElementText(btn, "Correct!");
+      }
+
+      function fadeIn(el) {
+    el.style.opacity = "0";    
+
+el.style.animation = "fadeIn 0.6s forwards";
+}
+
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      showNext();
+    }
+  });
+
+  function showNext() {
+    console.log("show next");
+    clickCount++;
+    switch (clickCount) {
+      case 1:
+        fadeIn(document.getElementById("p2"));
+        break;
+
+      case 2:
+        fadeIn(document.getElementById("quiz"));
+        break;
+      default:
+        break;
+    }
+  }
+      function changeCheckAnswersButtonToDefault(btn) {
+        setElementColor(btn, "black");
+        setElementText(btn, "Check Answers");
+      }
+      function setElementText(el, text) {
+        el.innerText = text;
+      }
+    function changeCheckAnswersBtnText(inputNum,btn) {
+        // -1 wrong, 1 right, 0 reset
+        if (inputNum === -1) {
+          changeCheckAnswersButtonToWrong(btn);
+        }
+        else if (inputNum === 1) {
+          changeCheckAnswersButtonToCorrect(btn);
+        }
+        else if (inputNum === 0) {
+          changeCheckAnswersButtonToDefault(btn);
+        }
+      }
+
+
+    function checkAnswers(answers,correctAnswers, wrongAnswers) {
+      let numAnswersToCheck = answers.length;
+      console.log("Answers: ", answers);
+      console.log("Correct answers: ", correctAnswers);
+
+      for (let i = 0; i < numAnswersToCheck; ++i) {
+        if (answers[i] !== correctAnswers[i]) {
+          wrongAnswers[i] = 1;
+        }
+        else {
+          wrongAnswers[i] = 0;
+        }
+      }
+      console.log("Wrong Answers: ", wrongAnswers);
+    }
+    function isWrong(wrongAnswers) {
+        let numAnswersToCheck = wrongAnswers.length;
+        for (let i = 0; i < numAnswersToCheck; ++i) {
+          if (wrongAnswers[i] === 1) {
+            return true;
+          }
+        }
+        return false;
+      }    
+      function changeQuestionColors(wrongAnswers, labelList) {
+        let wrongAnswersLength = wrongAnswers.length;
+        for (let i =0; i<wrongAnswersLength; ++i) {
+          if (wrongAnswers[i] === 1) { // change label to red
+            setElementColor(getLabelElementGivenIndex(i, labelList), "red");
+          }
+          else { // change label to green
+            setElementColor(getLabelElementGivenIndex(i, labelList), "green");
+          }
+        }
+      }
+
+      function setElementColor(el,color) {
+        el.style.color = color;
+      }      
+      function getLabelElementGivenIndex(i, labelList) {
+        return labelList[i];
+
+      }    
+      
+      document.getElementById("finish").addEventListener("click", function() {
+        // show next box and disable the button
+        fadeIn(document.getElementById("conclusions"));
+        document.getElementById("finish").disabled = true;
+      }
+    )
+      document.getElementById("check-answers-btn").addEventListener("click", function() {
+        const s2 = parseFloat(document.getElementById("s2").value.trim());
+        const s3 = parseFloat(document.getElementById("s3").value.trim());
+        const s4 = parseFloat(document.getElementById("s4").value.trim());
+        const s5 = parseFloat(document.getElementById("s5").value.trim());
+        const s6 = parseFloat(document.getElementById("s6").value.trim());
+        const s7 = parseFloat(document.getElementById("s7").value.trim());
+        const s8 = parseFloat(document.getElementById("s8").value.trim());
+        const answers1 = [s2,s3,s4, s5, s6,s7,s8];
+        // check for wrong answers
+        checkAnswers(answers1, correctAnswers1, wrongAnswers1);
+        if (isWrong(wrongAnswers1)) {
+          // change S4's text color
+          changeQuestionColors(wrongAnswers1, labelList);
+          // change button text + color to Wrong
+          changeCheckAnswersBtnText(-1, checkAnswersBtn);
+        }
+        else if (!isWrong(wrongAnswers1)) {
+          // reset all labels to green
+          changeQuestionColors(wrongAnswers1, labelList);
+          // change buttont to say correct
+          changeCheckAnswersBtnText(1, checkAnswersBtn);
+          // next div appear
+          fadeIn(document.getElementById("quiz3"));
+        }
+      });
+      // document.getElementById("check-answers-btn2").addEventListener("click", function() {
+      //   const s3s2 = parseFloat(document.getElementById("s3-s2").value.trim());
+      //   const s4s3 = parseFloat(document.getElementById("s4-s3").value.trim());
+      //   const s5s4 = parseFloat(document.getElementById("s5-s4").value.trim());
+      //   const s6s5 = parseFloat(document.getElementById("s6-s5").value.trim());
+      //   const s7s6 = parseFloat(document.getElementById("s7-s6").value.trim());
+      //   const s8s7 = parseFloat(document.getElementById("s8-s7").value.trim());
+
+      //   let wrongAnswers2 = [0,0,0,0,0,0];
+      //   const correctAnswers2 = [2,-1.5,1.2,-1,0.9,-0.8];
+      //   const answers2 = [s3s2,s4s3,s5s4,s6s5,s7s6,s8s7];
+      //   // check for wrong answers
+      //   checkAnswers(answers2, correctAnswers2, wrongAnswers2);
+      //   if (isWrong(wrongAnswers2)) {
+      //     // change S4's text color
+      //     changeQuestionColors(wrongAnswers2, labelList2);
+      //     // change button text + color to Wrong
+      //     changeCheckAnswersBtnText(-1, checkAnswersBtn2);
+      //   }
+      //   else if (!isWrong(wrongAnswers2)) {
+      //     // reset all labels to green
+      //     changeQuestionColors(wrongAnswers2, labelList2);
+      //     // change buttont to say correct
+      //     changeCheckAnswersBtnText(1, checkAnswersBtn2);
+      //     // next div appear
+      //     fadeIn(document.getElementById("quiz3"));
+
+      //   }
+      // });
+
+      document.getElementById("check-answers-btn3").addEventListener("click", function() {
+        const netchange1Val = parseFloat(document.getElementById("netchange1").value.trim());
+        const netchange2Val = parseFloat(document.getElementById("netchange2").value.trim());
+        const netchange3Val = parseFloat(document.getElementById("netchange3").value.trim());
+
+
+        let wrongAnswers3 = [0,0,0];
+        const correctAnswers3 = [0.5,0.2,0.1]
+        const answers3 = [netchange1Val, netchange2Val, netchange3Val];
+        // check for wrong answers
+        checkAnswers(answers3, correctAnswers3, wrongAnswers3);
+        if (isWrong(wrongAnswers3)) {
+          // change S4's text color
+          changeQuestionColors(wrongAnswers3, labelList3);
+          // change button text + color to Wrong
+          changeCheckAnswersBtnText(-1, checkAnswersBtn3);
+        }
+        else if (!isWrong(wrongAnswers3)) {
+          // reset all labels to green
+          changeQuestionColors(wrongAnswers3, labelList3);
+          // change buttont to say correct
+          changeCheckAnswersBtnText(1, checkAnswersBtn3);
+          // next div appear
+        }
+      });
+
+
+    function computeAlternatingHarmonic(n) {
+      const sums = [];
+      let sum = 0;
+      for (let k = 1; k <= n; k++) {
+        const term = 1 / k;
+        sum += (k % 2 === 0) ? -term : term;
+        sums.push(sum);
+      }
+      return sums;
+    }
+
+    function computeHarmonic(n) {
+      const sums = [];
+      let sum = 0;
+      for (let k = 1; k <= n; k++) {
+        sum += 1 / k;
+        sums.push(sum);
+      }
+      return sums;
+    }
+
+    function buildTraces(y, color) {
+      const traces = [];
+      for (let i = 0; i < y.length - 1; i++) {
+        traces.push({
+          x: [i, i + 1],
+          y: [y[i], y[i + 1]],
+          mode: 'lines+markers',
+          line: { color: color },
+          marker: { size: 6 },
+          showlegend: false
+        });
+      }
+      return traces;
+    }
+
+    function buildLayout(n) {
+      return {
+        paper_bgcolor: '#000',
+        plot_bgcolor: '#000',
+        font: { color: '#00ccff' },
+        xaxis: {
+          tickvals: Array.from({ length: n }, (_, i) => i),
+          ticktext: Array.from({ length: n }, (_, i) => `S${i + 1}`),
+          title: "Partial Sum Index",
+          gridcolor: '#222',
+          zerolinecolor: '#444'
+        },
+        yaxis: {
+          title: "Value",
+          gridcolor: '#222',
+          zerolinecolor: '#444'
+        },
+        margin: { t: 30 },
+        showlegend: false
+      };
+    }
+
+    function updatePlots(n) {
+      const yAlt = computeAlternatingHarmonic(n);
+      const yHarm = computeHarmonic(n);
+
+      // SWAPPED here: left = Harmonic (red), right = Alt Harmonic (green)
+      Plotly.newPlot('plotHarm', buildTraces(yHarm, '#ff4444'), buildLayout(n));
+      Plotly.newPlot('plotAlt', buildTraces(yAlt, '#88ff00'), buildLayout(n));
+    }
+  </script>
+</body>
+</html>

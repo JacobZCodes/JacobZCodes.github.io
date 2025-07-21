@@ -1,0 +1,4 @@
+global
+    cohesive input method
+Ratio
+    limit computer

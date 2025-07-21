@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Series Animation Example</title>
+      <style>
+
+        @font-face {
+      font-family: 'TangoSans_Bold';
+      src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+    }
+    body {
+      background-color: #000;
+      color: #00ccff;
+      font-family: 'TangoSans_Bold', sans-serif;
+      text-align: center;
+      padding: 2em;
+    }
+
+    .hovered {
+      text-decoration: underline;
+      cursor: help;
+      position: relative;
+      color: #33ddff;
+    }
+
+    .hovered::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      background: #222;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      top: 1.5em;
+      left: 0;
+      font-size: 0.9em;
+      white-space: nowrap;
+      display: none;
+      z-index: 10;
+    }
+
+    .hovered:hover::after {
+      display: block;
+    }
+
+    button {
+      margin-top: 1em;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+      background-color: #00ccff;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00ccff;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #00ccff;
+      border-radius: 5px;
+      background-color: #111;
+      color: #00ccff;
+      width: 60%;
+    }
+
+    .loading {
+  cursor: progress; /* or wait */
+}
+    #sentences {
+      margin-top: 1em;
+    }
+
+    #user-input {
+      margin-top: 1em;
+      display: none;
+    }
+
+    label {
+      display: inline-block;
+      margin-top: 0.5em;
+      color: #00ccff
+      ;
+    }
+
+        .next-lesson {
+  width: 300px;
+  padding: 18px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 8px; /* make it rectangular instead of round */
+  margin-top: 4rem;   /* space it further down */
+
+}
+
+
+      @keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+    @keyframes fadeOut {
+        from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+  </style>
+    <!-- ✅ MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body>
+    <h1>Divergence</h1>
+    <p id="sentence1"></p>
+    <div id="sentences"></div>
+    <div id="user-input-sequence" style="opacity: 1">
+      <p>Enter a sequence of at least 5 numbers, separated by commas (arithmetic only):</p>
+      <input type="text" id="sequenceInput" placeholder="e.g. 2, 4, 8, 16, 32">
+      <button onclick="storeSequenceAndShowNext()">Input Sequence</button>
+    </div>
+    <div id="user-input-series" style="opacity:0">
+      <p>Enter your sequence in series notation (please enter it exactly as a computer should read it, ie 2n+3 => 2*n+3):</p>
+      <label>\( \sum_{n=1}^{\infty} \) <input type="text" id="seriesInput" placeholder="n^2">
+      </label>
+      <button onclick="storeSeriesAndShowNext()">Input Series</button>
+    </div>
+
+
+    <div id="user-input-psums" style="opacity: 0;">
+      <p>Enter the partial sums for your series:</p>
+      <label>S1 <input type="text" id="S1">
+      </label>
+      <label>S2 <input type="text" id="S2">
+      </label>
+      <label>S3 <input type="text" id="S3">
+      </label>
+      <label>S4 <input type="text" id="S4">
+      </label>
+      <label>S5 <input type="text" id="S5">
+      </label>
+      <button onclick="storePsumsAndShowNext()">Input Partial Sums</button>
+    </div>
+    <div id="user-input-guess" style="opacity: 0;">
+
+    </div>
+    <div id="explanation1" style="opacity: 0;"> <!--convergence vs divergence--> </div>
+    <button id="plotPartialSums" style="opacity:0;" onclick="showNext()">Plot Partial Sums</button>
+    <div id="graphUserPoints" style="opacity:0;"></div>
+    <button id="graphUserPointsNextButton" onclick="showNext()" style="opacity: 0;">Continue</button>
+    <div id="div-guess" style="opacity: 0;"></div>
+    <button id="div-guess-next-btn" style="opacity: 0;" onclick="showNext()">Submit Guess</button>
+    <div id="divergenceExplain" style="opacity: 0;">
+      <p> It's a bit hard to tell just from graphing the first five terms whether or not the series will converge or diverge. Here is your graph with some more partial sums computed: </p>
+      <br>
+    </div>
+    <button id="showGraphBtn" style="opacity: 0;" onclick="showNext()">Show Graph</button>
+    <div id="graphMorePoints" style="opacity: 0;"></div>
+    <button id="graphMorePointsNextBtn" style="opacity: 0;" onclick="showNext()">Continue</button>
+    <div id="finalExplanation" style="opacity: 0;">
+      <p>So it might seem that we can easily tell whether or not a series converges or diverges: we can just start computing partial sums and follow the graph.</p>
+      <p>But sometimes this pattern is not always obvious, or predictable, or easy at all to compute (give an example of such a difficult computation). </p>
+        
+      <p>So that is why mathematicians have created a series of tests
+        to examine series in order that we do not need to sit all day computing partial sums. The first test is the  divergence test.</p>
+    </div>
+    <button id="nextLessonBtn" class="next-lesson" style = "opacity: 0;" onclick="window.location.href='(5)DivergenceTest.html'">Divergence Test</button>
+    <script>
+          alert("If you see no button, press 'Enter' to progress")
+
+      let verbosity = 0;
+        function fadeIn(el) {
+        el.style.opacity = "0";    
+
+    el.style.animation = "fadeIn 0.6s forwards";
+  }
+
+
+    function fadeOut(el) {
+    el.style.opacity = "1";    
+    el.style.animation = "fadeOut 0.6s forwards";
+  }
+
+  function checkArithmetic() {
+    const input = document.getElementById("arithmeticInput").value;
+    const nums = input.split(',').map(x => parseFloat(x.trim()));
+    if (verbosity === 1) {
+      showNext();
+    }
+    if (nums.length < 5 || nums.some(isNaN)) {
+      alert("Please enter at least 5 valid numbers.");
+      return;
+    }
+
+    const diff = nums[1] - nums[0];
+    for (let i = 2; i < nums.length; i++) {
+      if (Math.abs((nums[i] - nums[i - 1]) - diff) > 1e-6) {
+        alert("That's not a valid arithmetic sequence.");
+        return;
+      }
+    }
+    alert("✅ Great job! That is a valid arithmetic sequence.");
+    showNext();
+
+  }
+      function computePartialSum(n, series) { // computes S_n
+          let sum = 0;
+          for (let i = 1; i <= n; i++) {
+            sum += series(i);
+          }
+          return sum;
+      }
+        const sentenceList = [];
+        let currentIndex = 0;
+        let userSequence = []; // Global list to store the sequence
+        function checkArithmetic(rawInput) {
+    const nums = rawInput.split(',').map(x => parseFloat(x.trim()));
+    if (verbosity === 1) {
+      showNext();
+    }
+    if (nums.length < 5 || nums.some(isNaN)) {
+      alert("Please enter at least 5 valid numbers.");
+      return false;
+    }
+
+    const diff = nums[1] - nums[0];
+    for (let i = 2; i < nums.length; i++) {
+      if (Math.abs((nums[i] - nums[i - 1]) - diff) > 1e-6) {
+        alert("That's not a valid arithmetic sequence.");
+        return false;
+      }
+    }
+    return true;
+
+  }
+        function storeSequenceAndShowNext() {
+          
+          if (verbosity === 1) {
+            userSequence= [1,2,3,4,5];
+            showNext();
+          }
+
+          const input = document.getElementById("sequenceInput").value;
+          if (!checkArithmetic(input)) {
+            return;
+          }
+          // Parse by either spaces OR commas
+          userSequence = input.split(/[\s,]+/) // Split on space or comma
+            .map(x => parseFloat(x)) // Convert strings to numbers
+            .filter(x => !isNaN(x)); // Remove any non-numbers
+          console.log("Parsed sequence:", userSequence);
+          // Advance to next stage (optional)
+          showNext();
+        }
+        let userSeries = []; // Global list to store the series
+        function storeSeriesAndShowNext() {
+          if (verbosity === 1) {
+            userSeries= n;
+            showNext();
+          }
+          const input = document.getElementById("seriesInput").value;
+          userSeries = input;
+          console.log("User series: ", userSeries);
+          showNext();
+        }
+        let userPsums = []
+
+        function storePsumsAndShowNext() {
+          if (verbosity === 1) {
+            userPsums = [1,3,6,10,15];
+            showNext();
+          }
+          const input = document.getElementById("S1").value;
+          userPsums = [document.getElementById("S1").value, document.getElementById("S2").value,
+            document.getElementById("S3").value, document.getElementById("S4").value, document.getElementById("S5").value
+          ]
+          console.log("User Psums: ", userPsums);
+          showNext();
+        }
+        
+        document.addEventListener("keydown", function (event) {
+        //   if (event.key === "Enter") {
+        //             if (event.target.tagName === 'INPUT' && event.key === "Enter" || currentIndex > 0) {
+        //   event.preventDefault(); 
+        //   return; 
+        // }        
+        //     if (currentIndex === -1) {
+        //       showNext();
+        //     }
+        //     return
+        //   }
+          if (event.key === "Backspace") {
+                                if (event.target.tagName === 'INPUT' && event.key === "Backspace") {
+          
+          return; 
+        }        
+            if (currentIndex === -2) {
+              currentIndex = -1;
+              return
+            }
+            else {
+              goBack();
+            }
+          }
+        });
+        
+        function goBack() {
+          console.log(currentIndex);
+          currentIndex--;
+          switch (currentIndex){
+            case 7:
+            const nextLessonBtn = document.getElementById("nextLessonBtn");
+            const finalExplanation = document.getElementById("finalExplanation");
+            fadeOut(finalExplanation);
+            fadeOut(nextLessonBtn);
+              break;
+            case 6:
+                          const graphMore = document.getElementById('graphMorePoints');
+            const graphMorePointsNextBtn = document.getElementById('graphMorePointsNextBtn');
+           fadeOut(graphMore);
+         fadeOut(graphMorePointsNextBtn);
+              break;
+            case 5:
+                          fadeOut(divergenceExplain);
+      
+          fadeOut(document.getElementById("showGraphBtn"));
+              break;
+            case 4:
+                          const guessInput = document.getElementById('div-guess');
+            const guessSubmitButton = document.getElementById("div-guess-next-btn");
+            fadeOut(guessInput);
+            fadeOut(guessSubmitButton);
+              break;
+            case 3:
+                          const graph = document.getElementById("graphUserPoints");
+            const nextButton = document.getElementById("graphUserPointsNextButton");
+            fadeOut(graph);
+            fadeOut(nextButton);
+              break;
+            case 2:
+                          const explanation = document.getElementById("explanation1");
+            const plotPartialSumsBtn = document.getElementById("plotPartialSums");
+            fadeOut(explanation);
+            fadeOut(plotPartialSumsBtn);
+              break;
+            case 1:
+                   const psumsInput = document.getElementById('user-input-psums');
+                   fadeOut(psumsInput);
+              break;
+            case 0:
+                 const seriesInput = document.getElementById('user-input-series');
+                 fadeOut(seriesInput);
+              break;
+            case -1:
+        const seqInput = document.getElementById('user-input-sequence');
+        fadeOut(seqInput);
+              break;
+          }
+        }
+
+        function showNext() {
+          console.log(currentIndex);
+          currentIndex++;
+          if (currentIndex == 0) {
+                    // initial sequence entering + button
+        const seqInput = document.getElementById('user-input-sequence');
+        fadeIn(seqInput);
+        // document.getElementById("sentences").appendChild(seqInput);
+          }
+          if (currentIndex == 1) { // series notation
+            const seriesInput = document.getElementById('user-input-series');
+            fadeIn(seriesInput);
+            // document.getElementById("sentences").appendChild(seriesInput);
+          }
+          if (currentIndex == 2) { // psums 
+            const psumsInput = document.getElementById('user-input-psums');
+            fadeIn(psumsInput);
+            // document.getElementById("sentences").appendChild(psumsInput);
+          }
+          if (currentIndex == 3) { // convergence vs divergence
+            const explanation = document.getElementById("explanation1");
+            const plotPartialSumsBtn = document.getElementById("plotPartialSums");
+            fadeIn(explanation);
+                        explanation.innerHTML = `
+              <p>
+                We can form a sequence of your partial sums: S: {${userPsums.join(", ")}}
+                <br>
+                If <em>this</em> sequence approaches infinity, we say your series <em>diverges</em>.
+                Otherwise, we say your series <em>converges</em>
+              </p>`;
+            fadeIn(plotPartialSumsBtn);
+
+          }
+                    if (currentIndex == 4) { // graph user
+            console.log("here");
+            const graph = document.getElementById("graphUserPoints");
+            const nextButton = document.getElementById("graphUserPointsNextButton");
+            fadeIn(graph);
+            fadeIn(nextButton);
+            // // document.getElementById("sentences").appendChild(graph);
+            // const nextBtn = document.createElement("button");
+            // nextBtn.textContent = "Continue";
+            // nextBtn.onclick = showNext;
+            // document.getElementById("sentences").appendChild(nextBtn);
+            const xVals = userPsums.map((_, i) => i + 1);
+            const yVals = userPsums.map(val => parseFloat(val)).filter(v => !isNaN(v));
+Plotly.newPlot('graphUserPoints', [{
+  x: xVals,
+  y: yVals,
+  mode: 'markers',
+  type: 'scatter',
+  marker: {
+    size: 8,
+    color: '#00ccff'
+  }
+}], {
+  title: {
+    text: `Scatter Plot of ${userSeries}`,
+    font: { color: '#00ccff' }
+  },
+  plot_bgcolor: '#111',
+  paper_bgcolor: '#000',
+  font: { color: '#00ccff' },
+  xaxis: {
+    title: { text: 'S_n', font: { color: '#00ccff' } },
+    dtick: 1,
+    gridcolor: '#333',
+    zerolinecolor: '#555',
+    linecolor: '#00ccff',
+    tickcolor: '#00ccff'
+  },
+  yaxis: {
+    title: { text: 'Series Value', font: { color: '#00ccff' } },
+    dtick: 1,
+    gridcolor: '#333',
+    zerolinecolor: '#555',
+    linecolor: '#00ccff',
+    tickcolor: '#00ccff'
+  }
+});
+
+          }
+          if (currentIndex == 5) { // guess
+            const guessInput = document.getElementById('div-guess');
+            const guessSubmitButton = document.getElementById("div-guess-next-btn");
+            guessInput.innerHTML = `
+                  <p>What do you think the series will do?</p>
+                  <label>
+        <input type="radio" name="seriesGuess" value="converge"> Converge </label>
+      <br>
+      <label>
+        <input type="radio" name="seriesGuess" value="diverge"> Diverge </label>
+      <br>            `
+
+            fadeIn(guessInput);
+            fadeIn(guessSubmitButton);
+          }
+          if (currentIndex == 6) { // explain divergence more
+            fadeIn(divergenceExplain);
+      
+          fadeIn(document.getElementById("showGraphBtn"));
+          }
+
+          if (currentIndex == 7) { // graph user + more points
+            const graphMore = document.getElementById('graphMorePoints');
+            const graphMorePointsNextBtn = document.getElementById('graphMorePointsNextBtn');
+           fadeIn(graphMore);
+         fadeIn(graphMorePointsNextBtn);
+            const xVals = Array.from({
+              length: 30
+            }, (_, i) => i + 1);
+            let yVals = [];
+            try {
+              const seriesFunc = new Function("n", "return " + userSeries);
+              yVals = xVals.map(n => computePartialSum(n, seriesFunc));
+            } catch (e) {
+              alert("There was an error parsing your series function.");
+              console.error(e);
+            }
+Plotly.newPlot('graphMorePoints', [{
+  x: xVals,
+  y: yVals,
+  mode: 'markers',
+  type: 'scatter',
+  marker: {
+    size: 8,
+    color: '#00ccff'
+  }
+}], {
+  title: {
+    text: `Scatter Plot of ${userSeries}`,
+    font: { color: '#00ccff' }
+  },
+  plot_bgcolor: '#111',
+  paper_bgcolor: '#000',
+  font: { color: '#00ccff' },
+  xaxis: {
+    title: { text: 'S_n', font: { color: '#00ccff' } },
+    dtick: 1,
+    gridcolor: '#333',
+    zerolinecolor: '#555',
+    linecolor: '#00ccff',
+    tickcolor: '#00ccff'
+  },
+  yaxis: {
+    title: { text: 'Series Value', font: { color: '#00ccff' } },
+    dtick: 1,
+    gridcolor: '#333',
+    zerolinecolor: '#555',
+    linecolor: '#00ccff',
+    tickcolor: '#00ccff'
+  }
+});
+;
+          }
+           if (currentIndex == 8) { // final explaination
+            const nextLessonBtn = document.getElementById("nextLessonBtn");
+            fadeIn(finalExplanation);
+            fadeIn(nextLessonBtn);
+            // document.getElementById("sentences").appendChild(finalExplanation);
+          }
+        }
+    </script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  </body>
+</html>

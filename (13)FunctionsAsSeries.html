@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Functions as Power Series</title>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ['$', '$'],
+            ['\\(', '\\)']
+          ]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <style>
+      @font-face {
+        font-family: 'TangoSans_Bold';
+        src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+      }
+
+      body {
+        background-color: #000;
+        color: #00ccff;
+        font-family: 'TangoSans_Bold', sans-serif;
+        text-align: center;
+        padding: 2em;
+      }
+
+      .box {
+        display: flex;
+        flex-direction: column;
+        width: 500px;
+        /* margin: 0 auto; */
+        align-items: center;
+        border: 2px solid #00ccff;
+        border-radius: 10px;
+        padding: 1.5em;
+        background-color: #111;
+        box-shadow: 0 0 12px #00ccff55;
+        opacity: 0;
+      }
+
+      .question {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+      }
+
+      input[type="text"] {
+        background-color: #111;
+        /* dark input background */
+        color: #00ccff;
+        /* cyan text color */
+        border: 1px solid #00ccff;
+        /* cyan border */
+        border-radius: 4px;
+        /* rounded corners */
+        padding: 10px 12px;
+        font-size: 16px;
+        width: 20%;
+        height: 3px;
+        box-shadow: 0 0 8px #00ccff33;
+        /* subtle cyan glow */
+        outline: none;
+        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        position: relative;
+      }
+
+      input[type="text"]:focus {
+        border-color: #33ffff;
+        box-shadow: 0 0 12px #33ffff;
+      }
+
+      button {
+        margin-top: 1em;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #000;
+        background-color: #00ccff;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+        animation: fadeIn 1s forwards;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px #00ccff;
+        /* animation: fadeIn 1s forwards; */
+      }
+
+      button:active {
+        transform: scale(0.95);
+        /* animation: fadeIn 1s forwards; */
+      }
+
+      .statement {
+        opacity: 0;
+      }
+
+         .next-lesson {
+  width: 300px;
+  padding: 18px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 8px; /* make it rectangular instead of round */
+  margin-top: 4rem;   /* space it further down */
+  opacity: 0;
+
+}
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Rational Functions as Power Series</h2>
+    <p>Is it possible to convert a rational function \(f(x) = \frac{p(x)}{q(x)} \) into a power series \(\sum_{n=1}^{\infty}a_n (x-a)^{n}\;\)? </p>
+    </p>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 50px; flex-wrap: wrap;">
+      <div class="box" id="box1" style="opacity: 0;">
+        <p> Recall the general form of a <a href="(15)Geometric.html" style="color: white;">geometric sequence</a> \( \sum_{n=1}^{\infty} ar^{n-1} \begin{cases} \text{converges} & \text{if } |r| < 1 \\ \text{diverges} & \text{if } |r| \geq 1 \end{cases} \) </p>
+            <p id="key-insight" style="opacity: 0;"> KEY INSIGHT: If we can convert our rational function <span>\(f(x) = \frac{p(x)}{q(x)} \)</span> into the form \(f(x) = \frac{a}{1-r}\), then we will be able to represent \(f(x) = \frac{a}{1-r}\) as a geometric series. </p>
+            <p id="recap" style="opacity: 0;"> RECAP: Our goal is to convert \(f(x) = \frac{p(x)}{q(x)} \) -> \(\sum_{n=1}^{\infty}ar^{n-1}\). </p>
+            <o id="example" style="opacity: 0;"> EXAMPLE: We will try to do this with an example function \(f(x) = \frac{20}{1+x^3}\) </o>
+      </div>
+      <div class="box" id="box2">
+        <h3>Geometric Friendly Form</h3>
+        <p style="font-size: xx-large;">\(\frac{20}{1+x^3} = \) \(\frac{20}{1+x^3} \) \(= \frac{a}{1-r}\)</p>
+        <input id="numerator" type="text" style="width: 40px;position: relative;bottom: 90px;left: 10px;">
+        <input id="denominator" type="text" style="left: 10px;width: 60px;position: relative;bottom: 82px;">
+        <button id="checkFractionBtn">Submit</button>
+      </div>
+      <div class="box" id="box3">
+        <h3>Geometric Series Form</h3>
+        <p> Now that <span style="font-size: larger;">\(f(x) = \frac{20}{1 - (-x^3)} = \frac{a}{1-r}\)</span>: <br>
+          <br>
+          <span style="font-size: x-large;">\(\sum_{n=1}^{\infty}\; 20(-x^3)^{n-1}\) \(=\sum_{n=1}^{\infty} ar^{n-1}\)</span>
+        </p>
+        <input id="a" type="text" style="bottom: 57px;position: relative;right: 115px;width: 15px;height: 25px;">
+        <input id="r" type="text" style="position: relative;/* bottom: 60px; */height: 25px;width: 30px;bottom: 105px;right: 60px;">
+        <button id="checkSumBtn">Submit</button>
+      </div>
+      <div class="box" id="box4" style="width: 600px;">
+        <h3>Finding Interval of Convergence</h3>
+        <p> But we cannot yet claim that <span style="display: inline;">\(f(x) = \frac{20}{1 - (-x^3)} = \sum_{n=1}^{\infty} 20(-x^3)^{n-1}\)</span> because a geometric series only converges for certain values of r. So in this problem, we can think of our "r" as being \(-x^3\) </p>
+        <p> \( \sum_{n=1}^{\infty} 20(-x^3)^{n-1}\) converges when \(|-x^3| < 1\). </p>
+            <p> Solve the above inequality to find for which values of x our series converges: <span style="font-size: larger;">\(x \in (\;-1\;\;,\;1\;\;\;)\)</span>
+            </p>
+            <input id="start" type="text" style="
+                bottom: 40px;
+                width: 15px;
+                left: 42px;
+            ">
+            <input id="end" type="text" style="
+                bottom: 65px;
+                width: 5px;
+                left: 100px;
+            ">
+            <button id="checkRangeBtn">Submit</button>
+      </div>
+      <div class="box" id="box5" style="width: 700px;">
+        <h3>Result</h3>
+        <p>Putting everything together:</p>
+        <p> \(f(x) = \frac{20}{1+x^3} = \frac{20}{1-(-x^3)} = \sum_{n=1}^{\infty}20(-x^3)^{n-1}, x \in (-1,1) \) </p>
+        <h4>Your Turn (optional challenge problem)</h4>
+        <p>
+          <span style="font-size: x-large;">\(f(x) = \frac{x^2}{4-x^2} = \sum_{n=1}^{\infty}\; \frac{x^2}{4} (\frac{x^2}{4})^{n-1}, x \in (\;-2\;\;,\;2\;\;\;)\)</span>
+        </p>
+        <input id="a-challenge" type="text" style="    bottom: 60px;
+    position: relative;
+    right: 15px;
+    width: 10px;
+    height: 30px;">
+        <input id="r-challenge" type="text" style="position: relative;    position: relative;
+    /* bottom: 60px; */
+    height: 30px;
+    width: 15px;
+    bottom: 115px;
+    right: 0px;
+    left: 35px;">
+        <input id="start-challenge" type="text" style="
+    /* right: 45px; */
+    bottom: 160px;
+    width: 15px;
+    left: 42px;
+    height: 15px;
+    left: 210px;
+            ">
+        <input id="end-challenge" type="text" style="
+    /* bottom: 65px; */
+    /* width: 5px; */
+    /* left: 100px; */
+    /* right: 45px; */
+    bottom: 200px;
+    width: 15px;
+    left: 42px;
+    height: 15px;
+    left: 280px;
+            ">
+        <button id="checkChallengeBtn"style="position: relative;bottom: 150px;">Submit</button>
+        <button class="next-lesson" style="position: relative;bottom: 175px;" onclick="window.location.href=`(14)TS-Part1.html`">Next Lesson</button>
+      </div>
+    </div>
+  </body>
+  <script>
+    alert("If you see no button, press 'Enter' to progress")
+    let clickCount = 0;
+    document.addEventListener('keydown', function(event) {
+      if (event.key == "Enter") {
+        showNext();
+      }
+    })
+
+    function fadeIn(el) {
+      el.style.opacity = "0";
+      el.style.animation = "fadeIn 0.6s forwards";
+    };
+
+    function showNext() {
+      clickCount++;
+      switch (clickCount) {
+        case 1:
+          fadeIn(document.getElementById('box1'));
+          break;
+        case 2:
+          fadeIn(document.getElementById("key-insight"));
+          break;
+        case 3:
+          fadeIn(document.getElementById("recap"));
+          break;
+        case 4:
+          fadeIn(document.getElementById("example"));
+          break;
+        case 5:
+          fadeIn(document.getElementById("box2"));
+          break;
+      }
+    }
+    let numeratorLabel = document.getElementById("numerator");
+    let denominatorLabel = document.getElementById("denominator");
+    let checkFractionBtn = document.getElementById("checkFractionBtn");
+    let checkSumBtn = document.getElementById("checkSumBtn");
+    let aLabel = document.getElementById("a");
+    let rLabel = document.getElementById("r");
+    let checkRangeBtn = document.getElementById("checkRangeBtn");
+    let startLabel = document.getElementById("start");
+    let endLabel = document.getElementById("end");
+    checkFractionBtn.addEventListener("click", function() {
+      const numerator = parseInt(document.getElementById("numerator").value.trim());
+      const denominator = document.getElementById("denominator").value;
+      let labelList = [numeratorLabel, denominatorLabel];
+      let answers = [numerator, denominator];
+      const correctAnswers = [20, "1-(-x^3)"];
+      let wrongAnswers = [0, 0];
+      // check for wrong answers
+      checkAnswers(answers, correctAnswers, wrongAnswers);
+      if (isWrong(wrongAnswers)) {
+        // change S4's text color
+        changeQuestionColors(wrongAnswers, labelList);
+        // change button text + color to Wrong
+        changeCheckAnswersBtnText(-1, checkFractionBtn);
+      } else if (!isWrong(wrongAnswers)) {
+        // reset all labels to green
+        changeQuestionColors(wrongAnswers, labelList);
+        // change buttont to say correct
+        changeCheckAnswersBtnText(1, checkFractionBtn);
+        // next div appear
+        fadeIn(document.getElementById("box3"));
+      }
+    })
+    checkSumBtn.addEventListener("click", function() {
+      const aVal = parseInt(document.getElementById("a").value.trim());
+      const rVal = document.getElementById("r").value;
+      let labelList = [aLabel, rLabel];
+      let answers = [aVal, rVal];
+      const correctAnswers = [20, "-x^3"];
+      let wrongAnswers = [0, 0];
+      // check for wrong answers
+      checkAnswers(answers, correctAnswers, wrongAnswers);
+      if (isWrong(wrongAnswers)) {
+        // change S4's text color
+        changeQuestionColors(wrongAnswers, labelList);
+        // change button text + color to Wrong
+        changeCheckAnswersBtnText(-1, checkSumBtn);
+      } else if (!isWrong(wrongAnswers)) {
+        // reset all labels to green
+        changeQuestionColors(wrongAnswers, labelList);
+        // change buttont to say correct
+        changeCheckAnswersBtnText(1, checkSumBtn);
+        // next div appear
+        fadeIn(document.getElementById("box4"));
+      }
+    })
+    checkRangeBtn.addEventListener("click", function() {
+      const startVal = parseInt(document.getElementById("start").value.trim());
+      const endVal = parseInt(document.getElementById("end").value.trim());
+      let labelList = [startLabel, endLabel];
+      let answers = [startVal, endVal];
+      const correctAnswers = [-1, 1];
+      let wrongAnswers = [0, 0];
+      // check for wrong answers
+      checkAnswers(answers, correctAnswers, wrongAnswers);
+      if (isWrong(wrongAnswers)) {
+        // change S4's text color
+        changeQuestionColors(wrongAnswers, labelList);
+        // change button text + color to Wrong
+        changeCheckAnswersBtnText(-1, checkRangeBtn);
+      } else if (!isWrong(wrongAnswers)) {
+        // reset all labels to green
+        changeQuestionColors(wrongAnswers, labelList);
+        // change buttont to say correct
+        changeCheckAnswersBtnText(1, checkRangeBtn);
+        // next div appear
+        fadeIn(document.getElementById("box5"));
+      }
+    })
+
+    let checkChallengeBtn = document.getElementById("checkChallengeBtn");
+    checkChallengeBtn.addEventListener("click", function() {
+      const a_challenge = document.getElementById("a-challenge");
+      const r_challenge = document.getElementById("r-challenge");
+      const start_challenge = document.getElementById("start-challenge");
+      const end_challenge = document.getElementById("end-challenge");
+      let labelList = [a_challenge, r_challenge, start_challenge, end_challenge];
+      let answers = [a_challenge.value, r_challenge.value, parseInt(start_challenge.value), parseInt(end_challenge.value)];
+      const correctAnswers = ["x^2/4", "x^2/4", -2, 2];
+      let wrongAnswers = [0, 0, 0, 0];
+      // check for wrong answers
+      checkAnswers(answers, correctAnswers, wrongAnswers);
+      if (isWrong(wrongAnswers)) {
+        // change S4's text color
+        changeQuestionColors(wrongAnswers, labelList);
+        // change button text + color to Wrong
+        changeCheckAnswersBtnText(-1, checkChallengeBtn);
+      } else if (!isWrong(wrongAnswers)) {
+        // reset all labels to green
+        changeQuestionColors(wrongAnswers, labelList);
+        // change buttont to say correct
+        changeCheckAnswersBtnText(1, checkChallengeBtn);
+      }
+    })
+
+    function changeCheckAnswersButtonToWrong(btn) {
+      setElementColor(btn, "red");
+      setElementText(btn, "Try Again");
+    }
+
+    function changeCheckAnswersButtonToCorrect(btn) {
+      setElementColor(btn, "green");
+      setElementText(btn, "Correct!");
+    }
+
+    function changeCheckAnswersButtonToDefault(btn) {
+      setElementColor(btn, "black");
+      setElementText(btn, "Check Answers");
+    }
+
+    function setElementText(el, text) {
+      el.innerText = text;
+    }
+
+    function changeCheckAnswersBtnText(inputNum, btn) {
+      // -1 wrong, 1 right, 0 reset
+      if (inputNum === -1) {
+        changeCheckAnswersButtonToWrong(btn);
+      } else if (inputNum === 1) {
+        changeCheckAnswersButtonToCorrect(btn);
+      } else if (inputNum === 0) {
+        changeCheckAnswersButtonToDefault(btn);
+      }
+    }
+
+    function checkAnswers(answers, correctAnswers, wrongAnswers) {
+      let numAnswersToCheck = answers.length;
+      console.log("Answers: ", answers);
+      console.log("Correct answers: ", correctAnswers);
+      for (let i = 0; i < numAnswersToCheck; ++i) {
+        if (answers[i] !== correctAnswers[i]) {
+          wrongAnswers[i] = 1;
+        } else {
+          wrongAnswers[i] = 0;
+        }
+      }
+      console.log("Wrong Answers: ", wrongAnswers);
+    }
+
+    function isWrong(wrongAnswers) {
+      let numAnswersToCheck = wrongAnswers.length;
+      for (let i = 0; i < numAnswersToCheck; ++i) {
+        if (wrongAnswers[i] === 1) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function changeQuestionColors(wrongAnswers, labelList) {
+      let wrongAnswersLength = wrongAnswers.length;
+      for (let i = 0; i < wrongAnswersLength; ++i) {
+        if (wrongAnswers[i] === 1) { // change label to red
+          setElementColor(getLabelElementGivenIndex(i, labelList), "red");
+        } else { // change label to green
+          setElementColor(getLabelElementGivenIndex(i, labelList), "green");
+        }
+      }
+    }
+
+    function setElementColor(el, color) {
+      el.style.color = color;
+    }
+
+    function getLabelElementGivenIndex(i, labelList) {
+      return labelList[i];
+    }
+    MathJax.typeset();
+  </script>
+</html>

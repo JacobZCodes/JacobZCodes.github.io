@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Series Animation Example</title>
+    <style>
+      @font-face {
+        font-family: 'TangoSans_Bold';
+        src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+      }
+
+      body {
+        background-color: #000;
+        color: #00ccff;
+        font-family: 'TangoSans_Bold', sans-serif;
+        text-align: center;
+        padding: 2em;
+      }
+
+      p {
+        margin-top: 1em;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+        }
+      }
+
+      .purple {
+        color: purple;
+      }
+
+      .yellow {
+        color: yellow;
+      }
+
+      .question {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+      }
+
+      input[type="text"] {
+        background-color: #111;
+        /* dark input background */
+        color: #00ccff;
+        /* cyan text color */
+        border: 1px solid #00ccff;
+        /* cyan border */
+        border-radius: 4px;
+        /* rounded corners */
+        padding: 10px 12px;
+        font-size: 16px;
+        width: 20%;
+        height: 3px;
+        box-shadow: 0 0 8px #00ccff33;
+        /* subtle cyan glow */
+        outline: none;
+        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+      }
+
+      input[type="text"]:focus {
+        border-color: #33ffff;
+        box-shadow: 0 0 12px #33ffff;
+      }
+
+.box {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  margin: 0 auto;
+  align-items: center;
+  row-gap: 1em;
+  border: 2px solid #00ccff;
+  border-radius: 10px;
+  padding: 1.5em;
+  background-color: #111;
+  box-shadow: 0 0 12px #00ccff55;
+}
+
+
+.lesson-box {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 150px;
+  margin: 0 auto;
+  align-items: center;
+  row-gap: 1em;
+  border: 2px solid #00ccff;
+  border-radius: 10px;
+  padding: 1.5em;
+  background-color: #111;
+  box-shadow: 0 0 12px #00ccff55;
+}
+    .next-lesson {
+  width: 300px;
+  padding: 18px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 8px; /* make it rectangular instead of round */
+  margin-top: 4rem;   /* space it further down */
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+
+    button {
+      margin-top: 1em;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+      background-color: #00ccff;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      animation: fadeIn 1s forwards;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00ccff;
+      /* animation: fadeIn 1s forwards; */
+    }
+
+    button:active {
+      transform: scale(0.95);
+      /* animation: fadeIn 1s forwards; */
+    }
+
+    
+
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body>
+    <h1>
+      <b>Series</b>
+    </h1>
+    <div id="sentences">
+      <p id="0" style="opacity: 0;">A <span class="purple">partial sum</span> is the summation of the first n terms of our sequence </p>
+      <p id="1" style="opacity: 0;"> Let \(a_n = {10,20,30,40,50,60,70,80,90,100}\). Then a <span class="purple">partial sum</span> of the first 3 terms is \(10+20+30=60\) </p>
+      <p id="2" style="opacity: 0;">So we say <span class="yellow">\(S_3 = 60\) </span>to mean "the sum of the first 3 terms in our sequence is 60" </p>
+    </div>
+    <div style="opacity: 0;"id="quiz" class="box">
+      <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Your Turn</h3>
+      <div class="question">
+        <label id= "label-s4" for="s4">\(S_4=\)</label>
+        <input id="s4" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-s5" for="s5">\(S_5=\)</label>
+        <input id="s5" type="text">
+      </div>
+      <div class="question">
+        <label id= "label-s6" for="s6">\(S_6=\)</label>
+        <input id="s6" type="text">
+      </div>
+      <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
+        <button id="check-answers-btn" style="position: relative;">Check Answers</button>
+      </div>
+    </div>
+    <div id="lessons" style="display:flex; justify-content: space-evenly;">
+      <div style="opacity: 0;"id="partialSumLesson">
+        <p style="max-width: 300px;">We formally define our <span class="purple">partial sum</span> as:</p>
+        <div class="lesson-box">
+          <h3>Partial Sum</h3>
+          <p>\(S_n = \sum_{i=0}^{n} a_i\)</p>
+        </div>
+      </div>
+      <div style="opacity: 0;" id="infiniteSeriesLesson">
+        <p style="max-width: 300px; max-height: 34px;">We define a <span class="yellow">partal sum of infinite terms</span> as an <span class="purple">infinite series</span></p>
+        <div class="lesson-box">
+          <h3>Infinite Series</h3>
+          <p style="max-width: 100%; text-align: center; margin: 0 auto;">
+            \(\lim_{n \to \infty} S_n = \lim_{n \to \infty} \sum_{i=0}^{n} a_i\)
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div id="conclusion-space" style="display: flex; padding-top: 50px; flex-direction: column; align-items: center; opacity: 0;">
+      <p style="max-width: 280px;">
+        The major focus of studying series is based upon identifiy whether a series will <span class="purple">diverge or converge</span>.
+        We will explore these concepts in the next lesson.
+      </p>
+      <button class="next-lesson" onclick="window.location.href='(3)Geometric.html'">Next Lesson</button>
+    </div>
+
+    <script>
+          alert("If you see no button, press 'Enter' to progress")
+
+      let clickNum = -1;
+      document.addEventListener("keydown", function (event) {
+        if (event.key  == "Enter") {
+          showNext();
+        }
+      });
+      function fadeIn(el) {
+        el.style.opacity = "0";    
+
+    el.style.animation = "fadeIn 0.6s forwards";
+  }
+  function showNext() {
+    clickNum++;
+    console.log("clicknum: ", clickNum);
+    switch (clickNum) {
+      case 0:
+        fadeIn(document.getElementById("0"));
+        break;
+      case 1:
+        fadeIn(document.getElementById("1"));
+        break;
+      case 2:
+        fadeIn(document.getElementById("2"));
+        break;        
+      case 3:
+        fadeIn(document.getElementById("quiz"));
+        break;
+      case 4:
+        if (isRight) {
+          fadeIn(document.getElementById("partialSumLesson"));
+        }
+        else {
+          clickNum = 3;
+        }
+        break;
+      case 5:
+        fadeIn(document.getElementById("infiniteSeriesLesson"));
+        break;
+      case 6:
+        fadeIn(document.getElementById("conclusion-space"));
+        break;        
+    }
+  }
+      // MathJax.typeset();
+      let isRight = false;
+      const correctAnswers = [100, 150, 210]
+      let wrongAnswers = [0, 0, 0];
+      let checkAnswersBtn = document.getElementById("check-answers-btn");
+      let labels4 = document.getElementById("label-s4"); 
+      let labels5 = document.getElementById("label-s5"); 
+      let labels6 = document.getElementById("label-s6"); 
+      function checkAnswers(answers) {
+        console.log("Ansewres: ", answers);
+        for (let i = 0; i < 3; ++i) {
+          if (answers[i] !== correctAnswers[i]) {
+            wrongAnswers[i] = 1;
+          }
+          else {
+            wrongAnswers[i] = 0;
+          }
+        }
+      }
+
+      function isWrong() {
+        for (let i = 0; i < 3; ++i) {
+          if (wrongAnswers[i] === 1) {
+            return true;
+          }
+        }
+        return false;
+      }
+      function changeCheckAnswersBtnText(inputNum) {
+        // -1 wrong, 1 right, 0 reset
+        if (inputNum === -1) {
+          changeCheckAnswersButtonToWrong();
+        }
+        else if (inputNum === 1) {
+          changeCheckAnswersButtonToCorrect();
+        }
+        else if (inputNum === 0) {
+          changeCheckAnswersButtonToDefault();
+        }
+      }
+      function setElementColor(el,color) {
+        el.style.color = color;
+      }
+
+      function setElementText(el, text) {
+        el.innerText = text;
+      }
+
+      function changeCheckAnswersButtonToWrong() {
+        setElementColor(checkAnswersBtn, "red");
+        setElementText(checkAnswersBtn, "Try Again");
+      }
+
+      function changeCheckAnswersButtonToCorrect() {
+        setElementColor(checkAnswersBtn, "green");
+        setElementText(checkAnswersBtn, "Correct!");
+      }
+
+      function changeCheckAnswersButtonToDefault() {
+        setElementColor(checkAnswersBtn, "black");
+        setElementText(checkAnswersBtn, "Check Answers");
+      }
+
+      function getLabelElementGivenIndex(i) {
+        switch (i) {
+          case 0:
+            return labels4;
+            break;
+          case 1:
+            return labels5;
+            break;
+          case 2:
+            return labels6;
+            break;
+        }
+      }
+      function changeQuestionColors() {
+        // 0 - s4, 1 - s5, 2 - s6
+        for (let i =0; i<3; ++i) {
+          if (wrongAnswers[i] === 1) { // change label to red
+            setElementColor(getLabelElementGivenIndex(i), "red");
+          }
+          else { // change label to green
+            setElementColor(getLabelElementGivenIndex(i), "green");
+          }
+        }
+      }
+
+      document.getElementById("check-answers-btn").addEventListener("click", function() {
+        const s4 = parseInt(document.getElementById("s4").value.trim());
+        const s5 = parseInt(document.getElementById("s5").value.trim());
+        const s6 = parseInt(document.getElementById("s6").value.trim());
+        const answers = [s4, s5, s6];
+        // check for wrong answers
+        checkAnswers(answers);
+        if (isWrong()) {
+          // change S4's text color
+          changeQuestionColors();
+          // change button text + color to Wrong
+          changeCheckAnswersBtnText(-1);
+        }
+        else if (!isWrong()) {
+          // reset all labels to green
+          changeQuestionColors();
+          // change buttont to say correct
+          changeCheckAnswersBtnText(1);
+
+          isRight = true;
+          showNext();
+          // next div appear
+        }
+      });
+    </script>
+  </body>
+</html>

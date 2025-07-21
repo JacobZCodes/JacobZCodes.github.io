@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Geometric</title>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ['$', '$'],
+            ['\\(', '\\)']
+          ]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <style>
+      @font-face {
+        font-family: 'TangoSans_Bold';
+        src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+      }
+
+      body {
+        background-color: #000;
+        color: #00ccff;
+        font-family: 'TangoSans_Bold', sans-serif;
+        text-align: center;
+        padding: 2em;
+      }
+
+      .box {
+        display: flex;
+        flex-direction: column;
+        width: 420px;
+        margin: 0 auto;
+        align-items: center;
+        border: 2px solid #00ccff;
+        border-radius: 10px;
+        padding: 1.5em;
+        background-color: #111;
+        box-shadow: 0 0 12px #00ccff55;
+        gap: 10px;
+      }
+
+      .question {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+      }
+
+      input[type="text"] {
+        background-color: #111;
+        /* dark input background */
+        color: #00ccff;
+        /* cyan text color */
+        border: 1px solid #00ccff;
+        /* cyan border */
+        border-radius: 4px;
+        /* rounded corners */
+        padding: 10px 12px;
+        font-size: 16px;
+        width: 20%;
+        height: 3px;
+        box-shadow: 0 0 8px #00ccff33;
+        /* subtle cyan glow */
+        outline: none;
+        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+      }
+
+      input[type="text"]:focus {
+        border-color: #33ffff;
+        box-shadow: 0 0 12px #33ffff;
+      }
+
+      button {
+        margin-top: 1em;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #000;
+        background-color: #00ccff;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+        animation: fadeIn 1s forwards;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px #00ccff;
+        /* animation: fadeIn 1s forwards; */
+      }
+
+      button:active {
+        transform: scale(0.95);
+        /* animation: fadeIn 1s forwards; */
+      }
+
+      input[type="text"].sequence {
+        position: relative; bottom: 10px; right: 5px; width: 8px;      
+    }
+
+        .next-lesson {
+  width: 300px;
+  padding: 18px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 8px; /* make it rectangular instead of round */
+  margin-top: 4rem;   /* space it further down */
+}
+    </style>
+  </head>
+  <body>
+    <h2>Geometric Series</h2>
+    <p>Recall our earlier definition of a <a href="(1)Sequence.html" style="color: white; ">
+  geometric sequence
+</a>
+    </p>
+    <p>So we can define our geometric series as: \(
+\sum_{n=1}^{\infty} a \cdot r^{n-1}
+\)
+    </p>
+    <div style="display: flex; flex-wrap: wrap;">
+      <div id="box1" class="box" style="width: 475px;">
+        <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Your Turn</h3>
+        <p>Fill in the following exponents to find S_n</p>
+        <div class="question" style="position: relative;right: 37px;">
+          <label>\(S_2= ar^0 + ar^1\)</label>
+        </div>
+        <div class="question">
+          <label>\(S_3=ar^0\)</label>
+          <!-- <input id="s3" type="text"> -->
+          <label>\( + ar\)</label>
+          <input id="box1-1" class="sequence" type="text" >
+          <label>\(+ ar\)</label>
+          <input id="box1-2" class="sequence" type="text">
+        </div>
+        <div class="question">
+          <label>\(S_4=ar^0\)</label>
+          <!-- <input id="s3" type="text"> -->
+          <label>\( + ar\)</label>
+          <input id="box1-3" class="sequence" type="text">
+          <label>\(+ ar\)</label>
+          <input id="box1-4" class="sequence" type="text">
+          <label>\(+ ar\)</label>
+          <input id="box1-5"class="sequence" type="text">
+        </div>
+        <div class="question">
+          <label>\(S_n=ar^0\)</label>
+          <!-- <input id="s3" type="text"> -->
+          <label>\( + ar\)</label>
+          <input id="box1-6" type="text" class="sequence">
+          <label>\(+ ar\)</label>
+          <input id="box1-7" type="text" class="sequence">
+          <label>\(+ ar\)</label>
+          <input id="box1-8"type="text" class="sequence">
+          <label>\(...+ ar\)</label>
+          <input id="box1-9"type="text" class="sequence" style="width: 30px;">
+        </div>
+        <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
+          <button id="check-answers-btn-1" style="position: relative;">Check Answers</button>
+        </div>
+      </div>
+      <div id="box2" class="box" style="width: 550px; opacity: 0;">
+        <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Your Turn</h3>
+        <p>Fill in the following exponents to find r * S_n</p>
+        <div class="question" style="position: relative;right: 37px;">
+          <label>\(r*S_2= ar^1 + ar^2\)</label>
+        </div>
+        <div class="question">
+          <label>\(r*S_3=ar^1\)</label>
+          <!-- <input id="s3" type="text"> -->
+          <label>\( + ar\)</label>
+          <input id="box2-1" type="text" class="sequence">
+          <label>\(+ ar\)</label>
+          <input id="box2-2"type="text" class="sequence">
+        </div>
+        <div class="question">
+          <label>\(r*S_4=ar^1\)</label>
+          <!-- <input id="s3" type="text"> -->
+          <label>\( + ar\)</label>
+          <input id="box2-3"class="sequence"type="text">
+          <label>\(+ ar\)</label>
+          <input id="box2-4"class="sequence" type="text">
+          <label>\(+ ar\)</label>
+          <input id="box2-5"class="sequence" type="text">
+        </div>
+        <div class="question">
+          <label>\(r*S_n=ar^1\)</label>
+          <!-- <input id="s3" type="text"> -->
+          <label>\( + ar\)</label>
+          <input id="box2-6"class="sequence" type="text">
+          <label>\(+ ar\)</label>
+          <input id="box2-7"class="sequence" type="text">
+          <label>\(+ ar\)</label>
+          <input id="box2-8"class="sequence" type="text">
+          <label>\(...+ ar\)</label>
+          <input id="box2-9"class="sequence"type="text" style="width: 30px;">
+        </div>
+        <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
+          <button id="check-answers-btn-2" style="position: relative;">Check Answers</button>
+        </div>
+      </div>
+      <div id="box3" class="box" style="opacity: 0;">
+        <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Your Turn</h3>
+        <div class="question" style="position: relative;right: 37px;">
+          <label>\(S_n - rS_n= a - ar\)</label>
+          <input id="box3-1" type="text" class="sequence">
+        </div>
+        <div id="sn-expression" class="question" style="opacity: 0;position: relative;right: 37px;">
+            <label>\(S_n = \frac{a(1-r^n)}{1-r}\)</label>
+        </div>
+        <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
+          <button id="check-answers-btn-3" style="position: relative;">Check Answers</button>
+        </div>
+      </div>
+      <div id="box4"class="box" style="width: 900px; gap: 10px; position: relative; top: 30px; opacity: 0;">
+        <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Playing with Limits</h3>
+        <p>What happens when you choose |r| < 1?</p>
+        <div style="display: flex; gap: 150px;">
+            <div>
+                <div style="display: flex;">Input value for a: <input type="text" id="a" style="position: relative; left: 10px;"></div>
+                <div style="display: flex;">Input value for r: <input type="text" id="r" style="position: relative; left: 10px;"></div>
+                <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
+                <button id="submit-constants-btn" style="position: relative;">Submit Constants</button>
+                </div>            
+            </div>
+            <div class="question" style="position: relative;right: 37px; font-size: larger; gap: 50px;">
+                <div style="display: flex; flex-direction: column;">
+                    <label id="limit-label">\(\lim_{n \to \infty} \frac{a(1-r^n)}{1-r}=\)</label>
+                    <input id="slider" type="range" min="0" max="100" value="0" style="opacity: 0;">
+                    <span id="n">n=0</span>
+                </div>                
+                <div id="RHS" style="position: relative; bottom: 19px; right: 20px; width: 215px;">\(?\)</div>
+            </div>
+        </div>
+      </div>
+      <div id="box5"class="box" style="width: 400px; gap: 10px; position: relative; top: 30px; opacity: 0;">
+        <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Geometric Series</h3>
+        <p>We now observe the following: </p>
+  <div>
+    \[
+    \sum_{n=0}^{\infty} ar^n
+    \begin{cases}
+    \text{converges} & \text{if } |r| < 1 \\
+    \text{diverges}  & \text{if } |r| \geq 1
+    \end{cases}
+    \]
+  </div>
+        <div style="display: flex; gap: 150px;">
+            <div>
+                <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
+                <button id="next-btn" style="position: relative; right: 90px; bottom: 30px;" class="next-lesson" onclick="window.location.href='(4)Divergence.html'">Next Lesson</button>
+                </div>            
+            </div>
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+    <script>
+          alert("If you see no button, press 'Enter' to progress")
+
+        checkBox1Btn = document.getElementById("check-answers-btn-1");
+        checkBox2Btn = document.getElementById("check-answers-btn-2");
+        checkBox3Btn = document.getElementById("check-answers-btn-3");
+        submitConstantsBtn = document.getElementById("submit-constants-btn");
+        slider = document.getElementById("slider");
+        nLabel = document.getElementById("n");
+        let a;
+        let r;
+
+        submitConstantsBtn.addEventListener("click", function() {
+            // get values for a + r 
+            a = parseFloat (document.getElementById("a").value);
+            r = parseFloat (document.getElementById("r").value);
+            // get limitLabel + rewrite limit label
+            let limitLabel = document.getElementById("limit-label");
+            let innerHTMLForLimitLabel = `\\(\\lim_{n \\to \\infty} \\frac{${a}(1-${r}^n)}{1-${r}}=\\)`;
+            limitLabel.innerHTML = innerHTMLForLimitLabel;
+            // show slider and show next box
+            slider.style.opacity = 1;
+            document.getElementById("box5").style.opacity=1;
+            MathJax.typeset();
+        })
+
+        slider.addEventListener("input", function() {
+            // get current value 
+            let n = slider.value;
+            // update span tag
+            nLabel.innerHTML = `n=${n}`;
+            // get current limit value
+            let limitValue = limitFunction(a,r,n);
+            // update RHS
+            updateRHS(limitValue);
+        })
+
+        checkBox1Btn.addEventListener("click", function() {
+          console.log("clicked");
+
+          const box1Input = document.getElementById("box1-1");
+          const box2Input = document.getElementById("box1-2");
+          const box3Input = document.getElementById("box1-3");
+          const box4Input = document.getElementById("box1-4");
+          const box5Input = document.getElementById("box1-5");
+          const box6Input = document.getElementById("box1-6");
+          const box7Input = document.getElementById("box1-7");
+          const box8Input =  document.getElementById("box1-8");
+          const box9Input = document.getElementById("box1-9");
+      
+          const box1Val = parseInt (document.getElementById("box1-1").value);
+          const box2Val = parseInt (document.getElementById("box1-2").value);
+          const box3Val = parseInt (document.getElementById("box1-3").value);
+          const box4Val = parseInt (document.getElementById("box1-4").value);
+          const box5Val = parseInt (document.getElementById("box1-5").value);
+          const box6Val = parseInt (document.getElementById("box1-6").value);
+          const box7Val = parseInt(document.getElementById("box1-7").value);
+          const box8Val = parseInt (document.getElementById("box1-8").value);
+          const box9Val = document.getElementById("box1-9").value; // string
+          
+          let labelList = [box1Input,box2Input,box3Input,box4Input,box5Input,box6Input, box7Input, box8Input, box9Input];
+          let wrongAnswers = [0,0,0,0,0,0,0,0,0];
+          const correctAnswers = [1,2,1,2,3,1,2,3,"n-1"];
+          const answers = [box1Val,box2Val,box3Val,box4Val,box5Val,box6Val,box7Val,box8Val,box9Val];
+          // check for wrong answers
+          checkAnswers(answers, correctAnswers, wrongAnswers);
+          if (isWrong(wrongAnswers)) {
+            // change S4's text color
+            changeQuestionColors(wrongAnswers, labelList);
+            // change button text + color to Wrong
+            changeCheckAnswersBtnText(-1, checkBox1Btn);
+          }
+          else if (!isWrong(wrongAnswers)) {
+            // reset all labels to green
+            changeQuestionColors(wrongAnswers, labelList);
+            // change buttont to say correct
+            changeCheckAnswersBtnText(1, checkBox1Btn);
+            // next div appear
+            document.getElementById("box2").style.opacity=1;
+          }        
+        })
+
+        checkBox2Btn.addEventListener("click", function() {
+          console.log("clicked");
+
+          const box1Input = document.getElementById("box2-1");
+          const box2Input = document.getElementById("box2-2");
+          const box3Input = document.getElementById("box2-3");
+          const box4Input = document.getElementById("box2-4");
+          const box5Input = document.getElementById("box2-5");
+          const box6Input = document.getElementById("box2-6");
+          const box7Input = document.getElementById("box2-7");
+          const box8Input =  document.getElementById("box2-8");
+          const box9Input = document.getElementById("box2-9");
+      
+          const box1Val = parseInt (document.getElementById("box2-1").value);
+          const box2Val = parseInt (document.getElementById("box2-2").value);
+          const box3Val = parseInt (document.getElementById("box2-3").value);
+          const box4Val = parseInt (document.getElementById("box2-4").value);
+          const box5Val = parseInt (document.getElementById("box2-5").value);
+          const box6Val = parseInt (document.getElementById("box2-6").value);
+          const box7Val = parseInt(document.getElementById("box2-7").value);
+          const box8Val = parseInt (document.getElementById("box2-8").value);
+          const box9Val = document.getElementById("box2-9").value; // string
+          
+          let labelList = [box1Input,box2Input,box3Input,box4Input,box5Input,box6Input, box7Input, box8Input, box9Input];
+          let wrongAnswers = [0,0,0,0,0,0,0,0,0];
+          const correctAnswers = [2,3,2,3,4,2,3,4,"n"];
+          const answers = [box1Val,box2Val,box3Val,box4Val,box5Val,box6Val,box7Val,box8Val,box9Val];
+          // check for wrong answers
+          checkAnswers(answers, correctAnswers, wrongAnswers);
+          if (isWrong(wrongAnswers)) {
+            // change S4's text color
+            changeQuestionColors(wrongAnswers, labelList);
+            // change button text + color to Wrong
+            changeCheckAnswersBtnText(-1, checkBox2Btn);
+          }
+          else if (!isWrong(wrongAnswers)) {
+            // reset all labels to green
+            changeQuestionColors(wrongAnswers, labelList);
+            // change buttont to say correct
+            changeCheckAnswersBtnText(1, checkBox2Btn);
+            // next div appear
+            document.getElementById("box3").style.opacity=1;          }        
+        })
+        checkBox3Btn.addEventListener("click", function() {
+          const box1Input = document.getElementById("box3-1");
+          const box1Val = document.getElementById("box3-1").value; 
+          
+          let labelList = [box1Input];
+          let wrongAnswers = [0];
+          const correctAnswers = ["n"];
+          const answers = [box1Val];
+          // check for wrong answers
+          checkAnswers(answers, correctAnswers, wrongAnswers);
+          if (isWrong(wrongAnswers)) {
+            // change S4's text color
+            changeQuestionColors(wrongAnswers, labelList);
+            // change button text + color to Wrong
+            changeCheckAnswersBtnText(-1, checkBox3Btn);
+          }
+          else if (!isWrong(wrongAnswers)) {
+            // reset all labels to green
+            changeQuestionColors(wrongAnswers, labelList);
+            // change buttont to say correct
+            changeCheckAnswersBtnText(1, checkBox3Btn);
+            // next div appear + sn expression appear
+            document.getElementById("box4").style.opacity=1;
+            document.getElementById("sn-expression").style.opacity=1;
+          }        
+        })
+
+
+
+        function limitFunction(a,r,n) {
+            let num = a * (1-r**n);
+            let denom = 1 - r;
+            let quotient = num/denom;
+            console.log(quotient)
+            return quotient;
+        }
+        
+        function updateRHS(val){
+            document.getElementById("RHS").innerHTML = `\\(${val}\\)`;
+            MathJax.typeset();
+        } 
+      function changeCheckAnswersButtonToWrong(btn) {
+        setElementColor(btn, "red");
+        setElementText(btn, "Try Again");
+      }
+
+      function changeCheckAnswersButtonToCorrect(btn) {
+        setElementColor(btn, "green");
+        setElementText(btn, "Correct!");
+      }
+
+      function changeCheckAnswersButtonToDefault(btn) {
+        setElementColor(btn, "black");
+        setElementText(btn, "Check Answers");
+      }
+      function setElementText(el, text) {
+        el.innerText = text;
+      }
+    function changeCheckAnswersBtnText(inputNum,btn) {
+        // -1 wrong, 1 right, 0 reset
+        if (inputNum === -1) {
+          changeCheckAnswersButtonToWrong(btn);
+        }
+        else if (inputNum === 1) {
+          changeCheckAnswersButtonToCorrect(btn);
+        }
+        else if (inputNum === 0) {
+          changeCheckAnswersButtonToDefault(btn);
+        }
+      }
+
+
+    function checkAnswers(answers,correctAnswers, wrongAnswers) {
+      let numAnswersToCheck = answers.length;
+      console.log("Answers: ", answers);
+      console.log("Correct answers: ", correctAnswers);
+
+      for (let i = 0; i < numAnswersToCheck; ++i) {
+        if (answers[i] !== correctAnswers[i]) {
+          wrongAnswers[i] = 1;
+        }
+        else {
+          wrongAnswers[i] = 0;
+        }
+      }
+      console.log("Wrong Answers: ", wrongAnswers);
+    }
+    function isWrong(wrongAnswers) {
+        let numAnswersToCheck = wrongAnswers.length;
+        for (let i = 0; i < numAnswersToCheck; ++i) {
+          if (wrongAnswers[i] === 1) {
+            return true;
+          }
+        }
+        return false;
+      }    
+      function changeQuestionColors(wrongAnswers, labelList) {
+        
+        let wrongAnswersLength = wrongAnswers.length;
+        for (let i =0; i<wrongAnswersLength; ++i) {
+          if (wrongAnswers[i] === 1) { // change label to red
+            setElementColor(getLabelElementGivenIndex(i, labelList), "red");
+          }
+          else { // change label to green
+            setElementColor(getLabelElementGivenIndex(i, labelList), "green");
+          }
+        }
+      }
+
+      function setElementColor(el,color) {
+        el.style.color = color;
+      }      
+
+      function getLabelElementGivenIndex(i, labelList) {
+        console.log("Returning label: ", labelList[i]);
+        return labelList[i];
+      }    
+  </script>
+  </body>
+</html>

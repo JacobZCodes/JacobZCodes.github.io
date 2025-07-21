@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Power Series</title>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ['$', '$'],
+            ['\\(', '\\)']
+          ]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <style>
+      @font-face {
+        font-family: 'TangoSans_Bold';
+        src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+      }
+
+      body {
+        background-color: #000;
+        color: #00ccff;
+        font-family: 'TangoSans_Bold', sans-serif;
+        text-align: center;
+        padding: 2em;
+      }
+
+      .box {
+        display: flex;
+        flex-direction: column;
+        width: 200px;
+        /* margin: 0 auto; */
+        align-items: center;
+        border: 2px solid #00ccff;
+        border-radius: 10px;
+        padding: 1.5em;
+        background-color: #111;
+        box-shadow: 0 0 12px #00ccff55;
+      }
+
+      .question {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+      }
+
+      input[type="text"] {
+        background-color: #111;
+        /* dark input background */
+        color: #00ccff;
+        /* cyan text color */
+        border: 1px solid #00ccff;
+        /* cyan border */
+        border-radius: 4px;
+        /* rounded corners */
+        padding: 10px 12px;
+        font-size: 16px;
+        width: 20%;
+        height: 3px;
+        box-shadow: 0 0 8px #00ccff33;
+        /* subtle cyan glow */
+        outline: none;
+        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+      }
+
+      input[type="text"]:focus {
+        border-color: #33ffff;
+        box-shadow: 0 0 12px #33ffff;
+      }
+
+      button {
+        margin-top: 1em;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #000;
+        background-color: #00ccff;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+        animation: fadeIn 1s forwards;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px #00ccff;
+        /* animation: fadeIn 1s forwards; */
+      }
+
+      button:active {
+        transform: scale(0.95);
+        /* animation: fadeIn 1s forwards; */
+      }
+
+      .statement {
+        opacity: 0;
+      }
+
+            @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Power Series</h2>
+    <div class="lesson" style="display: flex; flex-direction: column; align-items: center;">
+      <p id="statement1" class="statement">A series is a summation: \( \sum_{n=1}^{\infty} a_n \)</p>
+      <p id="statement2" class="statement"> A power series is a series where each term includes a power of \( x \): \( \sum_{n=1}^{\infty} a_n x^n \). We say this series is <strong>centered</strong> at \( x = 0 \). </p>
+      <p id="statement3" class="statement"> But the series \( \sum_{n=1}^{\infty} a_n (x - a)^n \) is <strong>centered</strong> at \( x = a \). </p>
+      <div id="student-work" style="display: flex; justify-content: center; align-items: center; position: relative; gap: 5px;
+  left: 50px;">
+        <div id="yourTurn" class="box" style="opacity: 0;">
+          <h3 style="padding-bottom: 0.5em;">Your Turn</h3>
+          <p>Create a power series of the form \( \sum_{n=1}^{\infty} a_n (x - a)^n \)</p>
+          <div id="question">
+            <label id="label-an" for="sequence">\(a_n=\)</label>
+            <input id="sequence" type="text">
+          </div>
+          <div id="question">
+            <span>\( (x - \)</span>
+            <input id="center" type="text">
+            <span>\()^n \)</span>
+            <div id="button-space" style="width:150px; margin: 0 auto; padding-top: 10px;">
+              <button id="submitPowerSeriesBtn" style="position: relative;">Submit Power Series</button>
+            </div>
+          </div>
+        </div>
+        <div id="latexSection" style="display:flex;opacity: 0;">
+          <div id="generalSeriesSection">
+            <div id="generalSeries"></div>
+            <div id="termSlider" style="display:flex; flex-direction: column; align-items: center;">
+              <input width=50px; type="range" id="n-slider" min="0" max="5" value="0">
+              <br>
+              <label id="n-slider-label" for="n-slider">n = 0</label>
+              <div id="xInputSection" style="display:flex; flex-direction: row; align-items: center; justify-content: center;">
+                <label id="x-label" for="x">x = </label>
+                <input id="x" type="text" style="width: 10px; margin-left: 0.25em;">
+              </div>
+              <button id="evaluate-polynomial-btn" style="position: relative; width: 100px; font-size: smaller; text-align: center;">Submit</button>
+            </div>
+          </div>
+          <div id="expandedSection" style="width: 575px; justify-content: flex-start; display: flex;"></div>
+        </div>
+      </div>
+      <div id="yourTurn2" class="box" style="width: 700px; opacity: 0; margin-top: 50px;">
+        <h3 style="padding-bottom: 0.5em;">Center</h3>
+        <p>Notice that whenever you submit x = a, the polynomial will always evaluate to 0. <br>
+          <br>If we think about this in the context of series, we can interpret this static polynomial output, regardless of how many n-terms we have, as signifying that the power series/infinite polynomial converges at x = a. <br>
+          <br> Thus we define the center of a power series as the <span style=" color:#98ff98">known point of convergence for a power series.</span>
+        </p>
+        <div id="button-space" style="width:150px; margin: 0 auto; padding-top: 10px;">
+          <button id="next-lesson" onclick="window.location.href=`(13)FunctionsAsSeries.html`"style="position: relative;">Next Lesson</button>
+        </div>
+      </div>
+    </div>
+    <script>
+          alert("If you see no button, press 'Enter' to progress")
+
+      let evaluatePolynomialBtnHasNotBeenClicked = true;
+      let latexSection = document.getElementById("latexSection");
+      let yourTurnBox2 = document.getElementById("yourTurn2");
+      let yourTurnBox = document.getElementById("yourTurn");
+      let s1 = document.getElementById("statement1");
+      let s2 = document.getElementById("statement2");
+      let s3 = document.getElementById("statement3");
+      let sequence; // a_n = ...
+      let center; // a
+      let centerExpression; // (x-a)
+      let latexList = []; // [a1 * (x-a)^1, a2 * (x-a)^2, a3 * (x-a)^3]
+      let latexExpression;
+      let generalSeries = document.getElementById("generalSeries");
+      let expandedSection = document.getElementById("expandedSection");
+      let nSliderLabel = document.getElementById("n-slider-label");
+      let strippedLatexList;
+      let xVal;
+      let innerHTMLWithXValue;
+      let enterCount = 0;
+      document.addEventListener("keydown", function(e) {
+        if (e.key == "Enter") {
+          // enterCount caps at 5
+          if (enterCount < 5) {
+            enterCount++;
+          }
+          if (enterCount === 5) {
+
+              if (evaluatePolynomialBtnHasNotBeenClicked === false) {
+                revealNextStatement();
+              }
+          }
+          else {
+            revealNextStatement();
+          }
+        }
+        })
+      
+      document.getElementById("evaluate-polynomial-btn").addEventListener("click", function() {
+        if (evaluatePolynomialBtnHasNotBeenClicked === true) {
+          alert("Once you are done playing around with different x and n-values, push 'Enter' to progress");
+          evaluatePolynomialBtnHasNotBeenClicked = false;
+        }
+        xVal = parseInt(document.getElementById("x").value);
+        let n = parseInt(document.getElementById("n-slider").value);
+        let displayHTML = buildDisplayHTMLFromLatexList();
+        if (!xVal) {
+          // if there is an equality symbol present in the HTML, take that mf off and reform the displayHTML
+          if (isEqualSignPresent()) {
+            removeResultFromEndOfLatexList();
+            displayHTML = buildDisplayHTMLFromLatexList();
+            expandedSection.innerHTML = displayHTML;
+          }
+        } else {
+          console.log("Xval: ", xVal);
+          // append summation to last element in latex list
+          let summationResult = evaluatePolynomial(xVal, n);
+          console.log("= ", summationResult);
+          appendResultToEndOfLatexList(summationResult);
+          displayHTML = buildDisplayHTMLFromLatexList();
+          console.log("Before replacing x: ", displayHTML);
+          displayHTML = displayHTML.replace(/\bx\b/g, `(${xVal})`);
+          expandedSection.innerHTML = displayHTML;
+        }
+        MathJax.typeset();
+      });
+      document.getElementById("n-slider").addEventListener("input", function() {
+        // clean n
+        let n = parseInt(this.value);
+        // update visual on the slider
+        nSliderLabel.innerText = `n = ${n}`;
+        // build displayHTML
+        buildLatexListUpToN(n, sequence, center);
+        strippedLatexList = stripLatexList();
+        let displayHTML = `\\( ${strippedLatexList.join(' + ')} \\)`;
+        if (!xVal) {
+          expandedSection.innerHTML = displayHTML;
+        } else {
+          // append summation to last element in latex list
+          let summationResult = evaluatePolynomial(xVal, n);
+          appendResultToEndOfLatexList(summationResult);
+          strippedLatexList = stripLatexList();
+          displayHTML = `\\( ${strippedLatexList.join(' + ')} \\)`;
+          displayHTML = displayHTML.replace(/\bx\b/g, `(${xVal})`);
+          expandedSection.innerHTML = displayHTML;
+        }
+        MathJax.typeset();
+      });
+      document.getElementById("submitPowerSeriesBtn").addEventListener("click", function() {
+        console.log('clicked');
+        // TO DO: sanitize values
+        // collect values
+        sequence = document.getElementById("sequence").value;
+        center = parseInt(document.getElementById("center").value);
+        // return values as latex
+        generalSeries.innerHTML = buildInitialLatex(sequence, center);
+        // if next box is off, turn it on
+        revealElement(latexSection);
+
+        MathJax.typeset();
+      })
+
+      function revealNextStatement() {
+        console.log("called!");
+        switch (enterCount) {
+          case 1:
+            revealElement(s1);
+            break;
+          case 2:
+            revealElement(s2);
+            break;
+          case 3:
+            revealElement(s3);
+            break;
+          case 4:
+            revealElement(yourTurnBox);
+            break;
+          case 5:
+            console.log("revealing turnbox2");
+            revealElement(yourTurnBox2);
+            break;
+          default:
+            break;
+        }
+      }
+      function revealElement(el) {
+            el.style.opacity = "0";    
+
+el.style.animation = "fadeIn 0.6s forwards";
+      }
+      function buildDisplayHTMLFromLatexList() {
+        strippedLatexList = stripLatexList();
+        return `\\( ${strippedLatexList.join(' + ')} \\)`
+      }
+
+      function appendResultToEndOfLatexList(result) {
+        console.log("receiving: ", result);
+        let updatedLatex;
+        let indexOfLastLatexElement = latexList.length - 1;
+        let lastLatexElement = latexList[indexOfLastLatexElement];
+        // if equal sign NOT present
+        if (!isEqualSignPresent()) {
+          updatedLatex = lastLatexElement.replace(/\^(\d+)\s*\\\)/, `^$1 = ${result} \\)`);
+          latexList[indexOfLastLatexElement] = updatedLatex;
+        } else {
+          updatedLatex = lastLatexElement.replace(/=\s*\d+/, `= ${result}`);
+          latexList[indexOfLastLatexElement] = updatedLatex;
+        }
+        // if equal sign present
+        // \\(3 \\cdot (x - 4)^3 \\)       
+        // Replace the matched pattern with the desired new string
+        // latexList[indexOfLastLatexElement].replace(/\^(\d+)\s*\\\)/, `^$1 = ${result} \\)`);
+      }
+
+      function removeResultFromEndOfLatexList() {
+        let indexOfLastLatexElement = latexList.length - 1;
+        let lastLatexElement = latexList[indexOfLastLatexElement];
+        let updatedLatex = lastLatexElement.replace(/\^(\d+)\s*=\s*[^\\]+(?=\\\))/, '^$1');
+        latexList[indexOfLastLatexElement] = updatedLatex;
+        // \\(3 \\cdot (x - 4)^3 \\)       
+        // Replace the matched pattern with the desired new string
+        // latexList[indexOfLastLatexElement].replace(/\^(\d+)\s*\\\)/, `^$1 = ${result} \\)`);
+      }
+
+      function isEqualSignPresent() {
+        let indexOfLastLatexElement = latexList.length - 1;
+        let lastLatexElement = latexList[indexOfLastLatexElement];
+        if (lastLatexElement.includes('=')) {
+          return true
+        }
+        return false
+      }
+
+      function computeCenterExpression(xVal, center, n) {
+        return (xVal - center) ** n;
+      }
+
+      function computeSequenceExpression(n) {
+        let seqAsFunc = new Function("n", `return ${sequence};`);
+        return seqAsFunc(n);
+      }
+
+      function evaluatePolynomial(xVal, n) {
+        let rollingSum = 0;
+        let summandList = [];
+        for (let i = 1; i <= n; ++i) {
+          summandList[i - 1] = computeSequenceExpression(i) * computeCenterExpression(xVal, center, i)
+          rollingSum += summandList[i - 1];
+        }
+        return rollingSum;
+      }
+
+      function buildCenterExpressionWithoutNPower(center) {
+        centerExpression = center === 0 ? "x" : center > 0 ? `(x - ${center})` : `(x + ${Math.abs(center)})`;
+        return centerExpression;
+      }
+
+      function stripLatexList() {
+        return latexList.map(s => s.replace(/^\\\(|\\\)$/g, ''));
+      }
+
+      function replaceNInSequenceWithVariable(n, sequence) {
+        return sequence.replace(/n/g, n);
+      }
+
+      function buildInitialLatex(sequence, center) {
+        // don't variaibilze n since we're displaying sequence as is
+        centerExpression = buildCenterExpressionWithoutNPower(center);
+        const latex = `\\( \\sum_{n=1}^{\\infty} ${sequence} \\cdot ${centerExpression}^n = \\)`;
+        return `
+												<div>${latex}</div>`;
+      }
+
+      function buildLatexForGivenN(n, sequence, center) {
+        clean_sequence = replaceNInSequenceWithVariable(n, sequence);
+        const latex = `\\(${clean_sequence} \\cdot ${centerExpression}^${n} \\)`;
+        return latex;
+      }
+
+      function buildLatexListUpToN(n, sequence, center) {
+        // reset latexList
+        latexList = [];
+        for (let i = 1; i <= n; ++i) {
+          latexList[i - 1] = buildLatexForGivenN(i, sequence, center)
+        }
+      }
+    </script>
+  </body>
+</html>

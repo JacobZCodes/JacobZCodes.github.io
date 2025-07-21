@@ -1,0 +1,692 @@
+<!--
+BUGS:
+Pressing Submit while Continue Button is alive
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Series Animation Example</title>
+<style>
+    @font-face {
+      font-family: 'TangoSans_Bold';
+      src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+    }
+    body {
+      background-color: #000;
+      color: #00ccff;
+      font-family: 'TangoSans_Bold', sans-serif;
+      text-align: center;
+      padding: 2em;
+    }
+
+      @keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+    @keyframes fadeOut {
+        from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+  .hovered {
+    text-decoration: underline;
+    cursor: help;
+    position: relative;
+    color: #33ddff;
+  }
+
+  .hovered::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    background: #222;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    top: 1.5em;
+    left: 0;
+    font-size: 0.9em;
+    white-space: nowrap;
+    display: none;
+    z-index: 10;
+  }
+
+  .hovered:hover::after {
+    display: block;
+  }
+
+  button {
+    margin-top: 1em;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    background-color: #00ccff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00ccff;
+  }
+
+  button:active {
+    transform: scale(0.95);
+  }
+
+  /* input[type="range"] {
+    width: 100%;
+    margin-top: 1em;
+    accent-color: #00ccff;
+  } */
+
+  #sentences {
+    margin-top: 1em;
+  }
+
+  #user-input {
+    margin-top: 1em;
+    display: none;
+  }
+
+
+  #graph-explanation {
+    color: #00ccff;
+  }
+
+  label {
+    color: #00ccff;
+    font-weight: bold;
+  }
+
+  .red {
+  color: #ff4d4d; /* light red text */
+  padding-left: 0.4em;
+
+}
+
+  .yellow {
+  color:lightyellow; /* light red text */
+  padding-left: 0.4em;
+}
+
+  .green {
+  color:lightgreen; /* light red text */
+  padding-left: 0.4em;
+}
+
+
+  .purple {
+  color: purple; /* light red text */
+}
+
+input[type="text"] {
+  background-color: #111;         /* dark input background */
+  color: #00ccff;                 /* cyan text color */
+  border: 1px solid #00ccff;      /* cyan border */
+  border-radius: 4px;             /* rounded corners */
+  padding: 10px 12px;
+  font-size: 16px;
+  width: 10%;
+  box-shadow: 0 0 8px #00ccff33;  /* subtle cyan glow */
+  outline: none;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+  border-color: #33ffff;
+  box-shadow: 0 0 12px #33ffff;
+}
+
+
+select {
+  background-color: #111;
+  color: #00ccff;
+  border: 1px solid #00ccff;
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-family: 'TangoSans_Bold', sans-serif;
+  font-size: 16px;
+  box-shadow: 0 0 8px #00ccff33;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  appearance: none; /* removes default arrow styling */
+}
+
+select:focus {
+  border-color: #33ffff;
+  box-shadow: 0 0 12px #33ffff;
+}
+
+option {
+  background-color: #111;
+  color: #00ccff;
+}
+
+#next-lesson-btn {
+  margin: 2em auto 0 auto;     /* centers the button horizontally */
+  display: block;              /* makes margin auto work */
+  width: 250px;                /* more rectangular shape */
+  border-radius: 12px;         /* less pill-shaped */
+  padding: 16px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #00ccff;
+  color: #000;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+#next-lesson-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00ccff;
+}
+
+#next-lesson-btn:active {
+  transform: scale(0.95);
+}
+
+</style>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body>
+    <h1>Divergence Test</h1>
+    <div id="sentence1" style="opacity: 0;"><p><strong>If \(a_n \not\to 0\), then \(\sum a_n\) diverges.</strong></p> </div>
+    <div id="sentence2" style="opacity: 0;"><p>What this doesn't mean: <span class="red"><strong>if \(a_n \to 0\), then \(\sum a_n\) converges</strong>.</p></span></div>
+    <div id="sentence3" style="opacity: 0;"><p>Moreover, if  <span class="red">\(a_n \to 0\),</span><span class="yellow"><strong>then \(\sum a_n\) can either diverge or converge</strong>.</p></span></div>
+    <div id="input1" style="opacity:0";>
+      <p>Enter your sequence in series notation (please enter it exactly as a computer should read it, ie 2n+3 => 2*n+3):</p>
+      <label>\( \sum_{n=1}^{\infty} \) <input type="text" id="seriesInput" placeholder="n^2">
+      </label>
+      <button id="seriesInputBtn">Input Series</button>
+    </div>
+<div id="areas" style="display: flex;">
+  <div id="area1" style="display: flex; align-items: center; position:relative; opacity: 0;">
+    <div id="plotSpace1" style="position: relative;display: flex; margin-top: 2em; flex-direction: column; height: 350px;"  >
+      <div id="label-row" style="display: flex; align-items: center; z-index: 10; align-content: baseline;">
+        <div id="slider-wrapper" style="height: fit-content; width: fit-content; line-height: 1; margin: 0 auto; z-index: 10; position: relative;top: 40px; left: 200px;">
+            <label id="plot1-label" for="n-slider1"><span id="n-value-label1">a_n = n</span></label><br>
+            <input  width=50px; type="range" id="n-slider1" min="1" max="100" value="20">
+        </div>
+        <div id="quiz1" style="display:flex; position: relative; left: 500px; top: 80px;">
+          <div id="quiz1box">
+            <div id="guessInput1">
+              <label for="convergenceOptions">My series will</label>
+                      <select name="convergenceOptions" id="convergenceOptions">
+                <option value=-1>converge</option>
+                <option value=1>diverge</option>
+                <option value=0>converge or diverge</option>
+              </select>
+              <br>
+              <label for="arrowOptions">because a_n</label>
+                
+              <select name="arrowOptions" id="arrowOptions">
+                <option value=1>approaches</option>
+                <option value=0>does not approach</option>
+              </select>
+              the value 0.
+            </div>
+            <div id="feedback-row" style="display:flex; align-items: center;">
+              <button id="submitGuess">Submit Guess</button>
+              <p id="feedback" style=" max-width: 200px; overflow-wrap: break-word;min-height: 100px; "></p>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      <div id="plot1" style="position:relative; top: -70px;"></div>
+      
+<button id="next-lesson-btn" class="next-lesson" onclick="window.location.href='(6)IntegralTest.html'" style="opacity: 0; position: relative; z-index: 10; left: 500px; bottom:150px;">
+  Next Lesson
+</button>
+    </div>
+  </div>
+  <div id="area2" style="display: flex; align-items: center; position:relative; opacity: 0;">
+    <div id="plotSpace2" style="position: relative;display: flex; margin-top: 2em; flex-direction: column; height: 350px;"  >
+      <div id="label-row2" style="display: flex; position: relative; right: 250px;align-items: center; justify-content: flex-start; gap: 0; z-index: 10; align-content: baseline;">
+        <div id="slider-wrapper2" style="height: fit-content; width: fit-content; line-height: 1; margin: 0 auto; z-index: 10; position: relative;top: 40px; left: 200px;">
+            <label id="plot2-label" for="n-slider2"><span id="n-value-label2">a_n = n</span></label><br>
+            <input  width=50px; type="range" id="n-slider2" min="1" max="100" value="20">
+        </div>
+
+        <div id="quiz2" style="display:flex; position: relative;">
+          <div id="quiz2box">
+            <div id="guessInput2">
+              <label for="convergenceOptions">My series will</label>
+                      <select name="convergenceOptions" id="convergenceOptions2">
+                <option value=-1>converge</option>
+                <option value=1>diverge</option>
+                <option value=0>converge or diverge</option>
+              </select>
+              <br>
+              <label for="arrowOptions">because a_n</label>
+                
+              <select name="arrowOptions" id="arrowOptions2">
+                <option value=1>approaches</option>
+                <option value=0>does not approach</option>
+              </select>
+              the value 0.
+            </div>
+            <div id="feedback-row2" style="display:flex; align-items: center;">
+              <button id="submitGuess2">Submit Guess</button>
+              <p id="feedback2" style=" max-width: 200px; overflow-wrap: break-word; min-height: 100px"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="plot2" style="position:relative; top: -70px;"></div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<script>
+      alert("If you see no button, press 'Enter' to progress")
+
+let series1Info;
+let series2Info;
+let continueBtn;
+document.getElementById("submitGuess").addEventListener("click", function () {
+    let isCorrect = false;
+    const feedbackRow = document.getElementById("feedback-row");
+    const divergenceValue = document.getElementById("convergenceOptions").value;
+    const arrowValue = document.getElementById("arrowOptions").value;
+    const userAnswers = [divergenceValue, arrowValue];
+    const correctAnswers = getCorrectAnswers(series1Info[1]);
+    const feedback = document.getElementById("feedback");
+    feedback.innerHTML = giveFeedback(userAnswers, correctAnswers);
+    if (feedback.textContent.includes("Correct!")) { // append continue button too..
+      isCorrect = true;
+      continueBtn = document.createElement("button");
+      continueBtn.innerText = "Continue";
+      feedbackRow.appendChild(continueBtn);
+    }
+    if (isCorrect && continueBtn) {
+        continueBtn.addEventListener("click", function () { // remove quiz + update title of first plot + rename earlier button + adjust label + rename button...
+        document.getElementById("quiz1").remove();
+        const plot1label = document.getElementById("plot1-label");
+        updatePlotLabel(plot1label, series1Info[0], correctAnswers);
+        const wrapper  = document.getElementById("slider-wrapper");
+        wrapper.style.top = "10px";
+        wrapper.style.left = "40px";
+        const seriesInputBtn = document.getElementById("seriesInputBtn");
+        seriesInputBtn.textContent = "Input another Series";
+        
+      });
+
+    }
+
+  });
+
+document.getElementById("submitGuess2").addEventListener("click", function () {
+    let continueBtn;
+    let feedbackRow2 = document.getElementById("feedback-row2");
+    let isCorrect = false;
+    const divergenceValue = document.getElementById("convergenceOptions2").value;
+    const arrowValue = document.getElementById("arrowOptions2").value;
+    const userAnswers = [divergenceValue, arrowValue];
+    const correctAnswers = getCorrectAnswers(series2Info[1]);
+    const feedback = document.getElementById("feedback2");
+    feedback.innerHTML = giveFeedback(userAnswers, correctAnswers);
+    if (feedback.textContent.includes("Correct!")) { // append continue button too..
+      isCorrect = true;
+      continueBtn = document.createElement("button");
+      continueBtn.innerText = "Examine Graphs";
+      feedbackRow2.appendChild(continueBtn);
+    }
+    if (isCorrect && continueBtn) {
+      continueBtn.addEventListener("click", function () { // remove quiz + update title of first plot + rename earlier button + adjust label + rename button...
+        document.getElementById("quiz2").remove();
+        const plot2label = document.getElementById("plot2-label");
+        const plotspace2 = document.getElementById("plotSpace2");
+        plotspace2.style.position = "relative";
+        const wrapper2  = document.getElementById("slider-wrapper2");
+        // slider wrapper 2 top to 0 px
+        wrapper2.style.top = "0px";
+        // update plot2 title...
+        updatePlotLabel(plot2label, series2Info[0], correctAnswers);
+        // next lesson button at bottom
+        document.getElementById("next-lesson-btn").style.opacity = "1";
+
+        
+      });
+
+    }
+
+  });
+
+
+ 
+  // store first series text + function
+  let clickCount = 0;
+  let area2 = document.getElementById("area2");
+  let plot2label = document.getElementById("plot2-label");
+  HTMLWrongSeries = `<span class ="yellow warning">Input a series that acts differently than your first series</span>`
+  document.getElementById("seriesInputBtn").addEventListener("click", function () {
+    const warnings = document.querySelectorAll('.warning');
+    if (clickCount > 0) { // second series
+      // return if btn text contains another
+      if (!document.getElementById("seriesInputBtn").textContent.includes("another")) {
+        return;
+      }
+      const area2 = document.getElementById("area2");
+      const computedOpacity = window.getComputedStyle(area2).opacity;
+      // return if area2 is already on
+      if (computedOpacity !== "0" ){
+        console.log("area2 is light...");
+        return;
+      }
+      series2Str = document.getElementById("seriesInput").value;
+      let series2Fn = convertSeriesStrToFunc(series2Str);
+      series2Info = [series2Str, series2Fn];
+      if (seriesIsDifferent()) { // clear area then pplot series
+        warnings.forEach(w => w.remove());
+        coords2 = getCoords(series2Str);
+        plotSeries("plot2",series2Str, coords2);
+        updatePlotLabel(plot2label, series2Info[0]);
+        area2.style.opacity = "1";
+      }
+      else { // append warning to button
+        // if warning already exists, skip all of this
+        console.log("firing as expected...");
+        if (warnings.length == 0) {
+          console.log("should be firing...");
+          const input1div= document.getElementById("input1");
+          const warning = document.createElement("span");
+          warning.className = "yellow warning";
+          warning.innerHTML = HTMLWrongSeries;
+          warning.style.position = "relative";
+          warning.style.display = "inline-block";
+          warning.style.maxWidth = "300px";
+          input1div.appendChild(warning);
+          // area2.style.opacity = "1";
+        }
+      }
+    }
+    if (clickCount == 0) {
+      let series1Str = document.getElementById("seriesInput").value;
+      let series1Fn= convertSeriesStrToFunc(series1Str);
+      series1Info = [series1Str, series1Fn];
+      console.log("Series 1 Info: ", series1Info);
+      let coords1 = getCoords(series1Info[0]);
+      plotSeries("plot1", series1Info[0], coords1);
+      let plot1_label = document.getElementById("plot1-label");
+      updatePlotLabel(plot1_label, series1Info[0]);
+      document.getElementById("area1").style.opacity =1;
+    }
+    clickCount++;
+  });
+
+
+function seriesIsDifferent() {
+  console.log("Series 1: ", series1Info[0]);
+  console.log("Series 2: ", series2Info[0]);
+  console.log("Series 1 Inconclusive: ", isInconclusive(series1Info[1]));
+  console.log("Series 2 Inconclusive: ", isInconclusive(series2Info[1]));
+  series1Result = isInconclusive(series1Info[1]);
+  series2Result = isInconclusive(series2Info[1]);
+  if (series1Result != series2Result) {
+    return true;
+  }
+  return false;
+
+}
+
+
+function updatePlotLabel(plotlabel, seriesStr, correctAnswers=-1) {
+  if (correctAnswers == -1) { // we just want to set the title to the function
+    const textToInsert = `${seriesStr}`;
+    plotlabel.insertAdjacentHTML("afterbegin", `<div>${textToInsert}</div><br>`);
+    return;
+  }
+  let divergenceValue = correctAnswers[0];
+  let verb;
+  if (divergenceValue == 1) {
+    verb = `diverge`;
+  }
+  else {
+    verb = 'diverge or converge';
+  }
+  const textToInsert = `${seriesStr} will <span class="purple">${verb}</span>`;
+  plotlabel.insertAdjacentHTML("afterbegin", `<div>${textToInsert}</div><br>`);
+}
+function getCorrectAnswers(seriesFn) {
+  if (isInconclusive(seriesFn)) { // inconclusive test [0], approaching zero [1]
+    return [0,1];
+  }
+  return [1,0];
+}
+function isInconclusive(seriesFn) {
+  if (seriesFn(10000) < 1) {
+    return true;
+  }
+  return false;
+}
+
+function arraysEqual(a, b) {
+  return a.length === b.length && a.every((val, i) => val === b[i]);
+} 
+let correctCounter = 0;
+function giveFeedback(answers, correctAnswers) {
+  let userAnswers = answers.map(str => +str); // strings to int
+  console.log("user answers: ", userAnswers);
+  console.log("correct answers: ", correctAnswers);
+  if (userAnswers[0] == -1) { // this will never be correct
+    console.log("super wrong");
+    return HTMLConvergenceFeedback;
+  }
+  if (!arraysEqual(userAnswers,correctAnswers)) {
+    console.log("wrong");
+    return HTMLIncorrectFeedback;
+  }
+
+  if (correctCounter == 0) {
+    correctCounter++;
+    console.log("Giving continue...");
+    return getCorrectFeedback(correctAnswers);
+  }
+  else {
+    console.log("Giving continue2...");
+    return giveFinalCorrectFeedback();
+  }
+
+}
+
+function giveFinalCorrectFeedback() {
+  return `<span class="green">Correct!</span>`;
+}
+
+function getCorrectFeedback(correctAnswers) {
+  let divergenceValue = correctAnswers[0];
+  let verb;
+  if (divergenceValue == 1) { // ask for inconclsuive 
+    verb = `<span class="purple">converges or diverges</span>`;
+  }
+  else { // ask for divergent
+    verb = `<span class="purple">diverges</span>`;
+  }
+  return `<span class="green" >Correct! Now find a series that ${verb} this time.</span>`;
+}
+
+
+const HTMLConvergenceFeedback = `<span class="red">With the Divergence Test, we can never know if our series converges. Try again. </span>`;
+
+const HTMLIncorrectFeedback = `<span class="yellow">Incorrect. Please try again.</span>`;
+
+
+
+
+// showAllTags();
+let currentIndex = 0;
+// coords = getCoords("1/n");
+// plotSeries("plot1", "1/n", coords);
+document.addEventListener("keydown", function (event) {
+          if (event.key === "Enter") {
+              if (currentIndex === 4) {
+                return;
+              }
+              showNext();
+          }
+        });
+
+document.getElementById("n-slider1").addEventListener("input", function () { 
+  const n = parseInt(this.value);
+  const seriesFn = series1Info[1];
+  const value = seriesFn(n);
+  document.getElementById("n-value-label1").textContent = n;
+
+  document.getElementById("n-value-label1").innerHTML = `a<sub>${n}</sub> = <span id="n-value-label1">${value.toFixed(4)}</span>`;
+  const coords = getCoords(series1Info[0], n);
+  plotSeries("plot1", series1Info[0], coords);
+});
+
+
+document.getElementById("n-slider2").addEventListener("input", function () { 
+  const n = parseInt(this.value);
+  const seriesFn = series2Info[1];
+  const value = seriesFn(n);
+  document.getElementById("n-value-label2").textContent = n;
+
+  document.getElementById("n-value-label2").innerHTML = `a<sub>${n}</sub> = <span id="n-value-label2">${value.toFixed(4)}</span>`;
+  const coords = getCoords(series2Info[0], n);
+  plotSeries("plot2", series2Info[0], coords);
+});
+
+function showAllTags() {
+  const allElements = document.querySelectorAll('*');
+  allElements.forEach(el => {
+    el.style.opacity = "1";
+  });
+}
+function fadeIn(el) {
+    el.style.opacity = "0";    
+
+el.style.animation = "fadeIn 0.6s forwards";
+}
+
+
+function fadeOut(el) {
+el.style.opacity = "1";    
+el.style.animation = "fadeOut 0.6s forwards";
+}
+
+
+function showNext() {
+  currentIndex++;
+  console.log(currentIndex);
+  if (currentIndex === 1) {
+    fadeIn(sentence1);
+    MathJax.typeset();
+  }
+
+  if (currentIndex === 2) {
+    fadeIn(sentence2);
+    MathJax.typeset();
+  }
+
+  if (currentIndex === 3) {
+    fadeIn(sentence3);
+    MathJax.typeset();
+  }
+  if (currentIndex === 4) {
+    fadeIn(input1);
+    MathJax.typeset();
+  }
+
+}
+
+function convertSeriesStrToFunc(seriesStr) {
+  let seriesFn;
+  try {
+    seriesFn = new Function("n", "return " + seriesStr);
+    return seriesFn;
+  } catch (e) {
+    console.error("Invalid series string:", e);
+    alert("Invalid series input.");
+    return;
+  }}
+
+function getCoords(seriesStr,maxN=20) {
+  let seriesFn = convertSeriesStrToFunc(seriesStr);
+  // try {
+  //   // Compile the string into a function of n
+  //   seriesFn = new Function("n", "return " + seriesStr);
+  // } catch (e) {
+  //   console.error("Invalid series string:", e);
+  //   alert("Invalid series input.");
+  //   return;
+  // }
+
+  // Generate values
+  const xVals = [];
+  const yVals = [];
+  for (let n = 1; n <= maxN; n++) {
+    try {
+      const y = seriesFn(n);
+      if (typeof y === 'number' && !isNaN(y)) {
+        xVals.push(n);
+        yVals.push(y);
+      }
+    } catch (e) {
+      console.error(`Error evaluating series at n=${n}:`, e);
+    }
+  }
+  return [xVals, yVals];
+}
+
+
+function plotSeries(divID, series, coords) {
+  Plotly.react(divID, [{
+  x: coords[0],
+  y: coords[1],
+  mode: 'markers',
+  type: 'scatter',
+  marker: {
+    size: 8,
+    color: '#00ccff'
+  }
+}], {
+  width: 1000,
+  height: 500,
+  plot_bgcolor: '#111',
+  paper_bgcolor: '#000',
+  font: { color: '#00ccff' },
+  xaxis: {
+    title: { text: 'a_n', font: { color: '#00ccff' } },
+    showticklabels: false,
+    ticks: '',
+    gridcolor: '#333',
+    zerolinecolor: '#555',
+    linecolor: '#00ccff',
+    tickcolor: '#00ccff'
+  },
+  yaxis: {
+    title: { text: 'Value', font: { color: '#00ccff' } },
+    showticklabels: false,
+    ticks: '',
+    gridcolor: '#333',
+    zerolinecolor: '#555',
+    linecolor: '#00ccff',
+    tickcolor: '#00ccff'
+  }
+});
+;
+          }
+</script>
+
+  </body>
+</html>

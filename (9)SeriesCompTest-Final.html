@@ -1,0 +1,131 @@
+<head>
+  <meta charset="UTF-8">
+  <title>Series Comparison</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <!-- your styles and fonts here -->
+</head>
+
+<h3>Series Comparsion: Final</h3>
+<h2 id="instructions">Now we have all of our rules: </h2>
+<div class="container">
+  <div class="box">
+    <strong>Larger Series:</strong><br><br>
+    If a larger series converges, the smaller series converges also.<br><br>
+    If a larger series diverges, the smaller series can diverge or converge.
+  </div>
+  <div class="box">
+    <strong>Smaller Series:</strong><br><br>
+    If a smaller series converges, the larger series can diverge or converge.<br><br>
+    If a smaller series diverges, the larger series must diverge as well.
+  </div>
+</div>
+<!-- Hidden summary box, revealed with clickCount === 1 -->
+<div class="container" id="summary-box" style="display: none;">
+  <div class="box" id = "formal" style="flex: 1 1 100%; max-width: 700px;">
+    <strong>Formal Statement:</strong><br><br>
+    For series with positive terms, if \( 0 \leq a_n \leq b_n \), then:<br>
+    - If \( \sum b_n \) converges, so does \( \sum a_n \).<br>
+    - If \( \sum a_n \) diverges, so does \( \sum b_n \).
+  </div>
+  
+</div>
+
+<script> 
+    alert("If you see no button, press 'Enter' to progress")
+ let clickCount = 0;
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      clickCount++;
+      console.log("Click count is now:", clickCount);
+
+      // 🔧 You can use this block to trigger actions per step
+      if (clickCount === 1) {
+        document.getElementById("instructions").innerText = "Now we combine and formalize these rules";
+        document.getElementById("summary-box").style.display = "flex";
+        MathJax.typeset();
+      } else if (clickCount === 2) {
+        document.getElementById("formal").innerHTML += `<br><br>If you are looking for <strong>convergence</strong>, examine the <strong>larger</strong> series.<br>If you are looking for <strong>divergence</strong>, examine the <strong>smaller</strong> series.`;
+      } else if (clickCount === 3) {
+document.getElementById("formal").innerHTML += `<div class="button-wrapper"><button id="next-lesson-btn" onclick="window.location.href='(10)AST.html'">Next Lesson</button></div>`;
+      }
+      // etc...
+    }
+  });</script>
+<style>
+.button-wrapper {
+  text-align: center;
+  margin-top: 2em;
+}
+
+#next-lesson-btn {
+  display: block;
+  width: 250px;
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #00ccff;
+  color: #000;
+  cursor: pointer;
+  border: none;
+  margin: 0 auto;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+
+#next-lesson-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00ccff;
+}
+
+#next-lesson-btn:active {
+  transform: scale(0.95);
+}
+      @font-face {
+      font-family: 'TangoSans_Bold';
+      src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+    }
+    body {
+      background-color: #000;
+      color: #00ccff;
+      font-family: 'TangoSans_Bold', sans-serif;
+      text-align: center;
+      padding: 2em;
+    }
+  .container {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 1em;
+    flex-wrap: wrap; /* allow responsive stacking on narrow screens */
+  }
+
+  .box {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    height: auto;
+    background-color: #111;
+    border: 1px solid #00ccff;
+    color: #00ccff;
+    padding: 1.2em;
+    border-radius: 12px;
+    box-shadow: 0 0 12px #00ccff44;
+    text-align: left;
+    font-size: 1em;
+    line-height: 1.4em;
+  }
+
+  .box strong {
+    color: #66ddee;
+    font-size: 1.1em;
+  }
+</style>

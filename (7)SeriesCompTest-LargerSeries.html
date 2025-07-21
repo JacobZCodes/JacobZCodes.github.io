@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Series Comparison</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <style>
+    @font-face {
+      font-family: 'TangoSans_Bold';
+      src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+    }
+    body {
+      background-color: #000;
+      color: #00ccff;
+      font-family: 'TangoSans_Bold', sans-serif;
+      text-align: center;
+      padding: 2em;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+    .flex-container {
+      display: flex;
+      justify-content: center;
+      gap: 4em;
+      flex-wrap: wrap;
+    }
+    .column {
+      flex: 1;
+    }
+    .column div {
+      margin: 1.2em auto;
+      font-size: 20px;
+    }
+    #plot, #plot2, #plot3, #right-next-text {
+      margin-top: 2em;
+    }
+#rules {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  padding: 1em;
+  border: 2px solid #00ccff;
+  border-radius: 10px;
+  font-size: 18px;
+  background-color: #111;
+  max-width: 300px;
+  z-index: 3;
+}
+
+select {
+  background-color: #111;
+  color: #00ccff;
+  border: 1px solid #00ccff;
+  border-radius: 6px;
+  font-family: 'TangoSans_Bold', sans-serif;
+  font-size: 16px;
+  padding: 4px 8px;
+  outline: none;
+  appearance: none; /* Hide default OS styling */
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: #33ffff;
+  box-shadow: 0 0 6px #00ccff;
+}
+
+option {
+  background-color: #111;
+  color: #00ccff;
+}
+
+  button {
+    margin-top: 1em;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    background-color: #00ccff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00ccff;
+  }
+
+  button:active {
+    transform: scale(0.95);
+  }
+
+  #next-lesson-btn {
+  width: 250px;                /* more rectangular shape */
+  border-radius: 12px;         /* less pill-shaped */
+  padding: 16px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #00ccff;
+  color: #000;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  opacity: 0;
+}
+
+#next-lesson-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00ccff;
+}
+
+#next-lesson-btn:active {
+  transform: scale(0.95);
+}
+  </style>
+</head>
+<body>
+
+<div id="headerspace" style="
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8em;
+  margin-bottom: 2em; position: relative;
+  left: 160px;
+">
+  <h2 style="margin: 0;">Series Comparison Test: Part I</h2>
+  <button id="next-lesson-btn" onclick="window.location.href=`(8)SeriesCompTest-SmallerSeries.html`">Series Comparison Test: Part II</button>
+</div>
+
+
+  <div id="rules" style="display: none; flex-direction: row;"></div>
+  <div class="flex-container">
+    <div class="column">
+      <div id="math-container" style="position: relative;">
+        <div id="seriesInput" style="display: flex;">
+          <div id="series1" style="font-size: larger;">
+            Create a series <span id ="firstLatexFraction"style="font-size: larger;">\[\frac{1}{n}\]</span>
+            <label id="labelForExponent" for="exponent" style="position: relative"> </label>
+            <select id="exponent" style="
+            position: relative;
+            bottom: 90px;
+            left: 110px;
+            width: 30px;
+            height: 25px;
+            ">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+            <button id="buttonExponent">Submit Series</button>
+          </div>
+          <div id="series2" style="font-size: larger; opacity: 0;">
+            Create another series <span id ="secondLatexFraction"style="font-size: larger;"></span>
+            <label id="labelForConstant" for="constant" style="position: relative"> </label>
+            <select id="constant" style="
+            position: relative;
+            bottom: 85px;
+            left: 125px;
+            width: 30px;
+            height: 40px;
+            ">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>            
+            <button id="buttonConstant">Submit Series</button>
+          </div>
+        </div>
+      </div>
+      <div id="plot"></div>
+    </div>
+    <div class="column">
+      <div id="right-math">
+        <div id="seriesInput3" style="display: flex;">
+            <div id="userSeriesDisplaySection" style="font-size:larger; opacity: 0;"></div>
+            <div id="series3" style="opacity: 0;"> 
+              Create a third, different series <span id ="thirdLatexFraction"style="font-size: larger;"></span>
+              <label id="labelForThirdConstant" for="thirdConstant" style="position: relative"> </label>
+              <select id="thirdConstant" style="
+              position: relative;
+              bottom: 75px;
+              left: 120px;
+              width: 30px;
+              height: 40px;
+              ">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>              
+              <button id="buttonThirdConstant">Submit Series</button> 
+            </div>    
+          </div>
+        <!-- <div id="plot2"></div> -->
+        <!-- <div id="right-next-text"></div>
+        <div id="plot3"></div>         -->
+      </div>
+                
+      </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+        alert("If you see no button, press 'Enter' to progress")
+
+    let userExponent;
+    let userConstant;
+    let thirdUserConstant;
+    let step = 0;
+    const mathContainer = document.getElementById('math-container');
+    const rightMath = document.getElementById('right-math');
+    const rightNextText = document.getElementById('right-next-text');
+    const plotDiv = document.getElementById('plot');
+    // const plot2Div = document.getElementById('plot2');
+    const plot3Div = document.getElementById('plot3');
+    const rules = document.getElementById('rules');
+
+      const darkLayout = {
+        paper_bgcolor: '#000',
+        plot_bgcolor: '#000',
+        font: {
+          color: '#00ccff'
+        },
+        xaxis: {
+          title: 'n',
+          gridcolor: '#222',
+          zerolinecolor: '#444'
+        },
+        yaxis: {
+          title: 'Partial Sum',
+          gridcolor: '#222',
+          zerolinecolor: '#444',
+          type: 'log', // <-- This makes it logarithmic
+          autorange: true
+        }
+      };
+
+    
+    document.getElementById("buttonExponent").addEventListener("click", function () {
+      // redraw LATEX without label
+      userExponent = parseInt(document.getElementById("exponent").value);
+      document.getElementById("firstLatexFraction").innerHTML = `\\[\\frac{1}{n^{${userExponent}}}\\]`;
+      // remove button, select, and label from DOM
+      document.getElementById("labelForExponent").remove();
+      document.getElementById("exponent").remove();
+      document.getElementById("buttonExponent").remove();      
+      // show second series prompt
+      document.getElementById("series2").style.opacity = 1;
+      // update its html
+      document.getElementById("secondLatexFraction").innerHTML =  `\\[\\frac{1}{n^{${userExponent}}+4}\\]`;
+      MathJax.typeset();
+      // show new prompt
+      // console.log("Penis!")
+    })
+
+    document.getElementById("buttonConstant").addEventListener("click", function () {
+      // redraw LATEX without label
+      userConstant = parseInt(document.getElementById("constant").value);
+      console.log(userConstant);
+      document.getElementById("secondLatexFraction").innerHTML = `\\[\\frac{1}{n^{${userExponent}}+${userConstant}}\\]`;
+      // remove button, select, and label from DOM
+      document.getElementById("labelForConstant").remove();
+      document.getElementById("constant").remove();
+      document.getElementById("buttonConstant").remove();   
+      doStep1();
+      MathJax.typeset();
+      // move on
+    })
+
+    document.getElementById("buttonThirdConstant").addEventListener("click", function () {
+      // redraw LATEX without label
+      thirdUserConstant = parseInt(document.getElementById("thirdConstant").value);
+      document.getElementById("thirdLatexFraction").innerHTML = `\\[\\frac{1}{n^{${userExponent}}+${thirdUserConstant}}\\]`;
+      // remove button, select, and label from DOM
+      document.getElementById("labelForThirdConstant").remove();
+      document.getElementById("thirdConstant").remove();
+      document.getElementById("buttonThirdConstant").remove();   
+      doStep6();
+      MathJax.typeset();
+      // move on
+    })
+    
+    function doStep1() {
+        const nextLine = document.createElement('div');
+        nextLine.innerHTML = `We know that \\( \\frac{1}{n^{${userExponent}}} > \\frac{1}{n^{${userExponent}} + ${userConstant}} \\). Now we plot the partial sums of these series.`;
+        mathContainer.appendChild(nextLine);
+        MathJax.typeset();
+        step = 1;
+    }
+
+    function doStep6() {
+        const nextLine = document.createElement('div');
+        let firstFrac = `\\( \\frac{1}{n^{${userExponent}}}`;
+        let secondFrac  = `\\frac{1}{n^{${userExponent}} + ${userConstant}}`;
+        let thirdFrac = `\\frac{1}{n^{${userExponent}} + ${thirdUserConstant}}`;
+        let secondFracCopy = secondFrac;
+        let thirdFracCopy = thirdFrac;
+        // put second and third frac in order
+        if (userConstant > thirdUserConstant) {
+          secondFrac = thirdFracCopy;
+          thirdFrac = secondFracCopy;
+        }
+        nextLine.innerHTML = `We know that ${firstFrac} > ${secondFrac} > ${thirdFrac}\\).`;
+        rightMath.appendChild(nextLine);
+        MathJax.typeset();
+
+        step = 6;
+    }
+
+
+    function series1(n) {
+      return 1 / n ** userExponent
+    }
+
+    function series2(n) {
+      return 1 / (n ** userExponent + userConstant)
+    }
+
+    function series3(n) {
+      return 1 / (n ** userExponent + thirdUserConstant)
+    }
+    function nextStep() {
+      if (step === 0 ) {
+        return;
+      }
+      if (step === 5) {
+        return;
+      }
+      step++;
+    
+
+      if (step === 1) {
+        const nextLine = document.createElement('div');
+        nextLine.innerHTML = `We know that \\( \\frac{1}{n^{${userExponent}}} > \\frac{1}{n^{${userExponent}} + ${userConstant}} \\). Now we plot the partial sums of these series.`;
+        mathContainer.appendChild(nextLine);
+        MathJax.typeset();
+
+      } else if (step === 2) { // plotting series
+        plotDiv.innerHTML = '';
+        const n = Array.from({ length: 30 }, (_, i) => i + 1);
+        let sum1 = 0, sum2 = 0;
+        const partial1 = [], partial2 = [];
+        n.forEach(i => {
+          sum1 += series1(i);
+          sum2 += series2(i);
+          partial1.push(sum1);
+          partial2.push(sum2);
+        });
+
+        Plotly.newPlot(plotDiv, [
+          {
+            x: n, y: partial1, mode: 'markers+lines',
+            name: 'Partial Sums of First Series', marker: { color: '#00ccff' }, line: { color: '#00ccff' }
+          },
+          {
+            x: n, y: partial2, mode: 'markers+lines',
+            name: 'Partial Sums of Second Series', marker: { color: '#ffcc00' }, line: { color: '#ffcc00' }
+          }
+        ], darkLayout);
+
+      } else if (step === 3) {
+        const nextLine = document.createElement('div');
+        nextLine.innerHTML = 'We examine the larger series. The Divergence Test tells us that if a larger series converges, then a series smaller than it must also converge.';
+        mathContainer.appendChild(nextLine);
+        rules.style.display = "block";
+        rules.innerHTML = `<strong><u>Larger Series</u></strong><br>If a larger series converges, the smaller series converges also.<br>`;
+        MathJax.typeset();
+
+      } else if (step === 4) {
+        console.log("here!")
+        document.getElementById("userSeriesDisplaySection").innerHTML = `Consider your two series \\( \\frac{1}{n^{${userExponent}}}, \\frac{1}{n^{${userExponent}} + ${userConstant}} \\)`;
+        document.getElementById("userSeriesDisplaySection").style.opacity = 1;
+        // const nextLine = document.createElement('div');
+        // nextLine.innerHTML = 'Now we consider the three series: \\[ \\sum_{n=1}^{\\infty} 2 \\cdot 2^{n-1} , \\quad \\sum_{n=1}^{\\infty} \\left( 2 + 2(n-1) \\right), \\quad \\sum_{n=1}^{\\infty} 2 \\cdot \\left( \\frac{1}{2} \\right)^{n-1} \\]';
+        // rightMath.appendChild(nextLine);
+        MathJax.typeset();
+
+      } else if (step === 5) { // now construct a third series 
+        let series3 = document.getElementById("series3");
+        let thirdLatexFraction = document.getElementById("thirdLatexFraction");
+        series3.style.opacity = 1;
+        thirdLatexFraction.innerHTML += `\\[\\frac{1}{n^{${userExponent}}+4}\\]`;
+        MathJax.typeset();
+      } else if (step === 7) {
+        const nextLine = document.createElement('div');
+        nextLine.innerHTML = 'We again plot the partial sums of our three series. The Divergence Tests tells us that if the larger series diverges, the smaller series can either converge or diverge.';
+        rightMath.appendChild(nextLine);
+        MathJax.typeset();
+
+        // also append plotDiv2
+        const plot2Div = document.createElement('div');
+        rightMath.appendChild(plot2Div);
+  
+        const n = Array.from({ length: 20 }, (_, i) => i + 1);
+        let sumSeries1 = 0, sumSeries2 = 0, sumSeries3 = 0;
+        const partialSum1 = [], partialSum2 = [], partialSum3 = [];
+        n.forEach(i => {
+          const series1term = series1(i);
+          const series2term = series2(i);
+          const series3term = series3(i);
+          sumSeries1 += series1term;
+          sumSeries2 += series2term;
+          sumSeries3 += series3term;
+          partialSum1.push(sumSeries1);
+          partialSum2.push(sumSeries2);
+          partialSum3.push(sumSeries3);
+        });
+
+        Plotly.newPlot(plot2Div, [
+          { x: n, y: partialSum1, mode: 'markers+lines', name: `1/n^${userExponent}`, marker: { color: '#ff4444' }, line: { color: '#ff4444' } },
+          { x: n, y: partialSum2, mode: 'markers+lines', name: `1/n^${userExponent} + ${userConstant}`, marker: { color: '#00ccff' }, line: { color: '#00ccff' } },
+          { x: n, y: partialSum3, mode: 'markers+lines', name: `1/n^${userExponent} + ${thirdUserConstant}`, marker: { color: '#88ff00' }, line: { color: '#88ff00' } }
+        ], darkLayout);
+        
+        // MathJax.typeset();
+
+      } else if (step === 8) {
+        rules.innerHTML += `<br>If a larger series diverges, the smaller series can diverge or converge`;
+        // place button
+        document.getElementById("next-lesson-btn").style.opacity = 1;
+
+      } 
+    }
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') 
+      nextStep();
+    });
+  </script>
+</body>
+</html>

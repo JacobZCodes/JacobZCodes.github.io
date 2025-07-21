@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Taylor Series Con'td</title>
+    <style>
+      @font-face {
+        font-family: 'TangoSans_Bold';
+        src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+      }
+
+      body {
+        background-color: #000;
+        color: #00ccff;
+        font-family: 'TangoSans_Bold', sans-serif;
+        text-align: center;
+        padding: 2em;
+        display: flex;
+        flex-direction: column;
+        row-gap: 2em;
+      }
+
+      p {
+        margin-top: 1em;
+        text-align: start;
+      }
+
+      .arrow {
+        opacity: 1;
+      }
+
+      input[type="text"] {
+        background-color: #111;
+        /* dark input background */
+        color: #00ccff;
+        /* cyan text color */
+        border: 1px solid #00ccff;
+        /* cyan border */
+        border-radius: 4px;
+        /* rounded corners */
+        padding: 10px 12px;
+        font-size: 16px;
+        width:30px;
+        height: 3px;
+        box-shadow: 0 0 8px #00ccff33;
+        /* subtle cyan glow */
+        outline: none;
+        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        right: 50px;
+      }
+
+      .submit {
+        position: relative;
+        right: 50px;
+      }
+
+             button {
+      margin-top: 1em;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+      background-color: #00ccff;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      /* animation: fadeIn 1s forwards; */
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00ccff;
+      /* animation: fadeIn 1s forwards; */
+    }
+
+    button:active {
+      transform: scale(0.95);
+      /* animation: fadeIn 1s forwards; */
+    }
+
+    .purple {
+      color: purple;
+    }
+
+    .yellow {
+      color: yellow;
+    }
+
+    .orange-red {
+      color: orangered
+    }
+
+         .next-lesson {
+  width: 300px;
+  padding: 18px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 8px; /* make it rectangular instead of round */
+  margin-top: 4rem;   /* space it further down */
+
+}
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 1;
+        }
+      }
+
+            input[type="text"].sequence {
+        position: relative; bottom: 10px; right: 5px; left: 1px; width: 8px;      
+    }
+
+
+
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body>
+    <div id="divGraph" style="height: 300px;"></div>
+    <div id="explanations" style="display: flex;">
+      <div id="divExplainApproximation" style="max-width: 400px; opacity: 1;">
+        In order to get as accurate an approximation as possible, our goal is now to build an approximating function of degree n.
+      </div>
+      <div id="divExplainApproximation2" style="max-width: 400px; opacity: 0;">
+        We wish for our approximating function of degree n to be equal to our desired function so we write: 
+      </div>
+      <div id="divExplainApproximation3" style="opacity: 1; margin-left: 50px; font-size: x-large; color: white;">
+        <span id="expansion" style="opacity: 0;">\(f(x) = e^x = c_0 + c_1x + c_2x^2 + c_3x^3 + \ldots c_nx^n\)</span>
+        <span id="1" style="opacity: 0;">\(f(x) = e^x = 1 + 1x + \frac{1}{2}x^2 + \frac{1}{6}x^3 + \ldots \frac{1}{n!}x^n\)</span>      
+        <span id="2" style="opacity: 0;">\(f(x) = e^x = \frac{x^0}{0!} + \frac{x^1}{1!} + \frac{x^2}{2!} + \frac{x^3}{3!} + \ldots \frac{x^n}{n!} = \sum_{n=0}^{\infty}\frac{x^n}{n!}\)</span>  
+        <br>
+        <span id="3" style="font-size: medium; opacity: 0;">This is called a Taylor series expansion of \(e^x\) centered at \(a=0\).</span>   
+
+    </div>
+    </div>
+    <div id="work" style="display: flex; column-gap: 3em;">
+      <div id="divDeg1" style="max-width: 400px; opacity: 0;">
+        Now we do exactly as before, but we this time we will work with this same degree n polynomial approximating function the entire time:
+        <div id="workDeg1" style="display: flex; flex-direction: column;">
+          <p>\(f(0) = e^0  = c_0 + c_1(0) + c_2(0)^2 + c_3(0)^3 + \ldots c_n(0)^n  \) </p>
+          <p>\(f(0) = 1  = c_0 \implies c_0 = 1 \) </p>
+          <p>\(f'(x) = e^x = c_1 + 2c_2x + 3c_3x^2 + \ldots + nc_nx^n-1\)</p>
+          <p>\(f'(0) \implies  \)<label>\(c1 = \;\)</label><input id="c1" type="text"></span></p>
+          <div>
+            <button id="approx-submit1" class="submit" style="align-self: center">Submit</button>
+          </div>        
+        </div>
+      </div>
+      <div id="divDeg2" style="max-width: 600px; opacity: 0;">
+        <div id="workDeg2">
+          <div id="constants2" style="opacity: 1;">
+            <h2>\(c_2\)</h2>
+          
+            <p> \(f''(x) = e^x  =  \;\)<input id="coef_c2" type="text"><label>\(\;c2 \;+ \;\)</label><input type="text" id="coef_c3"><label>\(\;c_3\)</label><label>\(\;x\;\)</label><input id="power_c3"type="text" class="sequence">\(\;+\ldots\;\) <input type="text" id="coef_cn" style="width: 50px;"><label>\(\;c_n\)</label><label>\(\;x\;\)</label><input type="text" class="sequence" id="power_cn" style="width: 30px;"></p>
+            <p>\(f''(0) \implies \)<label>\(c_2 = \;\)</label><input type="text" id="c2"></p>
+            <div>
+              <button class="submit" id="submitConstants2Btn" style="align-self: center">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="divDeg3" style="max-width: 600px; opacity: 0;">
+        <div id="workDeg3">
+          <div id="constants3" style="opacity: 1;">
+            <h2>\(c_3\)</h2>
+          
+            <p> \(f'''(x) = e^x  =  \;\)<input id="coef_c3_1" type="text"><label>\(\;c3 + \ldots \)</label> <input id="coef_cn_1"type="text" style="width: 80px;"><label>\(\;c_n\)</label><label>\(x\)</label><input id ="power_cn_1"type="text" class="sequence" style="width: 30px; left: 3px;" ></p>
+            <p>\(f'''(0) \implies \)<label>\(c_3 = \;\)</label><input id="c3" type="text"></p>
+            <div>
+              <button class="submit" id="submitConstants3Btn" style="align-self: center">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="divDeg4" style="max-width: 600px; opacity: 0;">
+        <div id="workDeg4">
+          <div id="constants4" style="opacity: 1;">
+            <h2>\(c_n\)</h2>
+          
+            <p> \(f^n(x) = e^x  =  \;\)<input id="final_coef" type="text"><label>\(\;c_n\)</label></p>
+            <p>\(f^n(0) \implies \)<label>\(c_n = \;\)</label><input id="final_constant" type="text"></p>
+            <div>
+              <button class="submit" id="submitConstants4Btn" style="align-self: center">Submit</button>
+              
+            </div>
+            <!-- <div>
+              
+            </div> -->
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+    <button class="next-lesson" id="4" style="align-self: center; opacity: 0;" onclick="alertFinished()">Next Lesson</button>  
+  </body>
+  <script>
+    alert("If you see no button, press 'Enter' to progress")
+
+    function alertFinished() {
+      alert("All lessons completed!")
+    }
+    function fadeIn(el) {
+        el.style.opacity = "0";    
+
+    el.style.animation = "fadeIn 0.6s forwards";
+  }
+
+
+    function fadeOut(el) {
+    el.style.opacity = "1";    
+    el.style.animation = "fadeOut 0.6s forwards";
+  }
+    let currentIndex = -1;
+    MathJax.typeset();
+    document.addEventListener("keydown", function (event) {
+          currentIndex++;
+          if (event.key === "Enter") {
+              if (currentIndex === 4) {
+                return;
+              }
+              showNext();
+          }
+        });
+    function showNext() {
+      console.log("index:", currentIndex);
+      switch (currentIndex) {
+        
+        // case 0:
+        //   fadeIn(document.getElementById("divExplainApproximation"));
+        //   break;
+        case 0:
+          fadeIn(document.getElementById("divExplainApproximation2"));
+          break;      
+        case 1:
+          fadeIn(document.getElementById("expansion"));
+          break;
+        case 2:
+          fadeIn(document.getElementById("divDeg1"));
+          break;      }
+    }    
+    document.getElementById("approx-submit1").addEventListener("click", function() {
+      let inputs = [];
+      let userAnswerCorrectness = [-1];
+      let c1 = document.getElementById("c1");
+      let deg1_inputs = [c1];
+      inputs = [parseFloat(c1.value)];
+      updateUserAnswerCorrectness(userAnswerCorrectness, inputs);
+      // update button colors
+      for (let i=0; i<1; ++i) {
+        console.log("here!");
+        if (userAnswerCorrectness[i] === -1) {
+          // change text color to red
+          deg1_inputs[i].style.color = "red";
+        }
+        else {
+          deg1_inputs[i].style.color = "green";
+        }
+      }
+      // if all text is green, change button to green text + plot graph
+      if (isAllCorrect(userAnswerCorrectness)) {
+        this.style.color = 'green';
+        // show next block + disable btn
+        document.getElementById("approx-submit1").disabled = true;
+        fadeIn(document.getElementById("divDeg2"));
+
+      }
+      else {
+        this.style.color = 'red';
+      }
+
+      
+    });
+
+    submitConstants2Btn = document.getElementById("submitConstants2Btn");
+        submitConstants2Btn.addEventListener("click", function() {
+        const coef_c2 = document.getElementById("coef_c2");
+        const coef_c3 = document.getElementById("coef_c3");
+        const power_c3 = document.getElementById("power_c3");
+        const coef_cn = document.getElementById("coef_cn");
+        const power_cn = document.getElementById("power_cn");
+        const c2 = document.getElementById("c2");
+
+
+        const coef_c2Val = parseInt(coef_c2.value);
+        const coef_c3Val = parseInt(coef_c3.value);
+        const power_c3Val = parseInt(power_c3.value);
+        const coef_cnVal = coef_cn.value;
+        const power_cnVal = power_cn.value;
+        const c2Val = parseFloat(c2.value);
+          
+        let labelList = [coef_c2, coef_c3, power_c3, coef_cn, power_cn, c2];
+          let wrongAnswers = [0,0,0,0,0,0];
+          const correctAnswers = [2,6,1,"n(n-1)","n-2", 0.5];
+          const answers = [coef_c2Val, coef_c3Val, power_c3Val, coef_cnVal, power_cnVal, c2Val];
+          // check for wrong answers
+          checkAnswers(answers, correctAnswers, wrongAnswers);
+          if (isWrong(wrongAnswers)) {
+            // change S4's text color
+            changeQuestionColors(wrongAnswers, labelList);
+            // change button text + color to Wrong
+            changeCheckAnswersBtnText(-1, submitConstants2Btn);
+          }
+          else if (!isWrong(wrongAnswers)) {
+            // reset all labels to green
+            changeQuestionColors(wrongAnswers, labelList);
+            // change buttont to say correct
+            changeCheckAnswersBtnText(1, submitConstants2Btn);
+            // show next block + disable btn
+            submitConstants2Btn.disabled = true;
+            fadeIn(document.getElementById("divDeg3"));
+          }        
+        })
+
+
+
+    submitConstants3Btn = document.getElementById("submitConstants3Btn");
+        submitConstants3Btn.addEventListener("click", function() {
+        const coef_c3_1 = document.getElementById("coef_c3_1");
+        const coef_cn_1 = document.getElementById("coef_cn_1");
+        const power_cn_1 = document.getElementById("power_cn_1");
+        const c3 = document.getElementById("c3");
+
+        const coef_c3_1Val = parseInt (coef_c3_1.value);
+        const coef_cn_1Val = coef_cn_1.value;
+        const power_cn_1Val = power_cn_1.value;
+        const c3Val = parseFloat(c3.value)
+          
+        let labelList = [coef_c3_1, coef_cn_1, power_cn_1, c3];
+          let wrongAnswers = [0,0,0,0];
+          const correctAnswers = [6,"n(n-1)(n-2)","n-3", 0.17];
+          const answers = [coef_c3_1Val, coef_cn_1Val, power_cn_1Val, c3Val]
+          // check for wrong answers
+          checkAnswers(answers, correctAnswers, wrongAnswers);
+          if (isWrong(wrongAnswers)) {
+            // change S4's text color
+            changeQuestionColors(wrongAnswers, labelList);
+            // change button text + color to Wrong
+            changeCheckAnswersBtnText(-1, submitConstants3Btn);
+          }
+          else if (!isWrong(wrongAnswers)) {
+            // reset all labels to green
+            changeQuestionColors(wrongAnswers, labelList);
+            // change buttont to say correct
+            changeCheckAnswersBtnText(1, submitConstants3Btn);
+            submitConstants3Btn.disabled = true;
+            fadeIn(document.getElementById("divDeg4"));
+          }        
+        })
+
+
+
+            submitConstants4Btn = document.getElementById("submitConstants4Btn");
+        submitConstants4Btn.addEventListener("click", async function() {
+        const final_coef = document.getElementById("final_coef");
+        const final_constant = document.getElementById("final_constant");
+
+        const final_coefVal = final_coef.value;
+        const final_constantVal = final_constant.value;
+
+        let labelList = [final_coef, final_constant];
+          let wrongAnswers = [0,0];
+          const correctAnswers = ["n!", "1/n!"];
+          const answers = [final_coefVal, final_constantVal]
+          // check for wrong answers
+          checkAnswers(answers, correctAnswers, wrongAnswers);
+          if (isWrong(wrongAnswers)) {
+            // change S4's text color
+            changeQuestionColors(wrongAnswers, labelList);
+            // change button text + color to Wrong
+            changeCheckAnswersBtnText(-1, submitConstants4Btn);
+          }
+          else if (!isWrong(wrongAnswers)) {
+            // reset all labels to green
+            changeQuestionColors(wrongAnswers, labelList);
+            // change buttont to say correct
+            changeCheckAnswersBtnText(1, submitConstants4Btn);
+            submitConstants4Btn.disabled = true;
+            // slowly loop thru
+            for (let i=1; i<5; ++i) {
+              console.log("here!"); // this block not working...
+              // convert int to string
+              let intAsString = i.toString();
+              // get span witht his id
+              fadeIn(document.getElementById(intAsString));
+               await new Promise(resolve => setTimeout(resolve, 500)); // This pauses the loop
+            }
+          }        
+        })
+
+function fadeOut(el) {
+el.style.opacity = "1";    
+el.style.animation = "fadeOut 0.6s forwards";
+}
+
+    function updateUserAnswerCorrectness(userAnswerCorrectness, inputs) {
+      let inputsSize = inputs.length;
+      for (let i=0; i<inputsSize; ++i) {
+        userAnswerCorrectness[i] = checkInput(i, inputs[i]);
+      }
+    }
+
+    function isAllCorrect(userAnswerCorrectness) {
+      let size = userAnswerCorrectness.length;
+      for (let i=0; i<size; ++i) {
+        if (userAnswerCorrectness[i] === -1) {
+          return false
+        }
+      }
+      return true
+    }
+    function checkInput(cIndex, value) {
+      console.log("C_index", cIndex);
+      console.log("Value", value);
+      // c0 = 1 , c1 = 1, c2 = 1/2, c3 = 1/6
+      switch (cIndex) {
+        case 0:
+          if (value === 1) {
+            return 1
+          }
+          else {
+            return -1
+          }
+          break;
+        case 1:
+          if (value === 1) {
+            return 1
+          }
+          else {
+            return -1
+          }
+          break;
+        case 2:
+          if (value === 0.5) {
+            return 1
+          }
+          else {
+            return -1
+          }
+          break;
+        case 3:
+          if (value === (0.17)) {
+            return 1
+          }
+          else {
+            return -1
+          }
+          break;
+      }
+    }
+    function changeColorOfInput(inputID, color) {
+      document.getElementById(inputID).style.color = color;
+    }    
+    function e(x) {
+      return Math.exp(x)
+    }
+    function getRange(f) {
+      return xValues.map(each => f(each));
+    }
+    
+    function deg1(x) {
+      return x + 1
+    }
+    function deg2(x) {
+      return x**2 / 2 + x + 1
+    }
+
+    function deg3(x) {
+      return x**3 / 6 + x**2 / 2 + x + 1
+    }
+
+    function showTrace(traces, newTrace, layout = darkLayout) {
+      traces.push(newTrace);
+      Plotly.newPlot('divGraph', traces, layout);
+    }
+
+    function hideTrace(trace) {
+      trace.visible = false;
+    }
+    // trace_deg1 = 
+    // trace_deg2 
+    // trace_deg3
+    function getPointForFunction(f, label, color, pointSize, labelSize) {
+      return { 
+      x: [1.2],
+      y: [f(1.2)],
+      mode: 'markers+text',
+      type: 'scatter',
+      text: [label],
+      textposition: 'top center',
+      marker: {
+        size: pointSize,
+        color: color
+      },
+      textfont: {
+        size: labelSize,
+        color: color
+      },
+      showlegend:false
+    }
+    }     
+    let xValues = [];
+    let traces = [];
+    for (let i=-2; i<=2; i+=0.1) {
+        xValues.push(i);
+    }
+
+      function changeCheckAnswersButtonToWrong(btn) {
+        setElementColor(btn, "red");
+        setElementText(btn, "Try Again");
+      }
+
+      function changeCheckAnswersButtonToCorrect(btn) {
+        setElementColor(btn, "green");
+        setElementText(btn, "Correct!");
+      }
+
+      function changeCheckAnswersButtonToDefault(btn) {
+        setElementColor(btn, "black");
+        setElementText(btn, "Check Answers");
+      }
+      function setElementText(el, text) {
+        el.innerText = text;
+      }
+    function changeCheckAnswersBtnText(inputNum,btn) {
+        // -1 wrong, 1 right, 0 reset
+        if (inputNum === -1) {
+          changeCheckAnswersButtonToWrong(btn);
+        }
+        else if (inputNum === 1) {
+          changeCheckAnswersButtonToCorrect(btn);
+        }
+        else if (inputNum === 0) {
+          changeCheckAnswersButtonToDefault(btn);
+        }
+      }
+
+
+    function checkAnswers(answers,correctAnswers, wrongAnswers) {
+      let numAnswersToCheck = answers.length;
+      console.log("Answers: ", answers);
+      console.log("Correct answers: ", correctAnswers);
+
+      for (let i = 0; i < numAnswersToCheck; ++i) {
+        if (answers[i] !== correctAnswers[i]) {
+          wrongAnswers[i] = 1;
+        }
+        else {
+          wrongAnswers[i] = 0;
+        }
+      }
+      console.log("Wrong Answers: ", wrongAnswers);
+    }
+    function isWrong(wrongAnswers) {
+        let numAnswersToCheck = wrongAnswers.length;
+        for (let i = 0; i < numAnswersToCheck; ++i) {
+          if (wrongAnswers[i] === 1) {
+            return true;
+          }
+        }
+        return false;
+      }    
+      function changeQuestionColors(wrongAnswers, labelList) {
+        
+        let wrongAnswersLength = wrongAnswers.length;
+        for (let i =0; i<wrongAnswersLength; ++i) {
+          if (wrongAnswers[i] === 1) { // change label to red
+            setElementColor(getLabelElementGivenIndex(i, labelList), "red");
+          }
+          else { // change label to green
+            setElementColor(getLabelElementGivenIndex(i, labelList), "green");
+          }
+        }
+      }
+
+      function setElementColor(el,color) {
+        el.style.color = color;
+      }      
+
+      function getLabelElementGivenIndex(i, labelList) {
+        console.log("Returning label: ", labelList[i]);
+        return labelList[i];
+      }    
+
+
+
+    point_e_unknown = getPointForFunction(e,'?', 'blue', 3, 12);
+    point_deg1 = getPointForFunction(deg1,'D_1', 'black', 3, 3);
+    point_deg2 = getPointForFunction(deg2,'D_2', 'yellow', 3, 3);
+    point_deg3 = getPointForFunction(deg3,'D_3', 'green', 3, 3);
+
+
+
+    trace_e_x = {
+        x: xValues,
+        y: xValues.map(each => Math.exp(each)),// how to make this e^0, e^5, etc..],
+        mode:'lines',
+        name: 'e^x'
+    };
+    trace_deg1 = {
+        x: xValues,
+        y: getRange(deg1),
+        mode:'lines',
+        name: "Degree 1"
+    };
+    trace_deg2 = {
+        x: xValues,
+        y: getRange(deg2),
+        mode:'lines',
+        name: "Degree 2"
+    };
+    trace_deg3 = {
+        x: xValues,
+        y: getRange(deg3),
+        mode:'lines',
+        name: "Degree 3"
+    };
+
+darkLayout = {
+    title: {
+    text: 'Taylor Series: Contd',
+    font: {
+      family: 'TangoSans_Bold, sans-serif', // or any custom font
+      size: 32,                            // 🔠 font size in px
+      color: '#00ccff'                     // 🎨 title color
+    },
+    // x: 0.5,       // center title (0 = left, 1 = right)
+    // xanchor: 'center'
+  },
+  // width: 1000,
+  // height: 500,
+  plot_bgcolor: '#111',
+  paper_bgcolor: '#000',
+  font: { color: '#00ccff' },
+  xaxis: {
+    title: { text: 'x', font: { color: '#00ccff' } },
+    showticklabels: false,
+    ticks: '',
+    gridcolor: '#333',
+    zerolinecolor: '#555',
+    linecolor: '#00ccff',
+    tickcolor: '#00ccff'
+  },
+  yaxis: {
+    title: { text: 'f(x)', font: { color: '#00ccff' } },
+    showticklabels: false,
+    ticks: '',
+    gridcolor: '#333',
+    zerolinecolor: '#555',
+    linecolor: '#00ccff',
+    tickcolor: '#00ccff'
+  }
+};
+    traces.push(trace_e_x,  point_e_unknown, trace_deg1, trace_deg2, trace_deg3);
+
+   
+    Plotly.newPlot('divGraph', traces, darkLayout);
+
+  </script>
+</html>
