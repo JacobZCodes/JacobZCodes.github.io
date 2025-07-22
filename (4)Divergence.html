@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8">
     <title>Series Animation Example</title>
+        <!-- Load jQuery first (required for MathQuill) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load MathQuill -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
       <style>
 
         @font-face {
@@ -105,6 +111,10 @@
 }
 
 
+.mq {
+    width: 200px;
+}
+
       @keyframes fadeIn {
   to {
     opacity: 1;
@@ -135,10 +145,11 @@
     </div>
     <div id="user-input-series" style="opacity:0">
       <p>Enter your sequence in series notation (please enter it exactly as a computer should read it, ie 2n+3 => 2*n+3):</p>
-      <label>\( \sum_{n=1}^{\infty} \) <input type="text" id="seriesInput" placeholder="n^2">
+      <label>\( \sum_{n=1}^{\infty} \) <span id="user-input-series-mq" class="mq"></span>
       </label>
       <button onclick="storeSeriesAndShowNext()">Input Series</button>
     </div>
+    
 
 
     <div id="user-input-psums" style="opacity: 0;">
@@ -180,7 +191,16 @@
     </div>
     <button id="nextLessonBtn" class="next-lesson" style = "opacity: 0;" onclick="window.location.href='(5)DivergenceTest.html'">Divergence Test</button>
     <script>
-          alert("If you see no button, press 'Enter' to progress")
+      const MQ = MathQuill.getInterface(2);
+      const mathFieldSpan = document.getElementById('user-input-series-mq');
+      mathField = MQ.MathField(mathFieldSpan, {
+        spaceBehavesLikeTab: true,
+        handlers: {
+          edit: function () {
+            const latex = mathField.latex();
+          }
+        }
+      });
 
       let verbosity = 0;
         function fadeIn(el) {
@@ -247,6 +267,14 @@
     return true;
 
   }
+  function factorial(n) {
+  if (n < 0) return NaN;
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
         function storeSequenceAndShowNext() {
           
           if (verbosity === 1) {
@@ -268,12 +296,14 @@
         }
         let userSeries = []; // Global list to store the series
         function storeSeriesAndShowNext() {
+          console.log("showing next...");
           if (verbosity === 1) {
             userSeries= n;
             showNext();
           }
-          const input = document.getElementById("seriesInput").value;
-          userSeries = input;
+          const input = mathField.text();
+          let cleanedInput = cleanMathInput(input);
+          userSeries = cleanedInput;
           console.log("User series: ", userSeries);
           showNext();
         }
@@ -292,101 +322,34 @@
           showNext();
         }
         
-        document.addEventListener("keydown", function (event) {
-        //   if (event.key === "Enter") {
-        //             if (event.target.tagName === 'INPUT' && event.key === "Enter" || currentIndex > 0) {
-        //   event.preventDefault(); 
-        //   return; 
-        // }        
-        //     if (currentIndex === -1) {
-        //       showNext();
-        //     }
-        //     return
-        //   }
-          if (event.key === "Backspace") {
-                                if (event.target.tagName === 'INPUT' && event.key === "Backspace") {
-          
-          return; 
-        }        
-            if (currentIndex === -2) {
-              currentIndex = -1;
-              return
-            }
-            else {
-              goBack();
-            }
-          }
-        });
-        
-        function goBack() {
-          console.log(currentIndex);
-          currentIndex--;
-          switch (currentIndex){
-            case 7:
-            const nextLessonBtn = document.getElementById("nextLessonBtn");
-            const finalExplanation = document.getElementById("finalExplanation");
-            fadeOut(finalExplanation);
-            fadeOut(nextLessonBtn);
-              break;
-            case 6:
-                          const graphMore = document.getElementById('graphMorePoints');
-            const graphMorePointsNextBtn = document.getElementById('graphMorePointsNextBtn');
-           fadeOut(graphMore);
-         fadeOut(graphMorePointsNextBtn);
-              break;
-            case 5:
-                          fadeOut(divergenceExplain);
-      
-          fadeOut(document.getElementById("showGraphBtn"));
-              break;
-            case 4:
-                          const guessInput = document.getElementById('div-guess');
-            const guessSubmitButton = document.getElementById("div-guess-next-btn");
-            fadeOut(guessInput);
-            fadeOut(guessSubmitButton);
-              break;
-            case 3:
-                          const graph = document.getElementById("graphUserPoints");
-            const nextButton = document.getElementById("graphUserPointsNextButton");
-            fadeOut(graph);
-            fadeOut(nextButton);
-              break;
-            case 2:
-                          const explanation = document.getElementById("explanation1");
-            const plotPartialSumsBtn = document.getElementById("plotPartialSums");
-            fadeOut(explanation);
-            fadeOut(plotPartialSumsBtn);
-              break;
-            case 1:
-                   const psumsInput = document.getElementById('user-input-psums');
-                   fadeOut(psumsInput);
-              break;
-            case 0:
-                 const seriesInput = document.getElementById('user-input-series');
-                 fadeOut(seriesInput);
-              break;
-            case -1:
-        const seqInput = document.getElementById('user-input-sequence');
-        fadeOut(seqInput);
-              break;
-          }
+        function cleanMathInput(input) {
+          let inputCopy = input;
+          let carotsReplaced = inputCopy.replace(/\^/g, "**");
+          let asteriskInsertedBetweenNumAndVar = carotsReplaced.replace(/(-?\d+(?:\.\d+)?)n/g, "$1*n");
+          let asteriskInsertedBetweenNumAndParen = asteriskInsertedBetweenNumAndVar.replace(/(\d+(?:\.\d+)?)\(/g, "$1*(");
+          let factorialFunctionInserted = asteriskInsertedBetweenNumAndParen.replace(/(\w|\d|\))!/g, "factorial($1)");
+          let output = factorialFunctionInserted;
+          return output
         }
-
         function showNext() {
           console.log(currentIndex);
           currentIndex++;
           if (currentIndex == 0) {
-                    // initial sequence entering + button
-        const seqInput = document.getElementById('user-input-sequence');
-        fadeIn(seqInput);
-        // document.getElementById("sentences").appendChild(seqInput);
+            // initial sequence entering + button
+            console.log("fading in seq...");
+            const seqInput = document.getElementById('user-input-sequence');
+            fadeIn(seqInput);
+            // document.getElementById("sentences").appendChild(seqInput);
           }
           if (currentIndex == 1) { // series notation
+            console.log("fading in seres...");
             const seriesInput = document.getElementById('user-input-series');
             fadeIn(seriesInput);
-            // document.getElementById("sentences").appendChild(seriesInput);
+
           }
+    
           if (currentIndex == 2) { // psums 
+            console.log("fading in psums..");
             const psumsInput = document.getElementById('user-input-psums');
             fadeIn(psumsInput);
             // document.getElementById("sentences").appendChild(psumsInput);
@@ -405,7 +368,7 @@
             fadeIn(plotPartialSumsBtn);
 
           }
-                    if (currentIndex == 4) { // graph user
+          if (currentIndex == 4) { // graph user
             console.log("here");
             const graph = document.getElementById("graphUserPoints");
             const nextButton = document.getElementById("graphUserPointsNextButton");
@@ -418,41 +381,40 @@
             // document.getElementById("sentences").appendChild(nextBtn);
             const xVals = userPsums.map((_, i) => i + 1);
             const yVals = userPsums.map(val => parseFloat(val)).filter(v => !isNaN(v));
-Plotly.newPlot('graphUserPoints', [{
-  x: xVals,
-  y: yVals,
-  mode: 'markers',
-  type: 'scatter',
-  marker: {
-    size: 8,
-    color: '#00ccff'
-  }
-}], {
-  title: {
-    text: `Scatter Plot of ${userSeries}`,
-    font: { color: '#00ccff' }
-  },
-  plot_bgcolor: '#111',
-  paper_bgcolor: '#000',
-  font: { color: '#00ccff' },
-  xaxis: {
-    title: { text: 'S_n', font: { color: '#00ccff' } },
-    dtick: 1,
-    gridcolor: '#333',
-    zerolinecolor: '#555',
-    linecolor: '#00ccff',
-    tickcolor: '#00ccff'
-  },
-  yaxis: {
-    title: { text: 'Series Value', font: { color: '#00ccff' } },
-    dtick: 1,
-    gridcolor: '#333',
-    zerolinecolor: '#555',
-    linecolor: '#00ccff',
-    tickcolor: '#00ccff'
-  }
-});
-
+            Plotly.newPlot('graphUserPoints', [{
+              x: xVals,
+              y: yVals,
+              mode: 'markers',
+              type: 'scatter',
+              marker: {
+                size: 8,
+                color: '#00ccff'
+              }
+            }], {
+              title: {
+                text: `Scatter Plot of ${userSeries}`,
+                font: { color: '#00ccff' }
+              },
+              plot_bgcolor: '#111',
+              paper_bgcolor: '#000',
+              font: { color: '#00ccff' },
+              xaxis: {
+                title: { text: 'S_n', font: { color: '#00ccff' } },
+                dtick: 1,
+                gridcolor: '#333',
+                zerolinecolor: '#555',
+                linecolor: '#00ccff',
+                tickcolor: '#00ccff'
+              },
+              yaxis: {
+                title: { text: 'Series Value', font: { color: '#00ccff' } },
+                dtick: 1,
+                gridcolor: '#333',
+                zerolinecolor: '#555',
+                linecolor: '#00ccff',
+                tickcolor: '#00ccff'
+              }
+            });
           }
           if (currentIndex == 5) { // guess
             const guessInput = document.getElementById('div-guess');
@@ -460,11 +422,11 @@ Plotly.newPlot('graphUserPoints', [{
             guessInput.innerHTML = `
                   <p>What do you think the series will do?</p>
                   <label>
-        <input type="radio" name="seriesGuess" value="converge"> Converge </label>
-      <br>
-      <label>
-        <input type="radio" name="seriesGuess" value="diverge"> Diverge </label>
-      <br>            `
+                <input type="radio" name="seriesGuess" value="converge"> Converge </label>
+              <br>
+              <label>
+                <input type="radio" name="seriesGuess" value="diverge"> Diverge </label>
+              <br>            `
 
             fadeIn(guessInput);
             fadeIn(guessSubmitButton);
@@ -472,14 +434,14 @@ Plotly.newPlot('graphUserPoints', [{
           if (currentIndex == 6) { // explain divergence more
             fadeIn(divergenceExplain);
       
-          fadeIn(document.getElementById("showGraphBtn"));
+            fadeIn(document.getElementById("showGraphBtn"));
           }
 
           if (currentIndex == 7) { // graph user + more points
             const graphMore = document.getElementById('graphMorePoints');
             const graphMorePointsNextBtn = document.getElementById('graphMorePointsNextBtn');
            fadeIn(graphMore);
-         fadeIn(graphMorePointsNextBtn);
+            fadeIn(graphMorePointsNextBtn);
             const xVals = Array.from({
               length: 30
             }, (_, i) => i + 1);
@@ -491,43 +453,43 @@ Plotly.newPlot('graphUserPoints', [{
               alert("There was an error parsing your series function.");
               console.error(e);
             }
-Plotly.newPlot('graphMorePoints', [{
-  x: xVals,
-  y: yVals,
-  mode: 'markers',
-  type: 'scatter',
-  marker: {
-    size: 8,
-    color: '#00ccff'
-  }
-}], {
-  title: {
-    text: `Scatter Plot of ${userSeries}`,
-    font: { color: '#00ccff' }
-  },
-  plot_bgcolor: '#111',
-  paper_bgcolor: '#000',
-  font: { color: '#00ccff' },
-  xaxis: {
-    title: { text: 'S_n', font: { color: '#00ccff' } },
-    dtick: 1,
-    gridcolor: '#333',
-    zerolinecolor: '#555',
-    linecolor: '#00ccff',
-    tickcolor: '#00ccff'
-  },
-  yaxis: {
-    title: { text: 'Series Value', font: { color: '#00ccff' } },
-    dtick: 1,
-    gridcolor: '#333',
-    zerolinecolor: '#555',
-    linecolor: '#00ccff',
-    tickcolor: '#00ccff'
-  }
-});
-;
+            Plotly.newPlot('graphMorePoints', [{
+              x: xVals,
+              y: yVals,
+              mode: 'markers',
+              type: 'scatter',
+              marker: {
+                size: 8,
+                color: '#00ccff'
+              }
+            }], {
+              title: {
+                text: `Scatter Plot of ${userSeries}`,
+                font: { color: '#00ccff' }
+              },
+              plot_bgcolor: '#111',
+              paper_bgcolor: '#000',
+              font: { color: '#00ccff' },
+              xaxis: {
+                title: { text: 'S_n', font: { color: '#00ccff' } },
+                dtick: 1,
+                gridcolor: '#333',
+                zerolinecolor: '#555',
+                linecolor: '#00ccff',
+                tickcolor: '#00ccff'
+              },
+              yaxis: {
+                title: { text: 'Series Value', font: { color: '#00ccff' } },
+                dtick: 1,
+                gridcolor: '#333',
+                zerolinecolor: '#555',
+                linecolor: '#00ccff',
+                tickcolor: '#00ccff'
+              }
+            });
+            ;
           }
-           if (currentIndex == 8) { // final explaination
+          if (currentIndex == 8) { // final explaination
             const nextLessonBtn = document.getElementById("nextLessonBtn");
             fadeIn(finalExplanation);
             fadeIn(nextLessonBtn);

@@ -7,6 +7,13 @@ Pressing Submit while Continue Button is alive
   <head>
     <meta charset="UTF-8" />
     <title>Series Animation Example</title>
+    <!-- Load jQuery first (required for MathQuill) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load MathQuill -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+
 <style>
     @font-face {
       font-family: 'TangoSans_Bold';
@@ -208,7 +215,7 @@ option {
     <div id="sentence3" style="opacity: 0;"><p>Moreover, if  <span class="red">\(a_n \to 0\),</span><span class="yellow"><strong>then \(\sum a_n\) can either diverge or converge</strong>.</p></span></div>
     <div id="input1" style="opacity:0";>
       <p>Enter your sequence in series notation (please enter it exactly as a computer should read it, ie 2n+3 => 2*n+3):</p>
-      <label>\( \sum_{n=1}^{\infty} \) <input type="text" id="seriesInput" placeholder="n^2">
+      <label>\( \sum_{n=1}^{\infty} \) <span id="user-input-series-mq" style="width: 200px;">
       </label>
       <button id="seriesInputBtn">Input Series</button>
     </div>
@@ -295,6 +302,24 @@ option {
 
 
 <script>
+  function factorial(n) {
+  if (n < 0) return NaN;
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
+        const MQ = MathQuill.getInterface(2);
+      const mathFieldSpan = document.getElementById('user-input-series-mq');
+      mathField = MQ.MathField(mathFieldSpan, {
+        spaceBehavesLikeTab: true,
+        handlers: {
+          edit: function () {
+            const latex = mathField.latex();
+          }
+        }
+      });
       alert("If you see no button, press 'Enter' to progress")
 
 let series1Info;
@@ -390,8 +415,9 @@ document.getElementById("submitGuess2").addEventListener("click", function () {
         console.log("area2 is light...");
         return;
       }
-      series2Str = document.getElementById("seriesInput").value;
-      let series2Fn = convertSeriesStrToFunc(series2Str);
+      let cleanedInput = cleanMathInput(mathField.text())
+      let series2Str = cleanedInput;
+      let series2Fn= convertSeriesStrToFunc(cleanedInput);
       series2Info = [series2Str, series2Fn];
       if (seriesIsDifferent()) { // clear area then pplot series
         warnings.forEach(w => w.remove());
@@ -418,8 +444,9 @@ document.getElementById("submitGuess2").addEventListener("click", function () {
       }
     }
     if (clickCount == 0) {
-      let series1Str = document.getElementById("seriesInput").value;
-      let series1Fn= convertSeriesStrToFunc(series1Str);
+      let cleanedInput = cleanMathInput(mathField.text())
+      let series1Str = cleanedInput;
+      let series1Fn= convertSeriesStrToFunc(cleanedInput);
       series1Info = [series1Str, series1Fn];
       console.log("Series 1 Info: ", series1Info);
       let coords1 = getCoords(series1Info[0]);
@@ -431,6 +458,23 @@ document.getElementById("submitGuess2").addEventListener("click", function () {
     clickCount++;
   });
 
+function cleanMathInput(input) {
+  let inputCopy = input;
+
+  // 1. Replace factorials FIRST (includes things like (n+1)! and n!)
+  let factorialFunctionInserted = inputCopy.replace(/(\([^\)]+\)|[a-zA-Z0-9])!/g, "factorial($1)");
+
+  // 2. Replace ^ with **
+  let carotsReplaced = factorialFunctionInserted.replace(/\^/g, "**");
+
+  // 3. Insert * between number and variable (e.g., 4n -> 4*n), but not n! or factorial(n)
+  let asteriskInsertedBetweenNumAndVar = carotsReplaced.replace(/(\b\d+(?:\.\d+)?)(n)\b/g, "$1*$2");
+
+  // 4. Insert * between number and parenthesis (e.g., 4( -> 4*( )
+  let asteriskInsertedBetweenNumAndParen = asteriskInsertedBetweenNumAndVar.replace(/(\d+(?:\.\d+)?)\(/g, "$1*(");
+
+  return asteriskInsertedBetweenNumAndParen;
+}
 
 function seriesIsDifferent() {
   console.log("Series 1: ", series1Info[0]);
@@ -610,9 +654,10 @@ function showNext() {
 }
 
 function convertSeriesStrToFunc(seriesStr) {
+  console.log("str: ", seriesStr);
   let seriesFn;
   try {
-    seriesFn = new Function("n", "return " + seriesStr);
+    seriesFn = new Function("n, factorial", "return " + seriesStr);
     return seriesFn;
   } catch (e) {
     console.error("Invalid series string:", e);
