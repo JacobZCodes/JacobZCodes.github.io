@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>Series Comparison</title>
+    <!-- Load jQuery first (required for MathQuill) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Load MathQuill -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
   <script>
     window.MathJax = {
       tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
@@ -169,7 +175,7 @@ option {
             </select>
             <button id="buttonExponent">Submit Series</button>
           </div>
-          <div id="series2" style="font-size: larger; opacity: 0;">
+          <div id="series2" style="font-size: larger; opacity: 1;">
             Create another series <span id ="secondLatexFraction"style="font-size: larger;"></span>
             <label id="labelForConstant" for="constant" style="position: relative"> </label>
             <select id="constant" style="
@@ -199,28 +205,9 @@ option {
     <div class="column">
       <div id="right-math">
         <div id="seriesInput3" style="display: flex;">
-            <div id="userSeriesDisplaySection" style="font-size:larger; opacity: 0;"></div>
-            <div id="series3" style="opacity: 0;"> 
-              Create a third, different series <span id ="thirdLatexFraction"style="font-size: larger;"></span>
-              <label id="labelForThirdConstant" for="thirdConstant" style="position: relative"> </label>
-              <select id="thirdConstant" style="
-              position: relative;
-              bottom: 75px;
-              left: 120px;
-              width: 30px;
-              height: 40px;
-              ">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-              </select>              
+            <div id="userSeriesDisplaySection" style="font-size:larger; opacity: 1;"></div>
+            <div id="series3" style="opacity: 1;"> 
+              Create a divergent series <br><span id ="thirdLatexFraction"style="font-size: larger;"></span><br>
               <button id="buttonThirdConstant">Submit Series</button> 
             </div>    
           </div>
@@ -236,12 +223,35 @@ option {
   </div>
 
   <script>
+
+            const MQ = MathQuill.getInterface(2);
+      const mathFieldSpan = document.getElementById('thirdLatexFraction');
+      mathField = MQ.MathField(mathFieldSpan, {
+        spaceBehavesLikeTab: true,
+        handlers: {
+          edit: function () {
+            const latex = mathField.latex();
+          }
+        }
+      });
         alert("If you see no button, press 'Enter' to progress")
 
     let userExponent;
     let userConstant;
     let thirdUserConstant;
     let step = 0;
+    let userDivergentSeries1Cleaned;
+    let userDivergentSeries2Cleaned;
+
+    let userDivergentSeries1Latex;
+    let userDivergentSeries2Latex;
+
+    let userDivergentSeries1Func;
+    let userDivergentSeries2Func;
+
+    let firstSeries;
+    let secondSeries;
+
     const mathContainer = document.getElementById('math-container');
     const rightMath = document.getElementById('right-math');
     const rightNextText = document.getElementById('right-next-text');
@@ -303,13 +313,26 @@ option {
     })
 
     document.getElementById("buttonThirdConstant").addEventListener("click", function () {
-      // redraw LATEX without label
-      thirdUserConstant = parseInt(document.getElementById("thirdConstant").value);
-      document.getElementById("thirdLatexFraction").innerHTML = `\\[\\frac{1}{n^{${userExponent}}+${thirdUserConstant}}\\]`;
-      // remove button, select, and label from DOM
-      document.getElementById("labelForThirdConstant").remove();
-      document.getElementById("thirdConstant").remove();
-      document.getElementById("buttonThirdConstant").remove();   
+      userDivergentSeries1Cleaned = cleanMathInput(mathField.text());
+      userDivergentSeries2Cleaned = increment_n(userDivergentSeries1Cleaned);
+
+      userDivergentSeries1Latex = mathField.latex();
+      userDivergentSeries2Latex = increment_n(userDivergentSeries1Latex);
+
+      userDivergentSeries1Func = new Function("n, factorial", "return " + userDivergentSeries1Cleaned);
+      userDivergentSeries2Func = new Function("n, factorial", "return " + userDivergentSeries2Cleaned);
+
+
+      // compare the two divergent series
+      if (userDivergentSeries1Func(10, factorial) > userDivergentSeries2Func(10, factorial)) {
+        firstSeries = `\\(${userDivergentSeries1Latex}\\)`;
+        secondSeries = `$\\({userDivergentSeries2Latex}\\)`;
+      }
+      else {
+        firstSeries = `\\(${userDivergentSeries2Latex}\\)`;
+        secondSeries = `\\(${userDivergentSeries1Latex}\\)`;
+      }
+
       doStep6();
       MathJax.typeset();
       // move on
@@ -323,19 +346,32 @@ option {
         step = 1;
     }
 
-    function doStep6() {
+      function factorial(n) {
+  if (n < 0) return NaN;
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
+
+function cleanMathInput(input) {
+  let inputCopy = input;
+  let factorialFunctionInserted = inputCopy.replace(/(\([^\)]+\)|[a-zA-Z0-9])\*!/g, "factorial($1)");
+  let carotsReplaced = factorialFunctionInserted.replace(/\^/g, "**");
+  let asteriskInsertedBetweenNumAndParen = carotsReplaced.replace(/(\d+(?:\.\d+)?)\(/g, "$1*(");
+  console.log(asteriskInsertedBetweenNumAndParen);
+  return asteriskInsertedBetweenNumAndParen;
+}
+
+function increment_n(input) {
+  let inputCopy = input;
+  return inputCopy.replace(/\bn\b/g, "(n+1)");
+}
+
+function doStep6() {
         const nextLine = document.createElement('div');
-        let firstFrac = `\\( \\frac{1}{n^{${userExponent}}}`;
-        let secondFrac  = `\\frac{1}{n^{${userExponent}} + ${userConstant}}`;
-        let thirdFrac = `\\frac{1}{n^{${userExponent}} + ${thirdUserConstant}}`;
-        let secondFracCopy = secondFrac;
-        let thirdFracCopy = thirdFrac;
-        // put second and third frac in order
-        if (userConstant > thirdUserConstant) {
-          secondFrac = thirdFracCopy;
-          thirdFrac = secondFracCopy;
-        }
-        nextLine.innerHTML = `We know that ${firstFrac} > ${secondFrac} > ${thirdFrac}\\).`;
+        nextLine.innerHTML = `Consider the slightly different series \\(${userDivergentSeries2Latex}\\). We know that ${firstSeries} > ${secondSeries} `;
         rightMath.appendChild(nextLine);
         MathJax.typeset();
 
@@ -401,22 +437,24 @@ option {
         rules.innerHTML = `<strong><u>Larger Series</u></strong><br>If a larger series converges, the smaller series converges also.<br>`;
         MathJax.typeset();
 
-      } else if (step === 4) {
-        console.log("here!")
-        document.getElementById("userSeriesDisplaySection").innerHTML = `Consider your two series \\( \\frac{1}{n^{${userExponent}}}, \\frac{1}{n^{${userExponent}} + ${userConstant}} \\)`;
-        document.getElementById("userSeriesDisplaySection").style.opacity = 1;
-        // const nextLine = document.createElement('div');
-        // nextLine.innerHTML = 'Now we consider the three series: \\[ \\sum_{n=1}^{\\infty} 2 \\cdot 2^{n-1} , \\quad \\sum_{n=1}^{\\infty} \\left( 2 + 2(n-1) \\right), \\quad \\sum_{n=1}^{\\infty} 2 \\cdot \\left( \\frac{1}{2} \\right)^{n-1} \\]';
-        // rightMath.appendChild(nextLine);
-        MathJax.typeset();
-
-      } else if (step === 5) { // now construct a third series 
+      }  else if (step === 4) { // now construct a third series 
         let series3 = document.getElementById("series3");
         let thirdLatexFraction = document.getElementById("thirdLatexFraction");
         series3.style.opacity = 1;
-        thirdLatexFraction.innerHTML += `\\[\\frac{1}{n^{${userExponent}}+4}\\]`;
+        // thirdLatexFraction.innerHTML += `\\[\\frac{1}{n^{${userExponent}}+4}\\]`;
         MathJax.typeset();
-      } else if (step === 7) {
+      } 
+      
+      else if (step === 7) {
+        // full inequality
+        let thirdSeries = `\\(\frac{1}{n^{{${userExponent}}}}\\)`;
+        const nextLine = document.createElement('div');
+        
+        nextLine.innerHTML = `Consider your first series ${thirdSeries}. Combining with the above inequality, we know that ${firstSeries} > ${secondSeries} > ${thirdSeries}`;
+        rightMath.appendChild(nextLine);
+        MathJax.typeset();
+      }
+      else if (step === 8) {
         const nextLine = document.createElement('div');
         nextLine.innerHTML = 'We again plot the partial sums of our three series. The Divergence Tests tells us that if the larger series diverges, the smaller series can either converge or diverge.';
         rightMath.appendChild(nextLine);
@@ -449,7 +487,7 @@ option {
         
         // MathJax.typeset();
 
-      } else if (step === 8) {
+      } else if (step === 9) {
         rules.innerHTML += `<br>If a larger series diverges, the smaller series can diverge or converge`;
         // place button
         document.getElementById("next-lesson-btn").style.opacity = 1;

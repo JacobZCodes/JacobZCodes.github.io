@@ -460,19 +460,11 @@ document.getElementById("submitGuess2").addEventListener("click", function () {
 
 function cleanMathInput(input) {
   let inputCopy = input;
-
-  // 1. Replace factorials FIRST (includes things like (n+1)! and n!)
-  let factorialFunctionInserted = inputCopy.replace(/(\([^\)]+\)|[a-zA-Z0-9])!/g, "factorial($1)");
-
-  // 2. Replace ^ with **
+  console.log("inputCopy: ", inputCopy);
+  let factorialFunctionInserted = inputCopy.replace(/(\([^\)]+\)|[a-zA-Z0-9])\*!/g, "factorial($1)");
   let carotsReplaced = factorialFunctionInserted.replace(/\^/g, "**");
-
-  // 3. Insert * between number and variable (e.g., 4n -> 4*n), but not n! or factorial(n)
-  let asteriskInsertedBetweenNumAndVar = carotsReplaced.replace(/(\b\d+(?:\.\d+)?)(n)\b/g, "$1*$2");
-
-  // 4. Insert * between number and parenthesis (e.g., 4( -> 4*( )
-  let asteriskInsertedBetweenNumAndParen = asteriskInsertedBetweenNumAndVar.replace(/(\d+(?:\.\d+)?)\(/g, "$1*(");
-
+  let asteriskInsertedBetweenNumAndParen = carotsReplaced.replace(/(\d+(?:\.\d+)?)\(/g, "$1*(");
+  console.log(asteriskInsertedBetweenNumAndParen);
   return asteriskInsertedBetweenNumAndParen;
 }
 
@@ -515,7 +507,7 @@ function getCorrectAnswers(seriesFn) {
   return [1,0];
 }
 function isInconclusive(seriesFn) {
-  if (seriesFn(10000) < 1) {
+  if (seriesFn(10000, factorial) < 1) {
     return true;
   }
   return false;
@@ -590,7 +582,7 @@ document.addEventListener("keydown", function (event) {
 document.getElementById("n-slider1").addEventListener("input", function () { 
   const n = parseInt(this.value);
   const seriesFn = series1Info[1];
-  const value = seriesFn(n);
+  const value = seriesFn(n, factorial);
   document.getElementById("n-value-label1").textContent = n;
 
   document.getElementById("n-value-label1").innerHTML = `a<sub>${n}</sub> = <span id="n-value-label1">${value.toFixed(4)}</span>`;
@@ -602,7 +594,7 @@ document.getElementById("n-slider1").addEventListener("input", function () {
 document.getElementById("n-slider2").addEventListener("input", function () { 
   const n = parseInt(this.value);
   const seriesFn = series2Info[1];
-  const value = seriesFn(n);
+  const value = seriesFn(n, factorial);
   document.getElementById("n-value-label2").textContent = n;
 
   document.getElementById("n-value-label2").innerHTML = `a<sub>${n}</sub> = <span id="n-value-label2">${value.toFixed(4)}</span>`;
@@ -681,7 +673,7 @@ function getCoords(seriesStr,maxN=20) {
   const yVals = [];
   for (let n = 1; n <= maxN; n++) {
     try {
-      const y = seriesFn(n);
+      const y = seriesFn(n, factorial);
       if (typeof y === 'number' && !isNaN(y)) {
         xVals.push(n);
         yVals.push(y);
