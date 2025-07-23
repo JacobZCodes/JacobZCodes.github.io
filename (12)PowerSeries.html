@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <title>Power Series</title>
+    <!-- Load jQuery first (required for MathQuill) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load MathQuill -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>  
     <script>
       window.MathJax = {
         tex: {
@@ -123,8 +129,9 @@
           <p>Create a power series of the form \( \sum_{n=1}^{\infty} a_n (x - a)^n \)</p>
           <div id="question">
             <label id="label-an" for="sequence">\(a_n=\)</label>
-            <input id="sequence" type="text">
+            <span id="sequence"></span>
           </div>
+          <br>
           <div id="question">
             <span>\( (x - \)</span>
             <input id="center" type="text">
@@ -158,13 +165,49 @@
           <br> Thus we define the center of a power series as the <span style=" color:#98ff98">known point of convergence for a power series.</span>
         </p>
         <div id="button-space" style="width:150px; margin: 0 auto; padding-top: 10px;">
-          <button id="next-lesson" onclick="window.location.href=`(13)FunctionsAsSeries.html`"style="position: relative;">Next Lesson</button>
+          <button id="next-lesson" onclick="window.location.href=`(13)FunctionsAsSeries.html`"style="position: relative; bottom: 50px;">Next Lesson</button>
         </div>
       </div>
     </div>
     <script>
+
+      
+          function factorial(n) {
+  if (n < 0) return NaN;
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
+
+function cleanMathInput(input) {
+  let inputCopy = input;
+  let factorialFunctionInserted = inputCopy.replace(/(\([^\)]+\)|[a-zA-Z0-9])\*!/g, "factorial($1)");
+  let carotsReplaced = factorialFunctionInserted.replace(/\^/g, "**");
+  let asteriskInsertedBetweenNumAndParen = carotsReplaced.replace(/(\d+(?:\.\d+)?)\(/g, "$1*(");
+  console.log(asteriskInsertedBetweenNumAndParen);
+  return asteriskInsertedBetweenNumAndParen;
+}
+
+
+function getFunctionFromCleanMathInput(cleanInput) {
+  return new Function("n, factorial", "return " + cleanInput);
+}
+
+                const MQ = MathQuill.getInterface(2);
+      const mathFieldSpan = document.getElementById('sequence');
+      mathField = MQ.MathField(mathFieldSpan, {
+        spaceBehavesLikeTab: true,
+        handlers: {
+          edit: function () {
+            const latex = mathField.latex();
+          }
+        }
+      });
           alert("If you see no button, press 'Enter' to progress")
 
+      let sequenceRawInput;
       let evaluatePolynomialBtnHasNotBeenClicked = true;
       let latexSection = document.getElementById("latexSection");
       let yourTurnBox2 = document.getElementById("yourTurn2");
@@ -256,11 +299,13 @@
         console.log('clicked');
         // TO DO: sanitize values
         // collect values
-        sequence = document.getElementById("sequence").value;
+        sequenceRawInput = mathField.text();
+        sequence = mathField.latex();
         center = parseInt(document.getElementById("center").value);
         // return values as latex
         generalSeries.innerHTML = buildInitialLatex(sequence, center);
         // if next box is off, turn it on
+        console.log("No errors!");
         revealElement(latexSection);
 
         MathJax.typeset();
@@ -342,8 +387,8 @@ el.style.animation = "fadeIn 0.6s forwards";
       }
 
       function computeSequenceExpression(n) {
-        let seqAsFunc = new Function("n", `return ${sequence};`);
-        return seqAsFunc(n);
+        let seqFunc = getFunctionFromCleanMathInput(cleanMathInput(sequenceRawInput));
+        return seqFunc(n, factorial);
       }
 
       function evaluatePolynomial(xVal, n) {

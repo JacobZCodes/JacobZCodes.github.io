@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>Ratio Test Interactive</title>
+  <!-- Load jQuery first (required for MathQuill) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Load MathQuill -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>  
   <script>
     window.MathJax = {
       tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
@@ -185,24 +191,24 @@
   <div class="case-container">
     <!-- CASE I -->
     <div id="bot1" class="case-box">
-      Let \( a_n = \frac{2^n}{n!} \)<br>
-      <input type="text" id="input4">
+      Let \( a_n =  \)
+      <span id="input4"></span><br>
       <div class="ratio-output student-output" id="out4"></div>
       <button id="btn-out4">Submit</button>
     </div>
 
     <!-- CASE II -->
     <div id="bot2" class="case-box">
-      Let \( a_n = n! \)<br>
-      <input type="text" id="input5">      
+      Let \( a_n = \)
+      <span id="input5"></span><br>
       <div class="ratio-output student-output" id="out5"></div>
       <button id="btn-out5">Submit</button>
     </div>
 
     <!-- CASE III -->
     <div id="bot3" class="case-box">
-      Let \( a_n = \frac{1}{n} \)<br>
-      <input type="text" id="input6">      
+      Let \( a_n =  \)
+      <span id="input6">    </span><br>  
       <div class="ratio-output student-output" id="out6"></div>
       <button id="btn-out6">Submit</button>
     </div>
@@ -211,6 +217,84 @@
     <button id="nl" class="next-lesson" onclick="window.location.href=`(12)PowerSeries.html`">Next Lesson</button>
   </div>
   <script>
+
+          function factorial(n) {
+  if (n < 0) return NaN;
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
+
+function cleanMathInput(input) {
+  let inputCopy = input;
+  let factorialFunctionInserted = inputCopy.replace(/(\([^\)]+\)|[a-zA-Z0-9])\*!/g, "factorial($1)");
+  let carotsReplaced = factorialFunctionInserted.replace(/\^/g, "**");
+  let asteriskInsertedBetweenNumAndParen = carotsReplaced.replace(/(\d+(?:\.\d+)?)\(/g, "$1*(");
+  console.log(asteriskInsertedBetweenNumAndParen);
+  return asteriskInsertedBetweenNumAndParen;
+}
+
+
+function getFunctionFromCleanMathInput(cleanInput) {
+  return new Function("n, factorial", "return " + cleanInput);
+}
+
+                const MQ = MathQuill.getInterface(2);
+      const mathFieldSpan = document.getElementById('input4');
+      mathField = MQ.MathField(mathFieldSpan, {
+        spaceBehavesLikeTab: true,
+        handlers: {
+          edit: function () {
+            const latex = mathField.latex();
+          }
+        }
+      });
+
+                      const MQ2 = MathQuill.getInterface(2);
+      const mathFieldSpan2 = document.getElementById('input5');
+      mathField2 = MQ.MathField(mathFieldSpan2, {
+        spaceBehavesLikeTab: true,
+        handlers: {
+          edit: function () {
+            const latex2 = mathField2.latex();
+          }
+        }
+      });
+
+      
+                          const MQ3 = MathQuill.getInterface(2);
+      const mathFieldSpan3 = document.getElementById('input6');
+      mathField3 = MQ.MathField(mathFieldSpan3, {
+        spaceBehavesLikeTab: true,
+        handlers: {
+          edit: function () {
+            const latex3 = mathField3.latex();
+          }
+        }
+      });
+      //             const MQ = MathQuill.getInterface(2);
+      // const mathFieldSpan = document.getElementById('thirdLatexFraction');
+      // mathField = MQ.MathField(mathFieldSpan, {
+      //   spaceBehavesLikeTab: true,
+      //   handlers: {
+      //     edit: function () {
+      //       const latex = mathField.latex();
+      //     }
+      //   }
+      // });
+
+      //             const MQ = MathQuill.getInterface(2);
+      // const mathFieldSpan = document.getElementById('thirdLatexFraction');
+      // mathField = MQ.MathField(mathFieldSpan, {
+      //   spaceBehavesLikeTab: true,
+      //   handlers: {
+      //     edit: function () {
+      //       const latex = mathField.latex();
+      //     }
+      //   }
+      // });
     alert("If you see no buttons, push 'Enter' to progress");
     let hasHitEnter = false;
     document.addEventListener('keydown', function(event) {
@@ -240,7 +324,7 @@
     let out5_function;
     let out6_function;
     btn_out4.addEventListener("click", function() {
-      out4_function = returnInputStringAsFunction(input4.value);
+      out4_function = getFunctionFromCleanMathInput(cleanMathInput(mathField.text()));
       console.log("Function, ", out4_function);
      
       // if function valid
@@ -248,8 +332,8 @@
         revealOut4Inequality = true;
         makeButtonRight(btn_out4,"Converges Absolutely");
         let n = nVal.textContent;
-        let num = out4_function(n+1);
-        let denom = out4_function(n);
+        let num = out4_function(n+1, factorial);
+        let denom = out4_function(n, factorial);
         let r4 = num / denom;
         let n_1 = parseInt(n) + 1;
         let inequalityToShow = `$$0 \\leq \\left| \\frac{a_{${n_1}}}{a_${n}} \\right| = \\textcolor{#00ccff}{${r4.toFixed(4)}} < 1$$`;
@@ -271,7 +355,7 @@
     })
 
     btn_out5.addEventListener("click", function() {
-      out5_function = returnInputStringAsFunction(input5.value);
+      out5_function = getFunctionFromCleanMathInput(cleanMathInput(mathField2.text()));
      
       // if function valid
       if (isDiverging(out5_function)) {
@@ -282,8 +366,8 @@
         fadeIn(document.getElementById("top3"));
         fadeIn(document.getElementById("bot3")); 
         let n = nVal.textContent;
-        let num = out5_function(n+1);
-        let denom = out5_function(n);
+        let num = out5_function(n+1, factorial);
+        let denom = out5_function(n, factorial);
         let r5 = num / denom;
         let n_1 = parseInt(n) + 1;
         let inequalityToShow = `$$\\left| \\frac{a_{${n_1}}}{a_${n}} \\right| = \\color{#00ccff}{${r5.toFixed(4)}} > 1 $$`;
@@ -300,8 +384,7 @@
     })
 
     btn_out6.addEventListener("click", function() {
-      console.log("we go clicked");
-      out6_function = returnInputStringAsFunction(input6.value);
+      out6_function = getFunctionFromCleanMathInput(cleanMathInput(mathField3.text()));
      
       // if function valid
       if (isInconclusive(out6_function)) {
@@ -309,8 +392,8 @@
         makeButtonRight(btn_out6,"Inconclusive");
                 let n = nVal.textContent;
 
-        let num = out6_function(n+1);
-        let denom = out6_function(n);
+        let num = out6_function(n+1, factorial);
+        let denom = out6_function(n, factorial);
         let r6 = num / denom;
                 let n_1 = parseInt(n) + 1;
 
@@ -351,18 +434,18 @@ el.style.animation = "fadeIn 0.6s forwards";
 
     
     function isConvergingAbsolutely(f) {
-      let numerator = f(151);
-      let denominator = f(150);
+      let numerator = f(151, factorial);
+      let denominator = f(150, factorial);
       let quotientResult = numerator/denominator
-      if (quotientResult < 0.99) {
+      if (quotientResult < 0.9999) {
         return true
       }
       return false
     }
 
     function isDiverging(f) {
-      let numerator = f(151);
-      let denominator = f(150);
+      let numerator = f(151, factorial);
+      let denominator = f(150, factorial);
       let quotientResult = numerator/denominator
       if (quotientResult > 1) {
         return true
@@ -370,8 +453,8 @@ el.style.animation = "fadeIn 0.6s forwards";
       return false    }
     
     function isInconclusive(f) {
-      let numerator = f(151);
-      let denominator = f(150);
+      let numerator = f(151, factorial);
+      let denominator = f(150, factorial);
       let quotientResult = numerator/denominator
       if (quotientResult > 0.99 && quotientResult < 1.005) {
         return true
@@ -382,9 +465,7 @@ el.style.animation = "fadeIn 0.6s forwards";
       console.log("reading: ", inputString);
       return new Function("n", `return ${inputString};`);
     }
-    function factorial(k) {
-      return k <= 1 ? 1 : k * factorial(k - 1);
-    }
+
 
     function updateAll(n) {
       nVal.textContent = n;
@@ -418,23 +499,23 @@ el.style.animation = "fadeIn 0.6s forwards";
         `Inconclusive`;
 
       if (revealOut4Inequality) {
-        let num = out4_function(n+1);
-        let denom = out4_function(n);
+        let num = out4_function(n+1, factorial);
+        let denom = out4_function(n, factorial);
         let r4 = num / denom;
         let inequalityToShow = `$$0 \\leq \\left| \\frac{a_{${n + 1}}}{a_${n}} \\right| = \\textcolor{#00ccff}{${r4.toFixed(4)}} < 1$$`;
         out4.innerHTML = inequalityToShow;
       }
 
       if (revealOut5Inequality) {
-        let num = out5_function(n+1);
-        let denom = out5_function(n);
+        let num = out5_function(n+1, factorial);
+        let denom = out5_function(n, factorial);
         let r5 = num / denom;
         let inequalityToShow = `$$\\left| \\frac{a_{${n + 1}}}{a_${n}} \\right| = \\color{#00ccff}{${r5.toFixed(4)}} > 1 $$`;
         out5.innerHTML = inequalityToShow;
       }      
       if (revealOut6Inequality) {
-        let num = out6_function(n+1);
-        let denom = out6_function(n);
+        let num = out6_function(n+1, factorial);
+        let denom = out6_function(n, factorial);
         let r6 = num / denom;
         let inequalityToShow = `$$\\left| \\frac{a_{${n + 1}}}{a_${n}} \\right| =\\color{#00ccff}{${r3.toFixed(4)}} = 1$$`;
         out6.innerHTML = inequalityToShow;

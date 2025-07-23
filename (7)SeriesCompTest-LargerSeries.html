@@ -143,7 +143,7 @@ option {
   left: 160px;
 ">
   <h2 style="margin: 0;">Series Comparison Test: Part I</h2>
-  <button id="next-lesson-btn" onclick="window.location.href=`(8)SeriesCompTest-SmallerSeries.html`">Series Comparison Test: Part II</button>
+  <button id="next-lesson-btn" onclick="window.location.href=`(9)SeriesCompTest-Pt2.html`">Series Comparison Test: Part II</button>
 </div>
 
 
@@ -162,7 +162,6 @@ option {
             width: 30px;
             height: 25px;
             ">
-              <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
@@ -185,7 +184,6 @@ option {
             width: 30px;
             height: 40px;
             ">
-              <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
@@ -335,12 +333,14 @@ option {
 
       doStep6();
       MathJax.typeset();
+      // disable the button
+      document.getElementById("buttonThirdConstant").disabled = true;
       // move on
     })
     
     function doStep1() {
         const nextLine = document.createElement('div');
-        nextLine.innerHTML = `We know that \\( \\frac{1}{n^{${userExponent}}} > \\frac{1}{n^{${userExponent}} + ${userConstant}} \\). Now we plot the partial sums of these series.`;
+        nextLine.innerHTML = `We know that <span style="color:#ff4444">\\( \\frac{1}{n^{${userExponent}}} \\)</span> > <span style="color:#ffcc00">\\( \\frac{1}{n^{${userExponent + userConstant}}} \\)</span>. Now we plot the partial sums of these series.`;
         mathContainer.appendChild(nextLine);
         MathJax.typeset();
         step = 1;
@@ -370,6 +370,7 @@ function increment_n(input) {
 }
 
 function doStep6() {
+        console.log("do step 6 called");
         const nextLine = document.createElement('div');
         nextLine.innerHTML = `Consider the slightly different series \\(${userDivergentSeries2Latex}\\). We know that ${firstSeries} > ${secondSeries} `;
         rightMath.appendChild(nextLine);
@@ -398,7 +399,8 @@ function doStep6() {
         return;
       }
       step++;
-    
+      console.log("step is: ", step);
+
 
       if (step === 1) {
         const nextLine = document.createElement('div');
@@ -421,7 +423,7 @@ function doStep6() {
         Plotly.newPlot(plotDiv, [
           {
             x: n, y: partial1, mode: 'markers+lines',
-            name: 'Partial Sums of First Series', marker: { color: '#00ccff' }, line: { color: '#00ccff' }
+            name: 'Partial Sums of First Series', marker: { color:  '#ff4444'}, line: { color:  '#ff4444' }
           },
           {
             x: n, y: partial2, mode: 'markers+lines',
@@ -447,10 +449,12 @@ function doStep6() {
       
       else if (step === 7) {
         // full inequality
-        let thirdSeries = `\\(\frac{1}{n^{{${userExponent}}}}\\)`;
+        console.log("step 7 firing");
+        console.log("userEXPOENNT", userExponent);
+        let thirdSeries = `\\(\\frac{1}{n^{{${userExponent}}}}\\)`;
         const nextLine = document.createElement('div');
         
-        nextLine.innerHTML = `Consider your first series ${thirdSeries}. Combining with the above inequality, we know that ${firstSeries} > ${secondSeries} > ${thirdSeries}`;
+        nextLine.innerHTML = `Now consider your first series ${thirdSeries}. Combining with the above inequality, we know that <span style="color:#88ff00">${firstSeries}</span> > <span style="color:#9f00ff">${secondSeries}</span> > <span style="color:#ff4444">${thirdSeries}</span>`;
         rightMath.appendChild(nextLine);
         MathJax.typeset();
       }
@@ -469,8 +473,8 @@ function doStep6() {
         const partialSum1 = [], partialSum2 = [], partialSum3 = [];
         n.forEach(i => {
           const series1term = series1(i);
-          const series2term = series2(i);
-          const series3term = series3(i);
+          const series2term = userDivergentSeries1Func(i, factorial);
+          const series3term = userDivergentSeries2Func(i, factorial);
           sumSeries1 += series1term;
           sumSeries2 += series2term;
           sumSeries3 += series3term;
@@ -480,12 +484,12 @@ function doStep6() {
         });
 
         Plotly.newPlot(plot2Div, [
-          { x: n, y: partialSum1, mode: 'markers+lines', name: `1/n^${userExponent}`, marker: { color: '#ff4444' }, line: { color: '#ff4444' } },
-          { x: n, y: partialSum2, mode: 'markers+lines', name: `1/n^${userExponent} + ${userConstant}`, marker: { color: '#00ccff' }, line: { color: '#00ccff' } },
-          { x: n, y: partialSum3, mode: 'markers+lines', name: `1/n^${userExponent} + ${thirdUserConstant}`, marker: { color: '#88ff00' }, line: { color: '#88ff00' } }
+          { x: n, y: partialSum1, mode: 'markers+lines', marker: { color: '#ff4444' }, line: { color: '#ff4444' } },
+          { x: n, y: partialSum2, mode: 'markers+lines',  marker: { color: '#9f00ff' }, line: { color: '#9f00ff' } },
+          { x: n, y: partialSum3, mode: 'markers+lines', marker: { color: '#88ff00' }, line: { color: '#88ff00' } }
         ], darkLayout);
         
-        // MathJax.typeset();
+        MathJax.typeset();
 
       } else if (step === 9) {
         rules.innerHTML += `<br>If a larger series diverges, the smaller series can diverge or converge`;

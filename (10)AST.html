@@ -234,7 +234,7 @@
   <div style="display: flex; row-gap: 1em;">
 
     <div id="quiz" class="box">
-      <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Partial Sums</h3>
+      <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Partial Sums<br>(round to hundreths)</h3>
       <div class="question">
         <label id= "label-s2" for="s2">\(S_2=\)</label>
         <input id="s2" type="text">
@@ -317,10 +317,12 @@
         <button id="check-answers-btn3" style="position: relative;">Check Answers</button>
 
       </div>    
-      <P width="100px">Notice that the difference between pairs of partial sums decreases as \(S_n\) grows. We can intuit here that as \(S_n\) gets infinitely large, the difference
-           between \(S_n\) and \(S_{n+2}\) will shrink to 0, signalling convergence.     
-      </P>
-      <button id="finish" style="position: relative;">Finish</button>
+      <div id="finishSection" style="opacity: 0;">
+        <P width="100px">Notice that the difference between pairs of partial sums decreases as \(S_n\) grows. We can intuit here that as \(S_n\) gets infinitely large, the difference
+            between \(S_n\) and \(S_{n+2}\) will shrink to 0, signalling convergence.     
+        </P>
+        <button id="finish" style="position: relative;">Finish</button>
+      </div>
     </div>
   </div>
 <div id="conclusions" class="box" style="text-align: left; padding: 1em;">
@@ -368,7 +370,7 @@
     const slider = document.getElementById('termsSlider');
     const termCountDisplay = document.getElementById('termCount');
     let wrongAnswers1 = [0,0,0,0,0,0,0];
-    const correctAnswers1 = [3,5,3.5,4.7,3.7,4.6,3.8];
+    const correctAnswers1 = [0.50, 0.83, 0.58, 0.78, 0.62, 0.76, 0.64];
 
       function changeCheckAnswersButtonToWrong(btn) {
         setElementColor(btn, "red");
@@ -541,7 +543,7 @@ document.addEventListener('keydown', function (event) {
 
 
         let wrongAnswers3 = [0,0,0];
-        const correctAnswers3 = [0.5,0.2,0.1]
+        const correctAnswers3 = [0.08, 0.04, 0.02];
         const answers3 = [netchange1Val, netchange2Val, netchange3Val];
         // check for wrong answers
         checkAnswers(answers3, correctAnswers3, wrongAnswers3);
@@ -556,6 +558,7 @@ document.addEventListener('keydown', function (event) {
           changeQuestionColors(wrongAnswers3, labelList3);
           // change buttont to say correct
           changeCheckAnswersBtnText(1, checkAnswersBtn3);
+          fadeIn(document.getElementById("finishSection"));
           // next div appear
         }
       });

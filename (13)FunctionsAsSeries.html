@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <title>Functions as Power Series</title>
+     <!-- Load jQuery first (required for MathQuill) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load MathQuill -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>  
     <script>
       window.MathJax = {
         tex: {
@@ -214,6 +220,40 @@
     </div>
   </body>
   <script>
+    
+          function factorial(n) {
+  if (n < 0) return NaN;
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
+
+function cleanMathInput(input) {
+  let inputCopy = input;
+  let factorialFunctionInserted = inputCopy.replace(/(\([^\)]+\)|[a-zA-Z0-9])\*!/g, "factorial($1)");
+  let carotsReplaced = factorialFunctionInserted.replace(/\^/g, "**");
+  let asteriskInsertedBetweenNumAndParen = carotsReplaced.replace(/(\d+(?:\.\d+)?)\(/g, "$1*(");
+  console.log(asteriskInsertedBetweenNumAndParen);
+  return asteriskInsertedBetweenNumAndParen;
+}
+
+
+function getFunctionFromCleanMathInput(cleanInput) {
+  return new Function("n, factorial", "return " + cleanInput);
+}
+
+                const MQ = MathQuill.getInterface(2);
+      const mathFieldSpan = document.getElementById('input4');
+      mathField = MQ.MathField(mathFieldSpan, {
+        spaceBehavesLikeTab: true,
+        handlers: {
+          edit: function () {
+            const latex = mathField.latex();
+          }
+        }
+      });
     alert("If you see no button, press 'Enter' to progress")
     let clickCount = 0;
     document.addEventListener('keydown', function(event) {
