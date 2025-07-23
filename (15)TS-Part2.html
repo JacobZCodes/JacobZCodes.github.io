@@ -3,6 +3,13 @@
   <head>
     <meta charset="UTF-8">
     <title>Taylor Series Con'td</title>
+    <!-- Load jQuery first (required for MathQuill) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load MathQuill -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>  
+
     <style>
       @font-face {
         font-family: 'TangoSans_Bold';
@@ -101,6 +108,10 @@
 
 }
 
+.power {
+  position: relative; bottom: 10px;
+}
+
       @keyframes fadeIn {
         to {
           opacity: 1;
@@ -130,7 +141,7 @@
       <div id="divExplainApproximation" style="max-width: 400px; opacity: 1;">
         In order to get as accurate an approximation as possible, our goal is now to build an approximating function of degree n.
       </div>
-      <div id="divExplainApproximation2" style="max-width: 400px; opacity: 0;">
+      <div id="divExplainApproximation2" style="max-width: 400px; opacity: 1;">
         We wish for our approximating function of degree n to be equal to our desired function so we write: 
       </div>
       <div id="divExplainApproximation3" style="opacity: 1; margin-left: 50px; font-size: x-large; color: white;">
@@ -159,8 +170,18 @@
         <div id="workDeg2">
           <div id="constants2" style="opacity: 1;">
             <h2>\(c_2\)</h2>
-          
-            <p> \(f''(x) = e^x  =  \;\)<input id="coef_c2" type="text"><label>\(\;c2 \;+ \;\)</label><input type="text" id="coef_c3"><label>\(\;c_3\)</label><label>\(\;x\;\)</label><input id="power_c3"type="text" class="sequence">\(\;+\ldots\;\) <input type="text" id="coef_cn" style="width: 50px;"><label>\(\;c_n\)</label><label>\(\;x\;\)</label><input type="text" class="sequence" id="power_cn" style="width: 30px;"></p>
+            
+            <span style="display: inline-flex; align-items: flex-start;">
+                <span>
+                  \(f''(x) = e^x  =  \;\)<input id="coef_c2" type="text"><label>\(\;c2 \;+ \;\)</label>
+                  <input type="text" id="coef_c3"><label>\(\;c_3\)</label><label>\(\;x\;\)</label>
+                  <input id="power_c3"type="text" class="sequence">\(\;+\ldots\;\)
+                </span>
+                <span id="coef_cn"></span>
+                <span class="cn"></span>
+                <span class="x"></span>
+                <span id="power_cn" class="power"></span>
+            </span>
             <p>\(f''(0) \implies \)<label>\(c_2 = \;\)</label><input type="text" id="c2"></p>
             <div>
               <button class="submit" id="submitConstants2Btn" style="align-self: center">Submit</button>
@@ -172,8 +193,13 @@
         <div id="workDeg3">
           <div id="constants3" style="opacity: 1;">
             <h2>\(c_3\)</h2>
-          
-            <p> \(f'''(x) = e^x  =  \;\)<input id="coef_c3_1" type="text"><label>\(\;c3 + \ldots \)</label> <input id="coef_cn_1"type="text" style="width: 80px;"><label>\(\;c_n\)</label><label>\(x\)</label><input id ="power_cn_1"type="text" class="sequence" style="width: 30px; left: 3px;" ></p>
+            <span style="display: inline-flex; align-items: flex-start;">
+              <span>\(f'''(x) = e^x  =  \;\)<input id="coef_c3_1" type="text"><label>\(\;c3 + \ldots \)</label></span>
+              <span id="coef_cn_1"></span>
+              <span class="c_n"></span>
+              <span class="x"></span>
+              <span id="power_cn_1" class="power"></span>
+            </span>
             <p>\(f'''(0) \implies \)<label>\(c_3 = \;\)</label><input id="c3" type="text"></p>
             <div>
               <button class="submit" id="submitConstants3Btn" style="align-self: center">Submit</button>
@@ -185,9 +211,16 @@
         <div id="workDeg4">
           <div id="constants4" style="opacity: 1;">
             <h2>\(c_n\)</h2>
-          
-            <p> \(f^n(x) = e^x  =  \;\)<input id="final_coef" type="text"><label>\(\;c_n\)</label></p>
-            <p>\(f^n(0) \implies \)<label>\(c_n = \;\)</label><input id="final_constant" type="text"></p>
+            <span style="display: inline-flex; align-items: flex-start;">
+              <span>\(f^n(x) = e^x  =  \;\)</span>
+              <span id="final_coef"></span>
+              <span class="c_n"></span>
+            </span>
+            <br>
+            <span style="display: inline-flex; align-items: flex-start;">
+              <span style="margin-right: 5px;">\(f^n(0) \implies c_n = \)</span>
+              <span id="final_constant"></span>
+            </span>
             <div>
               <button class="submit" id="submitConstants4Btn" style="align-self: center">Submit</button>
               
@@ -204,6 +237,50 @@
     <button class="next-lesson" id="4" style="align-self: center; opacity: 0;" onclick="alertFinished()">Next Lesson</button>  
   </body>
   <script>
+      const MQ = MathQuill.getInterface(2);
+
+
+      const coef_cn = document.getElementById('coef_cn');
+      coef_cn_mf = MQ.MathField(coef_cn, {
+        spaceBehavesLikeTab: true,
+      });
+
+      const cnElements = document.querySelectorAll(".c_n");
+      cnElements.forEach((el) => {
+        const mf = MQ.StaticMath(el);
+        mf.latex("c_n");
+      } )
+
+      const xElements = document.querySelectorAll(".x");
+      xElements.forEach((el) => {
+        const mf = MQ.StaticMath(el);
+        mf.latex("x");
+      })
+
+      const power_cn_1 = document.getElementById("power_cn_1");
+      power_cn_1_mf = MQ.MathField(power_cn_1, {
+        spaceBehavesLikeTab: true,
+      })
+
+      const coef_cn_1 = document.getElementById("coef_cn_1");
+      coef_cn_1_mf = MQ.MathField(coef_cn_1, {
+        spaceBehavesLikeTab: true,
+      })
+
+      const power_cn = document.getElementById("power_cn");
+      power_cn_mf = MQ.MathField(power_cn, {spaceBehavesLikeTab: true,});
+
+      const final_coef = document.getElementById("final_coef");
+      final_coef_mf = MQ.MathField(final_coef, {
+        spaceBehavesLikeTab: true,
+      })
+
+      const final_constant = document.getElementById("final_constant");
+      final_constant_mf = MQ.MathField(final_constant, {
+        spaceBehavesLikeTab: true,
+      })
+
+
     alert("If you see no button, press 'Enter' to progress")
 
     function alertFinished() {
@@ -215,6 +292,14 @@
     el.style.animation = "fadeIn 0.6s forwards";
   }
 
+      function cleanSpacesAndParens(dRaw) {
+      console.log("cleaning ", dRaw);
+      let dRawCopy = dRaw;
+      let temp1 = dRawCopy.replace(/\s+/g, '');
+      let temp2 = temp1.replace(/[()]/g, '');
+      console.log("removed parens: ", temp2);
+      return temp2;
+    }
 
     function fadeOut(el) {
     el.style.opacity = "1";    
@@ -286,33 +371,33 @@
         const coef_c2 = document.getElementById("coef_c2");
         const coef_c3 = document.getElementById("coef_c3");
         const power_c3 = document.getElementById("power_c3");
-        const coef_cn = document.getElementById("coef_cn");
-        const power_cn = document.getElementById("power_cn");
+        const coef_cn = coef_cn_mf.text();
+        const power_cn = power_cn_mf.text();
         const c2 = document.getElementById("c2");
 
 
         const coef_c2Val = parseInt(coef_c2.value);
         const coef_c3Val = parseInt(coef_c3.value);
         const power_c3Val = parseInt(power_c3.value);
-        const coef_cnVal = coef_cn.value;
-        const power_cnVal = power_cn.value;
+        const coef_cnVal = coef_cn;
+        const power_cnVal = power_cn;
         const c2Val = parseFloat(c2.value);
           
         let labelList = [coef_c2, coef_c3, power_c3, coef_cn, power_cn, c2];
           let wrongAnswers = [0,0,0,0,0,0];
-          const correctAnswers = [2,6,1,"n(n-1)","n-2", 0.5];
+          const correctAnswers = [2,6,1,"n*(n-1)","n-2", 0.5];
           const answers = [coef_c2Val, coef_c3Val, power_c3Val, coef_cnVal, power_cnVal, c2Val];
           // check for wrong answers
           checkAnswers(answers, correctAnswers, wrongAnswers);
           if (isWrong(wrongAnswers)) {
             // change S4's text color
-            changeQuestionColors(wrongAnswers, labelList);
+            // changeQuestionColors(wrongAnswers, labelList);
             // change button text + color to Wrong
             changeCheckAnswersBtnText(-1, submitConstants2Btn);
           }
           else if (!isWrong(wrongAnswers)) {
             // reset all labels to green
-            changeQuestionColors(wrongAnswers, labelList);
+            // changeQuestionColors(wrongAnswers, labelList);
             // change buttont to say correct
             changeCheckAnswersBtnText(1, submitConstants2Btn);
             // show next block + disable btn
@@ -326,30 +411,30 @@
     submitConstants3Btn = document.getElementById("submitConstants3Btn");
         submitConstants3Btn.addEventListener("click", function() {
         const coef_c3_1 = document.getElementById("coef_c3_1");
-        const coef_cn_1 = document.getElementById("coef_cn_1");
-        const power_cn_1 = document.getElementById("power_cn_1");
+        const coef_cn_1 = coef_cn_1_mf.text();
+        const power_cn_1 = power_cn_1_mf.text()
         const c3 = document.getElementById("c3");
 
         const coef_c3_1Val = parseInt (coef_c3_1.value);
-        const coef_cn_1Val = coef_cn_1.value;
-        const power_cn_1Val = power_cn_1.value;
+        const coef_cn_1Val = coef_cn_1;
+        const power_cn_1Val = power_cn_1;
         const c3Val = parseFloat(c3.value)
           
         let labelList = [coef_c3_1, coef_cn_1, power_cn_1, c3];
           let wrongAnswers = [0,0,0,0];
-          const correctAnswers = [6,"n(n-1)(n-2)","n-3", 0.17];
+          const correctAnswers = [6,"n*(n-1)(n-2)","n-3", 0.17];
           const answers = [coef_c3_1Val, coef_cn_1Val, power_cn_1Val, c3Val]
           // check for wrong answers
           checkAnswers(answers, correctAnswers, wrongAnswers);
           if (isWrong(wrongAnswers)) {
             // change S4's text color
-            changeQuestionColors(wrongAnswers, labelList);
+            // changeQuestionColors(wrongAnswers, labelList);
             // change button text + color to Wrong
             changeCheckAnswersBtnText(-1, submitConstants3Btn);
           }
           else if (!isWrong(wrongAnswers)) {
             // reset all labels to green
-            changeQuestionColors(wrongAnswers, labelList);
+            // changeQuestionColors(wrongAnswers, labelList);
             // change buttont to say correct
             changeCheckAnswersBtnText(1, submitConstants3Btn);
             submitConstants3Btn.disabled = true;
@@ -361,27 +446,25 @@
 
             submitConstants4Btn = document.getElementById("submitConstants4Btn");
         submitConstants4Btn.addEventListener("click", async function() {
-        const final_coef = document.getElementById("final_coef");
-        const final_constant = document.getElementById("final_constant");
+        const final_coef =  cleanSpacesAndParens(final_coef_mf.text());
+        const final_constant = cleanSpacesAndParens(final_constant_mf.text());
 
-        const final_coefVal = final_coef.value;
-        const final_constantVal = final_constant.value;
 
         let labelList = [final_coef, final_constant];
           let wrongAnswers = [0,0];
-          const correctAnswers = ["n!", "1/n!"];
-          const answers = [final_coefVal, final_constantVal]
+          const correctAnswers = ["n*!", "1/n*!"];
+          const answers = [final_coef, final_constant]
           // check for wrong answers
           checkAnswers(answers, correctAnswers, wrongAnswers);
           if (isWrong(wrongAnswers)) {
             // change S4's text color
-            changeQuestionColors(wrongAnswers, labelList);
+            // changeQuestionColors(wrongAnswers, labelList);
             // change button text + color to Wrong
             changeCheckAnswersBtnText(-1, submitConstants4Btn);
           }
           else if (!isWrong(wrongAnswers)) {
             // reset all labels to green
-            changeQuestionColors(wrongAnswers, labelList);
+            // changeQuestionColors(wrongAnswers, labelList);
             // change buttont to say correct
             changeCheckAnswersBtnText(1, submitConstants4Btn);
             submitConstants4Btn.disabled = true;
