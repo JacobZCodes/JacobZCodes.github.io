@@ -1,4 +1,4 @@
-global
-    cohesive input method
-Ratio
-    limit computer
+to do
+    - have ^n-1 chase rMathField
+    - finish inputizing rational functions as power series 
+    - ts-part2 inputize
