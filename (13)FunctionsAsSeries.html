@@ -110,6 +110,11 @@
       .statement {
         opacity: 0;
       }
+      
+      .adjust {
+        position: relative;
+        top: 25px;
+      }
 
          .next-lesson {
   width: 300px;
@@ -149,14 +154,16 @@
         <input id="denominator" type="text" style="left: 10px;width: 60px;position: relative;bottom: 82px;"> -->
         <button id="checkFractionBtn">Submit</button>
       </div>
-      <div class="box" id="box3" style="opacity: 1;">
+      <div class="box" id="box3"">
         <h3>Geometric Series Form</h3>
-        <p> Now that <span style="font-size: larger;">\(f(x) = \frac{20}{1 - (-x^3)} = \frac{a}{1-r}\)</span>: <br>
-          <br>
-          <span style="font-size: x-large;">\(\sum_{n=1}^{\infty}\; \phantom{20(-x^3)}^{n-1}\) \(=\sum_{n=1}^{\infty} ar^{n-1}\)</span>
-        </p>
-        <span id="a"></span>
-        <span id="r"></span>
+        <p> Now that <span style="font-size: larger;">\(f(x) = \frac{20}{1 - (-x^3)} = \frac{a}{1-r}\)</span>:<br></p>
+        <span style="display: inline-flex; align-items: flex-start;">
+          <span id="sumEmpty"></span>
+          <span id="a" class="adjust"></span>
+          <span id="r" class="adjust"></span>
+          <span style="font-size: smaller; vertical-align: super;" class="adjust">\(^{n-1}\)</span>
+          <span id="sumFill"></span>
+        </span>
         <!-- <input id="a" type="text" style="bottom: 57px;position: relative;right: 115px;width: 15px;height: 25px;">
         <input id="r" type="text" style="position: relative;/* bottom: 60px; */height: 25px;width: 30px;bottom: 105px;right: 60px;"> -->
         <button id="checkSumBtn">Submit</button>
@@ -165,18 +172,14 @@
         <h3>Finding Interval of Convergence</h3>
         <p> But we cannot yet claim that <span style="display: inline;">\(f(x) = \frac{20}{1 - (-x^3)} = \sum_{n=1}^{\infty} 20(-x^3)^{n-1}\)</span> because a geometric series only converges for certain values of r. So in this problem, we can think of our "r" as being \(-x^3\) </p>
         <p> \( \sum_{n=1}^{\infty} 20(-x^3)^{n-1}\) converges when \(|-x^3| < 1\). </p>
-            <p> Solve the above inequality to find for which values of x our series converges: <span style="font-size: larger;">\(x \in (\;-1\;\;,\;1\;\;\;)\)</span>
-            </p>
-            <input id="start" type="text" style="
-                bottom: 40px;
-                width: 15px;
-                left: 42px;
-            ">
-            <input id="end" type="text" style="
-                bottom: 65px;
-                width: 5px;
-                left: 100px;
-            ">
+            <p> Solve the above inequality to find for which values of x our series converges:</p><br>
+            <span style="font-size: larger;">
+              <span id="xIn"></span>
+              <span id="start"></span>
+              <span id="comma"></span>
+              <span id="end"></span>
+              <span id="endParen"></span>
+            </span>
             <button id="checkRangeBtn">Submit</button>
       </div>
       <div class="box" id="box5" style="width: 700px;">
@@ -184,42 +187,21 @@
         <p>Putting everything together:</p>
         <p> \(f(x) = \frac{20}{1+x^3} = \frac{20}{1-(-x^3)} = \sum_{n=1}^{\infty}20(-x^3)^{n-1}, x \in (-1,1) \) </p>
         <h4>Your Turn (optional challenge problem)</h4>
-        <p>
-          <span style="font-size: x-large;">\(f(x) = \frac{x^2}{4-x^2} = \sum_{n=1}^{\infty}\; \frac{x^2}{4} (\frac{x^2}{4})^{n-1}, x \in (\;-2\;\;,\;2\;\;\;)\)</span>
-        </p>
-        <input id="a-challenge" type="text" style="    bottom: 60px;
-    position: relative;
-    right: 15px;
-    width: 10px;
-    height: 30px;">
-        <input id="r-challenge" type="text" style="position: relative;    position: relative;
-    /* bottom: 60px; */
-    height: 30px;
-    width: 15px;
-    bottom: 115px;
-    right: 0px;
-    left: 35px;">
-        <input id="start-challenge" type="text" style="
-    /* right: 45px; */
-    bottom: 160px;
-    width: 15px;
-    left: 42px;
-    height: 15px;
-    left: 210px;
-            ">
-        <input id="end-challenge" type="text" style="
-    /* bottom: 65px; */
-    /* width: 5px; */
-    /* left: 100px; */
-    /* right: 45px; */
-    bottom: 200px;
-    width: 15px;
-    left: 42px;
-    height: 15px;
-    left: 280px;
-            ">
-        <button id="checkChallengeBtn"style="position: relative;bottom: 150px;">Submit</button>
-        <button class="next-lesson" style="position: relative;bottom: 175px;" onclick="window.location.href=`(14)TS-Part1.html`">Next Lesson</button>
+        <span style="display: inline-flex; align-items: flex-start;">
+          <span id="funcAndSumEmpty"></span>
+          <span id="a-challenge" class="adjust"></span>
+          <span id="r-challenge" class="adjust"></span>
+          <span style="font-size: smaller; vertical-align: super;" class="adjust">\(^{n-1}\)</span>
+          <span style="display: inline-flex; align-items: flex-start;" class="adjust">
+            <span id="xIn-challenge" style="margin-left: 5px;"></span>
+            <span id="start-challenge"></span>
+            <span id="comma-challenge"></span>
+            <span id="end-challenge"></span>
+            <span id="endParen-challenge"></span>
+          </span>
+        </span>
+        <button id="checkChallengeBtn">Submit</button>
+        <button class="next-lesson"  onclick="window.location.href=`(14)TS-Part1.html`">Next Lesson</button>
       </div>
     </div>
   </body>
@@ -261,8 +243,6 @@ function getFunctionFromCleanMathInput(cleanInput) {
         spaceBehavesLikeTab: true,
       });
 
-
-      
       const aSpan = document.getElementById('a');
       aMathField = MQ.MathField(aSpan, {
         spaceBehavesLikeTab: true,
@@ -273,7 +253,74 @@ function getFunctionFromCleanMathInput(cleanInput) {
         spaceBehavesLikeTab: true,
       });
 
+      const sumEmptySpan = document.getElementById('sumEmpty');
+      sumEmptyMathField = MQ.StaticMath(sumEmptySpan);
+      sumEmptyMathField.latex("\\sum_{n=1}^{\\infty}");
 
+      const sumFillSpan = document.getElementById('sumFill');
+      sumFillMathField = MQ.StaticMath(sumFillSpan);
+      sumFillMathField.latex("=\\sum_{n=1}^{\\infty} ar^{n-1}");
+
+      const xInSpan = document.getElementById('xIn');
+      xInMathField = MQ.StaticMath(xInSpan);
+      xInMathField.latex("x\\in(");
+
+      const startSpan = document.getElementById('start');
+      startMathField = MQ.MathField(startSpan, {
+        spaceBehavesLikeTab: true,
+      })
+
+      
+      const comma = document.getElementById('comma');
+      mf0 = MQ.StaticMath(comma);
+      mf0.latex(",");
+
+      const endSpan = document.getElementById('end');
+      endMathField = MQ.MathField(endSpan, {
+        spaceBehavesLikeTab: true,
+      })
+      
+      const endParenSpan = document.getElementById('endParen');
+      endParenMathField = MQ.StaticMath(endParenSpan);
+      endParenMathField.latex(")");
+
+      const funcAndSumEmpty = document.getElementById('funcAndSumEmpty');
+      mf1 = MQ.StaticMath(funcAndSumEmpty);
+      mf1.latex("f(x) = \\frac{x^2}{4-x^2}=\\sum_{n=1}^{\\infty}");
+
+      const aChallenge = document.getElementById('a-challenge');
+      aMF = MQ.MathField(aChallenge, {
+        spaceBehavesLikeTab: true,
+      })
+
+      const rChallenge = document.getElementById('r-challenge');
+      rMF = MQ.MathField(rChallenge, {
+        spaceBehavesLikeTab: true,
+      })
+
+      const xInChallenge = document.getElementById("xIn-challenge");
+      mf2 = MQ.StaticMath(xInChallenge);
+      mf2.latex(",x\\in(");
+
+      const startChallenge = document.getElementById("start-challenge");
+      startMF = MQ.MathField(startChallenge, {
+        spaceBehavesLikeTab: true,
+      })
+
+      const commaChallenge = document.getElementById("comma-challenge");
+      mf3 = MQ.StaticMath(commaChallenge);
+      mf3.latex(",");
+
+
+      const endChallenge = document.getElementById("end-challenge");
+      endMF = MQ.MathField(endChallenge, {
+        spaceBehavesLikeTab: true,
+      })
+
+      const endParenChallenge = document.getElementById("endParen-challenge");
+      mf4 = MQ.StaticMath(endParenChallenge);
+      mf4.latex(")");
+         
       
     alert("If you see no button, press 'Enter' to progress")
     let clickCount = 0;
@@ -308,10 +355,12 @@ function getFunctionFromCleanMathInput(cleanInput) {
           break;
       }
     }
-    function cleanBox2Denominator(dRaw) {
+    function cleanSpacesAndParens(dRaw) {
+      console.log("cleaning ", dRaw);
       let dRawCopy = dRaw;
       let temp1 = dRawCopy.replace(/\s+/g, '');
       let temp2 = temp1.replace(/[()]/g, '');
+      console.log("removed parens: ", temp2);
       return temp2;
     }
     let numeratorLabel = document.getElementById("numerator");
@@ -325,7 +374,7 @@ function getFunctionFromCleanMathInput(cleanInput) {
     let endLabel = document.getElementById("end");
     checkFractionBtn.addEventListener("click", function() {
       let numerator= numeratorMathField.text();
-      let denominator = cleanBox2Denominator(denominatorMathField.text());
+      let denominator = cleanSpacesAndParens(denominatorMathField.text());
 
       let labelList = [numeratorLabel, denominatorLabel];
       let answers = [numerator, denominator];
@@ -371,8 +420,8 @@ function getFunctionFromCleanMathInput(cleanInput) {
       }
     })
     checkRangeBtn.addEventListener("click", function() {
-      const startVal = parseInt(document.getElementById("start").value.trim());
-      const endVal = parseInt(document.getElementById("end").value.trim());
+      const startVal = parseInt(startMathField.latex());
+      const endVal = parseInt(endMathField.latex());
       let labelList = [startLabel, endLabel];
       let answers = [startVal, endVal];
       const correctAnswers = [-1, 1];
@@ -396,24 +445,22 @@ function getFunctionFromCleanMathInput(cleanInput) {
 
     let checkChallengeBtn = document.getElementById("checkChallengeBtn");
     checkChallengeBtn.addEventListener("click", function() {
-      const a_challenge = document.getElementById("a-challenge");
-      const r_challenge = document.getElementById("r-challenge");
-      const start_challenge = document.getElementById("start-challenge");
-      const end_challenge = document.getElementById("end-challenge");
-      let labelList = [a_challenge, r_challenge, start_challenge, end_challenge];
-      let answers = [a_challenge.value, r_challenge.value, parseInt(start_challenge.value), parseInt(end_challenge.value)];
-      const correctAnswers = ["x^2/4", "x^2/4", -2, 2];
+      const a = cleanSpacesAndParens(aMF.text());
+      const r = cleanSpacesAndParens(rMF.text());
+      const start = startMF.text();
+      const end = endMF.text();
+      // let labelList = [a_challenge, r_challenge, start_challenge, end_challenge];
+      let answers = [a, r, start, end];
+      const correctAnswers = ["x^2/4", "x^2/4", "-2", "2"];
       let wrongAnswers = [0, 0, 0, 0];
       // check for wrong answers
       checkAnswers(answers, correctAnswers, wrongAnswers);
       if (isWrong(wrongAnswers)) {
         // change S4's text color
-        changeQuestionColors(wrongAnswers, labelList);
         // change button text + color to Wrong
         changeCheckAnswersBtnText(-1, checkChallengeBtn);
       } else if (!isWrong(wrongAnswers)) {
         // reset all labels to green
-        changeQuestionColors(wrongAnswers, labelList);
         // change buttont to say correct
         changeCheckAnswersBtnText(1, checkChallengeBtn);
       }
