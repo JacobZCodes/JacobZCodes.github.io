@@ -142,19 +142,23 @@
       </div>
       <div class="box" id="box2">
         <h3>Geometric Friendly Form</h3>
-        <p style="font-size: xx-large;">\(\frac{20}{1+x^3} = \) \(\frac{20}{1+x^3} \) \(= \frac{a}{1-r}\)</p>
-        <input id="numerator" type="text" style="width: 40px;position: relative;bottom: 90px;left: 10px;">
-        <input id="denominator" type="text" style="left: 10px;width: 60px;position: relative;bottom: 82px;">
+        <p style="font-size: xx-large;">\(\frac{20}{1+x^3} = \) \(\frac{\phantom{20}}{\phantom{1+x^3}} \) \(= \frac{a}{1-r}\)</p>
+        <span id="numerator" style="position: relative; bottom: 90px;"></span>
+        <span id="denominator" style="position: relative; bottom: 80px;"></span>
+        <!-- <input id="numerator" type="text" style="width: 40px;position: relative;bottom: 90px;left: 10px;">
+        <input id="denominator" type="text" style="left: 10px;width: 60px;position: relative;bottom: 82px;"> -->
         <button id="checkFractionBtn">Submit</button>
       </div>
-      <div class="box" id="box3">
+      <div class="box" id="box3" style="opacity: 1;">
         <h3>Geometric Series Form</h3>
         <p> Now that <span style="font-size: larger;">\(f(x) = \frac{20}{1 - (-x^3)} = \frac{a}{1-r}\)</span>: <br>
           <br>
-          <span style="font-size: x-large;">\(\sum_{n=1}^{\infty}\; 20(-x^3)^{n-1}\) \(=\sum_{n=1}^{\infty} ar^{n-1}\)</span>
+          <span style="font-size: x-large;">\(\sum_{n=1}^{\infty}\; \phantom{20(-x^3)}^{n-1}\) \(=\sum_{n=1}^{\infty} ar^{n-1}\)</span>
         </p>
-        <input id="a" type="text" style="bottom: 57px;position: relative;right: 115px;width: 15px;height: 25px;">
-        <input id="r" type="text" style="position: relative;/* bottom: 60px; */height: 25px;width: 30px;bottom: 105px;right: 60px;">
+        <span id="a"></span>
+        <span id="r"></span>
+        <!-- <input id="a" type="text" style="bottom: 57px;position: relative;right: 115px;width: 15px;height: 25px;">
+        <input id="r" type="text" style="position: relative;/* bottom: 60px; */height: 25px;width: 30px;bottom: 105px;right: 60px;"> -->
         <button id="checkSumBtn">Submit</button>
       </div>
       <div class="box" id="box4" style="width: 600px;">
@@ -244,16 +248,33 @@ function getFunctionFromCleanMathInput(cleanInput) {
   return new Function("n, factorial", "return " + cleanInput);
 }
 
-                const MQ = MathQuill.getInterface(2);
-      const mathFieldSpan = document.getElementById('input4');
-      mathField = MQ.MathField(mathFieldSpan, {
+      const MQ = MathQuill.getInterface(2);
+
+
+      const numeratorSpan = document.getElementById('numerator');
+      numeratorMathField = MQ.MathField(numeratorSpan, {
         spaceBehavesLikeTab: true,
-        handlers: {
-          edit: function () {
-            const latex = mathField.latex();
-          }
-        }
       });
+
+      const denominatorSpan = document.getElementById('denominator');
+      denominatorMathField = MQ.MathField(denominatorSpan, {
+        spaceBehavesLikeTab: true,
+      });
+
+
+      
+      const aSpan = document.getElementById('a');
+      aMathField = MQ.MathField(aSpan, {
+        spaceBehavesLikeTab: true,
+      });
+
+      const rSpan = document.getElementById('r');
+      rMathField = MQ.MathField(rSpan, {
+        spaceBehavesLikeTab: true,
+      });
+
+
+      
     alert("If you see no button, press 'Enter' to progress")
     let clickCount = 0;
     document.addEventListener('keydown', function(event) {
@@ -287,6 +308,12 @@ function getFunctionFromCleanMathInput(cleanInput) {
           break;
       }
     }
+    function cleanBox2Denominator(dRaw) {
+      let dRawCopy = dRaw;
+      let temp1 = dRawCopy.replace(/\s+/g, '');
+      let temp2 = temp1.replace(/[()]/g, '');
+      return temp2;
+    }
     let numeratorLabel = document.getElementById("numerator");
     let denominatorLabel = document.getElementById("denominator");
     let checkFractionBtn = document.getElementById("checkFractionBtn");
@@ -297,22 +324,23 @@ function getFunctionFromCleanMathInput(cleanInput) {
     let startLabel = document.getElementById("start");
     let endLabel = document.getElementById("end");
     checkFractionBtn.addEventListener("click", function() {
-      const numerator = parseInt(document.getElementById("numerator").value.trim());
-      const denominator = document.getElementById("denominator").value;
+      let numerator= numeratorMathField.text();
+      let denominator = cleanBox2Denominator(denominatorMathField.text());
+
       let labelList = [numeratorLabel, denominatorLabel];
       let answers = [numerator, denominator];
-      const correctAnswers = [20, "1-(-x^3)"];
+      const correctAnswers = ["20", "1--x^3"];
       let wrongAnswers = [0, 0];
       // check for wrong answers
       checkAnswers(answers, correctAnswers, wrongAnswers);
       if (isWrong(wrongAnswers)) {
         // change S4's text color
-        changeQuestionColors(wrongAnswers, labelList);
+        // changeQuestionColors(wrongAnswers, labelList);
         // change button text + color to Wrong
         changeCheckAnswersBtnText(-1, checkFractionBtn);
       } else if (!isWrong(wrongAnswers)) {
         // reset all labels to green
-        changeQuestionColors(wrongAnswers, labelList);
+        // changeQuestionColors(wrongAnswers, labelList);
         // change buttont to say correct
         changeCheckAnswersBtnText(1, checkFractionBtn);
         // next div appear
@@ -320,22 +348,22 @@ function getFunctionFromCleanMathInput(cleanInput) {
       }
     })
     checkSumBtn.addEventListener("click", function() {
-      const aVal = parseInt(document.getElementById("a").value.trim());
-      const rVal = document.getElementById("r").value;
+      const aVal = aMathField.text();
+      const rVal = rMathField.text();
       let labelList = [aLabel, rLabel];
       let answers = [aVal, rVal];
-      const correctAnswers = [20, "-x^3"];
+      const correctAnswers = ["20", "-x^3"];
       let wrongAnswers = [0, 0];
       // check for wrong answers
       checkAnswers(answers, correctAnswers, wrongAnswers);
       if (isWrong(wrongAnswers)) {
         // change S4's text color
-        changeQuestionColors(wrongAnswers, labelList);
+        // changeQuestionColors(wrongAnswers, labelList);
         // change button text + color to Wrong
         changeCheckAnswersBtnText(-1, checkSumBtn);
       } else if (!isWrong(wrongAnswers)) {
         // reset all labels to green
-        changeQuestionColors(wrongAnswers, labelList);
+        // changeQuestionColors(wrongAnswers, labelList);
         // change buttont to say correct
         changeCheckAnswersBtnText(1, checkSumBtn);
         // next div appear
@@ -426,6 +454,7 @@ function getFunctionFromCleanMathInput(cleanInput) {
       console.log("Answers: ", answers);
       console.log("Correct answers: ", correctAnswers);
       for (let i = 0; i < numAnswersToCheck; ++i) {
+        console.log("Comparing ", answers[i], "to ", correctAnswers[i]);
         if (answers[i] !== correctAnswers[i]) {
           wrongAnswers[i] = 1;
         } else {
