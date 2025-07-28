@@ -1,348 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sequence</title>
+  <meta charset="UTF-8" />
+  <title>Math Lessons Homepage</title>
   <style>
     @font-face {
       font-family: 'TangoSans_Bold';
       src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
     }
-    .next-lesson {
-  width: 300px;
-  padding: 18px 32px;
-  font-size: 20px;
-  font-weight: bold;
-  border-radius: 8px; /* make it rectangular instead of round */
-  margin-top: 4rem;   /* space it further down */
-  opacity: 0;
-  animation: fadeIn 1s forwards;
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
 
     body {
       background-color: #000;
       color: #00ccff;
       font-family: 'TangoSans_Bold', sans-serif;
       text-align: center;
-      padding: 2em;
+      padding: 3em;
     }
 
-    .hovered {
-      text-decoration: underline;
-      cursor: help;
-      position: relative;
-      color: #33ddff;
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 1.5em;
     }
 
-    .hovered::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      background: #222;
-      color: white;
-      padding: 4px 8px;
-      border-radius: 4px;
-      top: 1.5em;
-      left: 0;
-      font-size: 0.9em;
-      white-space: nowrap;
-      display: none;
-      z-index: 10;
-    }
-
-    .hovered:hover::after {
-      display: block;
-    }
-
-    .sentence-line {
+    .lesson-list {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
       gap: 1em;
-      margin-top: 1em;
-      animation: fadeIn 1s forwards;
     }
 
-    p, input {
-      opacity: 0;
-      animation: fadeIn 1s forwards;
-    }
-
-    #sentences {
-      margin-top: 1em;
-    }
-
-    #user-input-arithmetic,
-    #user-input-geometric {
-      margin-top: 2em;
-      animation: fadeIn 1s forwards;
-    }
-
-    input[type="text"] {
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #00ccff;
-      border-radius: 5px;
-      background-color: #111;
+    .lesson-link {
+      font-size: 1.5em;
       color: #00ccff;
-      width: 60%;
-    }
-
-    button {
-      margin-top: 1em;
+      text-decoration: none;
+      border: 2px solid #00ccff;
+      border-radius: 12px;
       padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #000;
-      background-color: #00ccff;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
-      animation: fadeIn 1s forwards;
+      transition: all 0.3s ease;
+      width: 300px;
     }
 
-    button:hover {
+    .lesson-link:hover {
+      background-color: #00ccff;
+      color: #000;
       transform: scale(1.05);
       box-shadow: 0 0 15px #00ccff;
-      /* animation: fadeIn 1s forwards; */
-    }
-
-    button:active {
-      transform: scale(0.95);
-      /* animation: fadeIn 1s forwards; */
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
     }
   </style>
 </head>
-
 <body>
-  <h1><b>Intro To Sequences</b></h1>
-  <div id="sentences">
-    <p id="1"  style="display: none;"></p>
-    <p id="2" style="display: none;"></p>
-    <p id="3"  style="display: none;"></p>
+  <h1>Calculus II: Sequences & Series</h1>
+
+  <div style="display: flex; flex-direction: row; justify-content: center; gap: 100px;">
+    <div class="lesson-list">
+      <a class="lesson-link" href="(1)Sequence.html">Intro to Sequences</a>
+      <a class="lesson-link" href="(2)Series.html">Intro to Series</a>
+      <a class="lesson-link" href="(3)Geometric.html">Geometric Series</a>
+      <a class="lesson-link" href="(4)Divergence.html">Defining Divergence & Convergence</a>
+      <a class="lesson-link" href="(5)DivergenceTest.html">Divergence Test</a>
+      <a class="lesson-link" href="(6)IntegralTest.html">Integral Test</a>
+            <a class="lesson-link" href="(7)SeriesCompTest-LargerSeries.html">Series Comparison Test: Pt 1</a>
+
+    </div>
+    <div class="lesson-list">
+      <a class="lesson-link" href="(9)SerisCompTest-Pt2.html">Series Comparison Test: Pt 2</a>
+      <a class="lesson-link" href="(10)AST.html">Alternating Series Test</a>
+      <a class="lesson-link" href="(11)Ratio.html">Ratio Test</a>
+      <a class="lesson-link" href="(12)PowerSeries.html">Intro to Power Series</a>
+      <a class="lesson-link" href="(13)FunctionsAsSeries.html">Writing Rational Functions as Power Series</a>
+      <a class="lesson-link" href="(14)TS-Part1.html">Taylor Series: Pt 1</a>
+      <a class="lesson-link" href="(15)TS-Part2.html">Taylor Series: Pt 2</a>
+    </div>
   </div>
-
-  <div id="user-input-arithmetic" style="display: none">
-    <p>Enter your own arithmetic sequence (at least 5 numbers, separated by commas):</p>
-    <input type="text" id="arithmeticInput" placeholder="e.g. 2, 4, 6, 8, 10">
-    <br>
-    <button onclick="checkArithmetic()">Check Sequence</button>
+  <div style="margin-top: 3em;">
+      <a class="lesson-link" href="updates.html">Upcoming Changes</a>
   </div>
-
-  <div id="user-input-geometric" style="display: none">
-    <p>Enter your own geometric sequence (at least 5 numbers, separated by commas):</p>
-    <input type="text" id="geometricInput" placeholder="e.g. 2, 4, 8, 16, 32">
-    <br>
-    <button onclick="checkGeometric()">Check Sequence</button>
-    <br><br>
-<button id="next-lesson-btn" class="next-lesson" style="display: none;" onclick="window.location.href='(2)Series.html'">Next Lesson</button>
-  </div>
-
-<script>
-  alert("If you see no button, press 'Enter' to progress")
-  function fadeOutAndHide(el) {
-  el.style.animation = "fadeOut 0.6s forwards";
-  setTimeout(() => {
-    el.style = "display:none;";
-  }, 600);
-}
-
-
-  const sentenceList = [
-    'A <u>sequence</u> is an ordering of numbers.',
-    'If each term of the sequence is separated by addition, the sequence is <u>arithmetic</u>.\nEx: 4,6,8,10,12...',
-    'If each term of the sequence is separated by multiplication, the sequence is <u>geometric</u>.\nEx: 4,8,16,32,64...',
-  ];
-
-let currentIndex = 0;
-let verbosity = 0; // debug mode
-const p1 = document.getElementById("1");
-const p2 = document.getElementById("2");
-const p3 = document.getElementById("3");
-const sentences = document.getElementById("sentences");
-let keyCooldown = false;
-    document.addEventListener("keydown", function (event) {
-        if (keyCooldown) return;
-
-    keyCooldown = true;
-
-    setTimeout(() => {
-      keyCooldown = false;
-    }, 500); 
-      if (event.key === "Enter") {
-        if (event.target.tagName === 'INPUT' && event.key === "Enter") {
-          event.preventDefault(); 
-          return; 
-        }        
-        if (currentIndex >= 4) {
-          return;
-        }
-        else {
-          showNext();
-        }
-      }
-
-      // if (event.key === "Backspace") {
-      //   if (event.target.tagName === 'INPUT' && event.key === "Backspace") {
-      //     event.preventDefault(); 
-      //     return;
-      //   }
-      //   goBack();
-      // }
-    });
-
-  function goBack() {
-    currentIndex--;
-    if (currentIndex === -1) {
-      return;
-    }
-    switch(currentIndex) {
-      case 0:
-fadeOutAndHide(p1);
-      case 1: 
-fadeOutAndHide(p2); 
-        break;
-      case 2: 
-fadeOutAndHide(p3);
-      break;
-      case 3: // a. input
-    const arithmeticInput = document.getElementById("user-input-arithmetic");
-    const arithmeticBtn = arithmeticInput.querySelector("button");
-      fadeOutAndHide(arithmeticBtn);
-      fadeOutAndHide(arithmeticInput);
-      break;
-      case 4: // g. input
-          const geometricInput = document.getElementById("user-input-geometric");
-    const geometricBtn = geometricInput.querySelector("button");
-    fadeOutAndHide(geometricBtn);
-fadeOutAndHide(geometricInput);
-      break;
-      case 5:
-  const nextBtn = document.getElementById("next-lesson-btn");
-  nextBtn.style.opacity = "1"; // in case it was still faded
-  nextBtn.style.animation = "fadeOut 0.6s forwards";
-  setTimeout(() => {
-    nextBtn.style.display = "none";
-  }, 600);
-    break;
-    }
-
-    
-  }
-  function showNext() {
-    currentIndex++;
-    if (currentIndex === 7) {
-      currentIndex = 6;
-    }
-    console.log(currentIndex);
-    switch(currentIndex) {
-      case 1:
-        p1.innerHTML = sentenceList[0];
-        p1.style.display="block";
-        break;
-         // sentence 1
-      case 2: 
-        p2.innerHTML = sentenceList[1];
-        p2.style.display="block";// setnence 2  
-        break;
-      case 3: 
-              p3.innerHTML = sentenceList[2];
-        p3.style.display="block";// sentence 3
-      break;
-      case 4: // a. input
-      const arithmeticInput = document.getElementById("user-input-arithmetic");
-      arithmeticInput.style.display = "block";
-      arithmeticInput.style.animation = "fadeIn 1s forwards";
-      // Also animate the button
-      const arithmeticBtn = arithmeticInput.querySelector("button");
-      arithmeticBtn.style.opacity = "0";
-      arithmeticBtn.style.animation = "fadeIn 1s forwards";
-      arithmeticBtn.style.display = "inline-block";
-      break;
-      case 5: // g. input
-          const geometricInput = document.getElementById("user-input-geometric");
-    geometricInput.style.display = "block";
-    geometricInput.style.animation = "fadeIn 1s forwards";
-    const geometricBtn = geometricInput.querySelector("button");
-geometricBtn.style.opacity = "0";
-geometricBtn.style.animation = "fadeIn 1s forwards";
-geometricBtn.style.display = "inline-block";
-      break;
-      case 6:
-            nextBtn = document.getElementById("next-lesson-btn");
-    nextBtn.style.display = "inline-block";
-    nextBtn.style.opacity = "0";
-    nextBtn.style.animation = "fadeIn 1s forwards";
-    break;
-    }
-  }
-
-  function checkArithmetic() {
-    const input = document.getElementById("arithmeticInput").value;
-    const nums = input.split(',').map(x => parseFloat(x.trim()));
-    if (verbosity === 1) {
-      showNext();
-    }
-    if (nums.length < 5 || nums.some(isNaN)) {
-      alert("Please enter at least 5 valid numbers.");
-      return;
-    }
-
-    const diff = nums[1] - nums[0];
-    for (let i = 2; i < nums.length; i++) {
-      if (Math.abs((nums[i] - nums[i - 1]) - diff) > 1e-6) {
-        alert("That's not a valid arithmetic sequence.");
-        return;
-      }
-    }
-    alert("✅ Great job! That is a valid arithmetic sequence.");
-    showNext();
-
-  }
-
-  function checkGeometric() {
-    const input = document.getElementById("geometricInput").value;
-    const nums = input.split(',').map(x => parseFloat(x.trim()));
-
-    if (verbosity === 1) {
-      showNext();
-    }
-    if (nums.length < 5 || nums.some(isNaN)) {
-      alert("Please enter at least 5 valid numbers.");
-      return;
-    }
-
-    const ratio = nums[1] / nums[0];
-    for (let i = 2; i < nums.length; i++) {
-      if (Math.abs((nums[i] / nums[i - 1]) - ratio) > 1e-6) {
-        alert("That's not a valid geometric sequence.");
-        return;
-      }
-    }
-    alert("✅ Great job! That is a valid geometric sequence.");
-    showNext();
-    // show next lesson
-  }
-
-  function alertComplete() {
-    alert("🎉 You have completed this lesson!");
-  }
-</script>
-
 </body>
 </html>
