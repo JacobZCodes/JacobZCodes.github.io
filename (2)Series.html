@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Series Animation Example</title>
+      <link rel="stylesheet" href="style.css"/>
+
+    <title>Calculus II: Sequences & Series</title>
     <style>
       @font-face {
         font-family: 'TangoSans_Bold';
@@ -144,6 +146,25 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body>
+    <div class="navBtns">
+      <div>
+          <button id="openModal" class="circle">?</button>
+          <div class="modal" id="modal">
+              <div class="modal-inner">
+                  <h3 style="color: #000;">Push "Enter" to progress</h3>
+                  <h3 style="color: black">Press the home icon at 
+                      any time to return to the landing page.
+                  </h3>
+                  <button id="closeModal">Close</button>
+              </div>
+          </div>
+      </div>
+      <div>
+        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">H</button>
+      </div>
+    </div>
+    <script src="script.js"></script>
+
     <h1>
       <b>Series</b>
     </h1>
@@ -198,7 +219,6 @@
     </div>
 
     <script>
-          alert("If you see no button, press 'Enter' to progress")
 
       let clickNum = -1;
       document.addEventListener("keydown", function (event) {

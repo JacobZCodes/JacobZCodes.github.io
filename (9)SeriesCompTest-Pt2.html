@@ -1,6 +1,8 @@
 <head>
   <meta charset="UTF-8">
-  <title>Series Comparison</title>
+    <link rel="stylesheet" href="style.css"/>
+
+  <title>Calculus II: Sequences & Series</title>
   <script>
     window.MathJax = {
       tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
@@ -10,6 +12,24 @@
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   <!-- your styles and fonts here -->
 </head>
+    <div class="navBtns">
+      <div>
+          <button id="openModal" class="circle">?</button>
+          <div class="modal" id="modal">
+              <div class="modal-inner">
+                  <h3 style="color: #000;">Push "Enter" to progress</h3>
+                  <h3 style="color: black">Press the home icon at 
+                      any time to return to the landing page.
+                  </h3>
+                  <button id="closeModal">Close</button>
+              </div>
+          </div>
+      </div>
+      <div>
+        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">H</button>
+      </div>
+    </div>
+  <script src="script.js"></script>
 
 <h2 id="instructions">The left box contains rules you have just learned. If you have time, go back and look at your graph to see if you can prove to yourself why the right box's rules must also be true.</h2>
 <div class="container">
@@ -36,7 +56,6 @@
 </div>
 
 <script> 
-    alert("If you see no button, press 'Enter' to progress")
  let clickCount = 0;
 
   document.addEventListener('keydown', function(event) {

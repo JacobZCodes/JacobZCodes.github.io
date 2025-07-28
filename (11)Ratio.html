@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Ratio Test Interactive</title>
+    <link rel="stylesheet" href="style.css"/>
+
+  <title>Calculus II: Sequences & Series</title>
   <!-- Load jQuery first (required for MathQuill) -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -156,6 +158,25 @@
     </style>
 </head>
 <body>
+      <div class="navBtns">
+      <div>
+          <button id="openModal" class="circle">?</button>
+          <div class="modal" id="modal">
+              <div class="modal-inner">
+                  <h3 style="color: #000;">Push "Enter" to progress</h3>
+                  <h3 style="color: black">Press the home icon at 
+                      any time to return to the landing page.
+                  </h3>
+                  <button id="closeModal">Close</button>
+              </div>
+          </div>
+      </div>
+      <div>
+        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">H</button>
+      </div>
+    </div>
+  <script src="script.js"></script>
+
   <h2>Ratio Test</h2>
   <h3>The ratio test allows us to quickly identify the end behavior of a series by comparing the ratio of successive terms,
       \(a_{n+1}, a_n\) as n grows infinitely large. There are three cases of this comparison.
@@ -295,7 +316,6 @@ function getFunctionFromCleanMathInput(cleanInput) {
       //     }
       //   }
       // });
-    alert("If you see no buttons, push 'Enter' to progress");
     let hasHitEnter = false;
     document.addEventListener('keydown', function(event) {
       if (event.key == "Enter") {

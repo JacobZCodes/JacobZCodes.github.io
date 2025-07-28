@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AST</title>
+    <link rel="stylesheet" href="style.css"/>
+
+  <title>Calculus II: Sequences & Series</title>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script>
     window.MathJax = {
@@ -223,6 +225,25 @@
   </style>
 </head>
 <body>
+      <div class="navBtns">
+      <div>
+          <button id="openModal" class="circle">?</button>
+          <div class="modal" id="modal">
+              <div class="modal-inner">
+                  <h3 style="color: #000;">Push "Enter" to progress</h3>
+                  <h3 style="color: black">Press the home icon at 
+                      any time to return to the landing page.
+                  </h3>
+                  <button id="closeModal">Close</button>
+              </div>
+          </div>
+      </div>
+      <div>
+        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">H</button>
+      </div>
+    </div>
+  <script src="script.js"></script>
+
   <h3>Alternating Series Test (AST)</h3>
   <p id="p1">The alternating series test can best be explained through the lens of the alternating harmonic series. The alternating harmonic series
     is the same as the harmonic series except that its terms alternate between positive and negative: \(\sum_{n=1}^{\infty} (-1)^{n-1} \frac{1}{n} = 1 - 1/2 + 1/3 - 1/4... \) 
@@ -337,7 +358,6 @@
 
   <script>
     // MathJax.typeset();
-    alert("If you see no button, push 'Enter' to progress");
     let clickCount = 0;
     let labels2 = document.getElementById("s2");
     let labels3 = document.getElementById("s3");

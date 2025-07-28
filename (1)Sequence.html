@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sequence</title>
+  <link rel="stylesheet" href="style.css"/>
+  <title>Calculus II: Sequences & Series</title>
   <style>
     @font-face {
       font-family: 'TangoSans_Bold';
@@ -130,6 +131,26 @@
 </head>
 
 <body>
+    <div class="navBtns">
+      <div>
+          <button id="openModal" class="circle">?</button>
+          <div class="modal" id="modal">
+              <div class="modal-inner">
+                  <div id="modal-inner-text">
+                    <h3 style="color: #000;">Push "Enter" to progress</h3>
+                    <h3 style="color: black">Press the home icon at 
+                        any time to return to the landing page.
+                    </h3>
+                  </div>
+                  <button id="closeModal">Close</button>
+              </div>
+          </div>
+      </div>
+      <div>
+        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">H</button>
+      </div>
+    </div>
+  <script src="script.js"></script>
   <h1><b>Intro To Sequences</b></h1>
   <div id="sentences">
     <p id="1"  style="display: none;"></p>
@@ -146,7 +167,7 @@
 
   <div id="user-input-geometric" style="display: none">
     <p>Enter your own geometric sequence (at least 5 numbers, separated by commas):</p>
-    <input type="text" id="geometricInput" placeholder="e.g. 2, 4, 8, 16, 32">
+    <input type="text" id="geometricInput" placeholder="e.g. 2, 4, 8, 16, 32">  
     <br>
     <button onclick="checkGeometric()">Check Sequence</button>
     <br><br>
@@ -154,7 +175,6 @@
   </div>
 
 <script>
-  alert("If you see no button, press 'Enter' to progress")
   function fadeOutAndHide(el) {
   el.style.animation = "fadeOut 0.6s forwards";
   setTimeout(() => {
@@ -299,18 +319,21 @@ geometricBtn.style.display = "inline-block";
       showNext();
     }
     if (nums.length < 5 || nums.some(isNaN)) {
-      alert("Please enter at least 5 valid numbers.");
+
+      updateInnerModalHTML(`<h3 style="color: #000;">Please enter at least 5 valid numbers</h3>`);
+      openModal();
+      // alert("Please enter at least 5 valid numbers.");
       return;
     }
 
     const diff = nums[1] - nums[0];
     for (let i = 2; i < nums.length; i++) {
       if (Math.abs((nums[i] - nums[i - 1]) - diff) > 1e-6) {
-        alert("That's not a valid arithmetic sequence.");
+        updateInnerModalHTML(`<h3 style="color: #000;">That's not a valid arithmetic sequence</h3>`);
+        openModal();
         return;
       }
     }
-    alert("✅ Great job! That is a valid arithmetic sequence.");
     showNext();
 
   }
@@ -323,25 +346,23 @@ geometricBtn.style.display = "inline-block";
       showNext();
     }
     if (nums.length < 5 || nums.some(isNaN)) {
-      alert("Please enter at least 5 valid numbers.");
+      updateInnerModalHTML(`<h3 style="color: #000;">Please enter at least 5 valid numbers</h3>`);
+      openModal();
       return;
     }
 
     const ratio = nums[1] / nums[0];
     for (let i = 2; i < nums.length; i++) {
       if (Math.abs((nums[i] / nums[i - 1]) - ratio) > 1e-6) {
-        alert("That's not a valid geometric sequence.");
+        updateInnerModalHTML(`<h3 style="color: #000;">That's not a valid geometric sequence</h3>`);
+        openModal();
         return;
       }
     }
-    alert("✅ Great job! That is a valid geometric sequence.");
     showNext();
     // show next lesson
   }
 
-  function alertComplete() {
-    alert("🎉 You have completed this lesson!");
-  }
 </script>
 
 </body>

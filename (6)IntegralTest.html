@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Integral Test</title>
+      <link rel="stylesheet" href="style.css"/>
+
+    <title>Calculus II: Sequences & Series</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>
 
@@ -133,6 +135,25 @@
       </style>
   </head>
   <body>
+        <div class="navBtns">
+      <div>
+          <button id="openModal" class="circle">?</button>
+          <div class="modal" id="modal">
+              <div class="modal-inner">
+                  <h3 style="color: #000;">Push "Enter" to progress</h3>
+                  <h3 style="color: black">Press the home icon at 
+                      any time to return to the landing page.
+                  </h3>
+                  <button id="closeModal">Close</button>
+              </div>
+          </div>
+      </div>
+      <div>
+        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">H</button>
+      </div>
+    </div>
+      <script src="script.js"></script>
+
     <h2>Integral Test</h2>
     <div id="plots-container">
       <div class="plot-box">
@@ -452,7 +473,6 @@
 
 
 <script>
-      alert("If you see no button, press 'Enter' to progress")
 
   let button1 = document.getElementById("rectangles");
   let button2 = document.getElementById("rectangles-");

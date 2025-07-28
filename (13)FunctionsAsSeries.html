@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Functions as Power Series</title>
+      <link rel="stylesheet" href="style.css"/>
+
+    <title>Calculus II: Sequences & Series</title>
      <!-- Load jQuery first (required for MathQuill) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -135,6 +137,25 @@
     </style>
   </head>
   <body>
+        <div class="navBtns">
+      <div>
+          <button id="openModal" class="circle">?</button>
+          <div class="modal" id="modal">
+              <div class="modal-inner">
+                  <h3 style="color: #000;">Push "Enter" to progress</h3>
+                  <h3 style="color: black">Press the home icon at 
+                      any time to return to the landing page.
+                  </h3>
+                  <button id="closeModal">Close</button>
+              </div>
+          </div>
+      </div>
+      <div>
+        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">H</button>
+      </div>
+    </div>
+  <script src="script.js"></script>
+
     <h2>Rational Functions as Power Series</h2>
     <p>Is it possible to convert a rational function \(f(x) = \frac{p(x)}{q(x)} \) into a power series \(\sum_{n=1}^{\infty}a_n (x-a)^{n}\;\)? </p>
     </p>
@@ -322,7 +343,6 @@ function getFunctionFromCleanMathInput(cleanInput) {
       mf4.latex(")");
          
       
-    alert("If you see no button, press 'Enter' to progress")
     let clickCount = 0;
     document.addEventListener('keydown', function(event) {
       if (event.key == "Enter") {

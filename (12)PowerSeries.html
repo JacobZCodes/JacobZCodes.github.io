@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Power Series</title>
+      <link rel="stylesheet" href="style.css"/>
+
+    <title>Calculus II: Sequences & Series</title>
     <!-- Load jQuery first (required for MathQuill) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -117,6 +119,25 @@
     </style>
   </head>
   <body>
+        <div class="navBtns">
+      <div>
+          <button id="openModal" class="circle">?</button>
+          <div class="modal" id="modal">
+              <div class="modal-inner">
+                  <h3 style="color: #000;">Push "Enter" to progress</h3>
+                  <h3 style="color: black">Press the home icon at 
+                      any time to return to the landing page.
+                  </h3>
+                  <button id="closeModal">Close</button>
+              </div>
+          </div>
+      </div>
+      <div>
+        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">H</button>
+      </div>
+    </div>
+  <script src="script.js"></script>
+
     <h2>Power Series</h2>
     <div class="lesson" style="display: flex; flex-direction: column; align-items: center;">
       <p id="statement1" class="statement">A series is a summation: \( \sum_{n=1}^{\infty} a_n \)</p>
@@ -205,7 +226,6 @@ function getFunctionFromCleanMathInput(cleanInput) {
           }
         }
       });
-          alert("If you see no button, press 'Enter' to progress")
 
       let sequenceRawInput;
       let evaluatePolynomialBtnHasNotBeenClicked = true;

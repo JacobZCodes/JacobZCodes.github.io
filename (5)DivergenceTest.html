@@ -6,7 +6,9 @@ Pressing Submit while Continue Button is alive
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Series Animation Example</title>
+      <link rel="stylesheet" href="style.css"/>
+
+    <title>Calculus II: Sequences & Series</title>
     <!-- Load jQuery first (required for MathQuill) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -209,6 +211,25 @@ option {
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body>
+        <div class="navBtns">
+      <div>
+          <button id="openModal" class="circle">?</button>
+          <div class="modal" id="modal">
+              <div class="modal-inner">
+                  <h3 style="color: #000;">Push "Enter" to progress</h3>
+                  <h3 style="color: black">Press the home icon at 
+                      any time to return to the landing page.
+                  </h3>
+                  <button id="closeModal">Close</button>
+              </div>
+          </div>
+      </div>
+      <div>
+        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">H</button>
+      </div>
+    </div>
+  <script src="script.js"></script>
+
     <h1>Divergence Test</h1>
     <div id="sentence1" style="opacity: 0;"><p><strong>If \(a_n \not\to 0\), then \(\sum a_n\) diverges.</strong></p> </div>
     <div id="sentence2" style="opacity: 0;"><p>What this doesn't mean: <span class="red"><strong>if \(a_n \to 0\), then \(\sum a_n\) converges</strong>.</p></span></div>
@@ -320,7 +341,6 @@ option {
           }
         }
       });
-      alert("If you see no button, press 'Enter' to progress")
 
 let series1Info;
 let series2Info;
