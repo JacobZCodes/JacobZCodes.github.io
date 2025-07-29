@@ -95,11 +95,11 @@
       }
 
       .height-input {
-        width: 35px;
+        width: 55px;
       }
 
       .width-input {
-        width: 20px;
+        width: 30px;
       }    
       
       .heights {
@@ -149,7 +149,9 @@
           </div>
       </div>
       <div>
-        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">H</button>
+        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">
+          <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+        </button>
       </div>
     </div>
       <script src="script.js"></script>
@@ -772,7 +774,7 @@
     let [isCorrect, inputsToCheck] = checkRectangles();
     if (isCorrect) {
       // update text to an = ...
-      labelAndResizeHeights(inputsToCheck);
+      // labelAndResizeHeights(inputsToCheck);
       // call step 4
       doStep4();
       // hide button 1
@@ -790,7 +792,7 @@
     let [isCorrect, inputsToCheck] = checkRectangles2();
     if (isCorrect) { 
       // update text to an = ...
-      labelAndResizeHeights(inputsToCheck);
+      // labelAndResizeHeights(inputsToCheck);
       // move on 
       doStep10();
       // hide button 2
