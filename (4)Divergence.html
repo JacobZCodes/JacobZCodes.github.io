@@ -143,10 +143,12 @@
           <button id="openModal" class="circle">?</button>
           <div class="modal" id="modal">
               <div class="modal-inner">
-                  <h3 style="color: #000;">Push "Enter" to progress</h3>
-                  <h3 style="color: black">Press the home icon at 
-                      any time to return to the landing page.
-                  </h3>
+                  <div id="modal-inner-text">
+                    <h3 style="color: #000;">Push "Enter" to progress</h3>
+                    <h3 style="color: black">Press the home icon at 
+                        any time to return to the landing page.
+                    </h3>
+                  </div>
                   <button id="closeModal">Close</button>
               </div>
           </div>
@@ -159,6 +161,7 @@
       </div>
     </div>
       <script src="script.js"></script>
+      <script src="seqChecker.js"></script>
 
     <h1>Divergence</h1>
     <p id="sentence1"></p>
@@ -169,7 +172,7 @@
       <button onclick="storeSequenceAndShowNext()">Input Sequence</button>
     </div>
     <div id="user-input-series" style="opacity:0">
-      <p>Enter your sequence in series notation (please enter it exactly as a computer should read it, ie 2n+3 => 2*n+3):</p>
+      <p>Enter your sequence in series notation:</p>
       <label>\( \sum_{n=1}^{\infty} \) <span id="user-input-series-mq" class="mq"></span>
       </label>
       <button onclick="storeSeriesAndShowNext()">Input Series</button>
@@ -209,7 +212,7 @@
     <button id="graphMorePointsNextBtn" style="opacity: 0;" onclick="showNext()">Continue</button>
     <div id="finalExplanation" style="opacity: 0;">
       <p>So it might seem that we can easily tell whether or not a series converges or diverges: we can just start computing partial sums and follow the graph.</p>
-      <p>But sometimes this pattern is not always obvious, or predictable, or easy at all to compute (give an example of such a difficult computation). </p>
+      <p>But sometimes this pattern is not always obvious, or predictable, or easy at all to compute. </p>
         
       <p>So that is why mathematicians have created a series of tests
         to examine series in order that we do not need to sit all day computing partial sums. The first test is the  divergence test.</p>
@@ -239,29 +242,6 @@
     el.style.opacity = "1";    
     el.style.animation = "fadeOut 0.6s forwards";
   }
-
-  function checkArithmetic() {
-    const input = document.getElementById("arithmeticInput").value;
-    const nums = input.split(',').map(x => parseFloat(x.trim()));
-    if (verbosity === 1) {
-      showNext();
-    }
-    if (nums.length < 5 || nums.some(isNaN)) {
-      alert("Please enter at least 5 valid numbers.");
-      return;
-    }
-
-    const diff = nums[1] - nums[0];
-    for (let i = 2; i < nums.length; i++) {
-      if (Math.abs((nums[i] - nums[i - 1]) - diff) > 1e-6) {
-        alert("That's not a valid arithmetic sequence.");
-        return;
-      }
-    }
-    alert("✅ Great job! That is a valid arithmetic sequence.");
-    showNext();
-
-  }
       function computePartialSum(n, series) { // computes S_n
           let sum = 0;
           for (let i = 1; i <= n; i++) {
@@ -272,26 +252,7 @@
         const sentenceList = [];
         let currentIndex = 0;
         let userSequence = []; // Global list to store the sequence
-        function checkArithmetic(rawInput) {
-    const nums = rawInput.split(',').map(x => parseFloat(x.trim()));
-    if (verbosity === 1) {
-      showNext();
-    }
-    if (nums.length < 5 || nums.some(isNaN)) {
-      alert("Please enter at least 5 valid numbers.");
-      return false;
-    }
 
-    const diff = nums[1] - nums[0];
-    for (let i = 2; i < nums.length; i++) {
-      if (Math.abs((nums[i] - nums[i - 1]) - diff) > 1e-6) {
-        alert("That's not a valid arithmetic sequence.");
-        return false;
-      }
-    }
-    return true;
-
-  }
   function factorial(n) {
   if (n < 0) return NaN;
   let result = 1;
@@ -301,7 +262,6 @@
   return result;
 }
         function storeSequenceAndShowNext() {
-          
           if (verbosity === 1) {
             userSequence= [1,2,3,4,5];
             showNext();
@@ -316,9 +276,10 @@
             .map(x => parseFloat(x)) // Convert strings to numbers
             .filter(x => !isNaN(x)); // Remove any non-numbers
           console.log("Parsed sequence:", userSequence);
-          // Advance to next stage (optional)
           showNext();
         }
+
+
         let userSeries = []; // Global list to store the series
         function storeSeriesAndShowNext() {
           console.log("showing next...");

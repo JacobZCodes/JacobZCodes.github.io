@@ -37,7 +37,7 @@
       }
 
       .arrow {
-        opacity: 1;
+        opacity: 0;
       }
 
       input[type="text"] {
@@ -124,7 +124,7 @@
 
       @keyframes fadeOut {
         to {
-          opacity: 1;
+          opacity: 0;
         }
       }
 
@@ -169,7 +169,7 @@
       <div id="divExplainApproximation" style="max-width: 400px; opacity: 1;">
         In order to get as accurate an approximation as possible, our goal is now to build an approximating function of degree n.
       </div>
-      <div id="divExplainApproximation2" style="max-width: 400px; opacity: 1;">
+      <div id="divExplainApproximation2" style="max-width: 400px; opacity: 0;">
         We wish for our approximating function of degree n to be equal to our desired function so we write: 
       </div>
       <div id="divExplainApproximation3" style="opacity: 1; margin-left: 50px; font-size: x-large; color: white;">
@@ -182,7 +182,7 @@
     </div>
     </div>
     <div id="work" style="display: flex; column-gap: 3em;">
-      <div id="divDeg1" style="max-width: 400px; opacity: 1;">
+      <div id="divDeg1" style="max-width: 400px; opacity: 0;">
         Now we do exactly as before, but we this time we will work with this same degree n polynomial approximating function the entire time:
         <div id="workDeg1" style="display: flex; flex-direction: column;">
           <p>\(f(0) = e^0  = c_0 + c_1(0) + c_2(0)^2 + c_3(0)^3 + \ldots c_n(0)^n  \) </p>
@@ -194,9 +194,9 @@
           </div>        
         </div>
       </div>
-      <div id="divDeg2" style="max-width: 600px; opacity: 1;">
+      <div id="divDeg2" style="max-width: 600px; opacity: 0;">
         <div id="workDeg2">
-          <div id="constants2" style="opacity: 1;">
+          <div id="constants2" style="opacity: 0;">
             <h2>\(c_2\)</h2>
             
             <span style="display: inline-flex; align-items: flex-start;">
@@ -218,9 +218,9 @@
           </div>
         </div>
       </div>
-      <div id="divDeg3" style="max-width: 600px; opacity: 1;">
+      <div id="divDeg3" style="max-width: 600px; opacity: 0;">
         <div id="workDeg3">
-          <div id="constants3" style="opacity: 1;">
+          <div id="constants3" style="opacity: 0;">
             <h2>\(c_3\)</h2>
             <span style="display: inline-flex; align-items: flex-start;">
               <span>\(f'''(x) = e^x  =  \;\)<input id="coef_c3_1" type="text"><label>\(\;c3 + \ldots \)</label></span>
@@ -236,9 +236,9 @@
           </div>
         </div>
       </div>
-      <div id="divDeg4" style="max-width: 600px; opacity: 1;">
+      <div id="divDeg4" style="max-width: 600px; opacity: 0;">
         <div id="workDeg4">
-          <div id="constants4" style="opacity: 1;">
+          <div id="constants4" style="opacity: 0;">
             <h2>\(c_n\)</h2>
             <span style="display: inline-flex; align-items: flex-start;">
               <span>\(f^n(x) = e^x  =  \;\)</span>
@@ -738,7 +738,7 @@ el.style.animation = "fadeOut 0.6s forwards";
 
 darkLayout = {
     title: {
-    text: 'Taylor Series: Contd',
+    text: 'Taylor Series',
     font: {
       family: 'TangoSans_Bold, sans-serif', // or any custom font
       size: 32,                            // 🔠 font size in px
