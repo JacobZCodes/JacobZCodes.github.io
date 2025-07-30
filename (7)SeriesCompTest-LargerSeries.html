@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="sigma.png">
+
     <link rel="stylesheet" href="style.css"/>
 
   <title>Calculus II: Sequences & Series</title>
@@ -198,7 +200,7 @@ option {
             </select>
             <button id="buttonExponent">Submit Series</button>
           </div>
-          <div id="series2" style="font-size: larger; opacity: 1;">
+          <div id="series2" style="font-size: larger; opacity: 0;">
             Create another series <span id ="secondLatexFraction"style="font-size: larger;"></span>
             <label id="labelForConstant" for="constant" style="position: relative"> </label>
             <select id="constant" style="
@@ -227,8 +229,8 @@ option {
     <div class="column">
       <div id="right-math">
         <div id="seriesInput3" style="display: flex;">
-            <div id="userSeriesDisplaySection" style="font-size:larger; opacity: 1;"></div>
-            <div id="series3" style="opacity: 1;"> 
+            <div id="userSeriesDisplaySection" style="font-size:larger; opacity: 0;"></div>
+            <div id="series3" style="opacity: 0;"> 
               Create a divergent series <br><span id ="thirdLatexFraction"style="font-size: larger;"></span><br>
               <button id="buttonThirdConstant">Submit Series</button> 
             </div>    
@@ -363,7 +365,7 @@ option {
     
     function doStep1() {
         const nextLine = document.createElement('div');
-        nextLine.innerHTML = `We know that <span style="color:#ff4444">\\( \\frac{1}{n^{${userExponent}}} \\)</span> > <span style="color:#ffcc00">\\( \\frac{1}{n^{${userExponent + userConstant}}} \\)</span>. Now we plot the partial sums of these series.`;
+        nextLine.innerHTML = `We know that <span style="color:#ff4444">\\( \\frac{1}{n^{${userExponent}}} \\)</span> > <span style="color:#ffcc00">\\( \\frac{1}{n^{${userExponent}}+${userConstant}} \\)</span>. Now we plot the partial sums of these series.`;
         mathContainer.appendChild(nextLine);
         MathJax.typeset();
         step = 1;

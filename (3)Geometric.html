@@ -2,7 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
+        <!--MATHQUILL STUFF -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+      <link rel="icon" type="image/png" href="sigma.png">
+
       <link rel="stylesheet" href="style.css"/>
+      <link rel="stylesheet" href="mqStyle.css">
 
     <title>Calculus II: Sequences & Series</title>
     <script>
@@ -103,8 +111,9 @@
       }
 
       input[type="text"].sequence {
-        position: relative; bottom: 10px; right: 5px; width: 8px;      
+        position: relative; bottom: 10px; right: 5px; width: 40px;      
     }
+
 
         .next-lesson {
   width: 300px;
@@ -183,13 +192,13 @@
           <label>\(+ ar\)</label>
           <input id="box1-8"type="text" class="sequence">
           <label>\(...+ ar\)</label>
-          <input id="box1-9"type="text" class="sequence" style="width: 30px;">
+          <span id="box1-9" class="power"></span>
         </div>
         <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
           <button id="check-answers-btn-1" style="position: relative;">Check Answers</button>
         </div>
       </div>
-      <div id="box2" class="box" style="width: 550px; opacity: 0;">
+      <div id="box2" class="box" style="width: 550px; opacity: 1;">
         <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Your Turn</h3>
         <p>Fill in the following exponents to find r * S_n</p>
         <div class="question" style="position: relative;right: 37px;">
@@ -223,26 +232,26 @@
           <label>\(+ ar\)</label>
           <input id="box2-8"class="sequence" type="text">
           <label>\(...+ ar\)</label>
-          <input id="box2-9"class="sequence"type="text" style="width: 30px;">
+          <span id="box2-9"class="power"></span>
         </div>
         <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
           <button id="check-answers-btn-2" style="position: relative;">Check Answers</button>
         </div>
       </div>
-      <div id="box3" class="box" style="opacity: 0;">
+      <div id="box3" class="box" style="opacity: 1;">
         <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Your Turn</h3>
         <div class="question" style="position: relative;right: 37px;">
           <label>\(S_n - rS_n= a - ar\)</label>
           <input id="box3-1" type="text" class="sequence">
         </div>
-        <div id="sn-expression" class="question" style="opacity: 0;position: relative;right: 37px;">
+        <div id="sn-expression" class="question" style="opacity: 1;position: relative;right: 37px;">
             <label>\(S_n = \frac{a(1-r^n)}{1-r}\)</label>
         </div>
         <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
           <button id="check-answers-btn-3" style="position: relative;">Check Answers</button>
         </div>
       </div>
-      <div id="box4"class="box" style="width: 900px; gap: 10px; position: relative; top: 30px; opacity: 0;">
+      <div id="box4"class="box" style="width: 900px; gap: 10px; position: relative; top: 30px; opacity: 1;">
         <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Playing with Limits</h3>
         <p>What happens when you choose |r| < 1?</p>
         <div style="display: flex; gap: 150px;">
@@ -256,14 +265,14 @@
             <div class="question" style="position: relative;right: 37px; font-size: larger; gap: 50px;">
                 <div style="display: flex; flex-direction: column;">
                     <label id="limit-label">\(\lim_{n \to \infty} \frac{a(1-r^n)}{1-r}=\)</label>
-                    <input id="slider" type="range" min="0" max="100" value="0" style="opacity: 0;">
+                    <input id="slider" type="range" min="0" max="100" value="0" style="opacity: 1;">
                     <span id="n">n=0</span>
                 </div>                
                 <div id="RHS" style="position: relative; bottom: 19px; right: 20px; width: 215px;">\(?\)</div>
             </div>
         </div>
       </div>
-      <div id="box5"class="box" style="width: 400px; gap: 10px; position: relative; top: 30px; opacity: 0;">
+      <div id="box5"class="box" style="width: 400px; gap: 10px; position: relative; top: 30px; opacity: 1;">
         <h3 style="margin: 0 auto; padding-bottom: 0.5em;">Geometric Series</h3>
         <p>We now observe the following: </p>
   <div>
@@ -288,8 +297,9 @@
 
 
     </div>
-
+    <script src="mqHandler.js"></script>
     <script>
+
 
         checkBox1Btn = document.getElementById("check-answers-btn-1");
         checkBox2Btn = document.getElementById("check-answers-btn-2");
@@ -346,7 +356,11 @@
           const box6Val = parseInt (document.getElementById("box1-6").value);
           const box7Val = parseInt(document.getElementById("box1-7").value);
           const box8Val = parseInt (document.getElementById("box1-8").value);
-          const box9Val = document.getElementById("box1-9").value; // string
+
+          
+          const box9Val = cleanMathInput(box19Input.text());
+
+          console.log("box9: ", box9Val);
           
           let labelList = [box1Input,box2Input,box3Input,box4Input,box5Input,box6Input, box7Input, box8Input, box9Input];
           let wrongAnswers = [0,0,0,0,0,0,0,0,0];
@@ -531,5 +545,6 @@
         return labelList[i];
       }    
   </script>
+  <script src="mqHelper.js"></script>
   </body>
 </html>

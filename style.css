@@ -28,8 +28,8 @@
 
 
 .modal {
-    background-color: rgba(0,0,0,0.3);
     opacity: 0;
+    background-color: rgba(0,0,0,0.3);
     position: fixed;
     top: 0;
     left: 0;
@@ -68,7 +68,7 @@
 
 .navBtns {
     position: absolute;
-    top: 20px;
+    top: 0px;
     right: 20px;
     display: flex;
     gap: 5px;

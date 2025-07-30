@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+      <link rel="icon" type="image/png" href="sigma.png">
+
       <link rel="stylesheet" href="style.css"/>
 
     <title>Calculus II: Sequences & Series</title>
@@ -49,7 +51,7 @@
         /* rounded corners */
         padding: 10px 12px;
         font-size: 16px;
-        width:30px;
+        width:60px;
         height: 3px;
         box-shadow: 0 0 8px #00ccff33;
         /* subtle cyan glow */
@@ -138,9 +140,17 @@
     <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body>
-        <div class="navBtns">
-      <div>
+      <div class="navBtns" style="z-index: 3;">
+        <div>
           <button id="openModal" class="circle">?</button>
+        </div>
+        <div>
+          <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">          
+          <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+          </button>
+        </div>
+      </div>
+      <div>
           <div class="modal" id="modal">
               <div class="modal-inner">
                   <h3 style="color: #000;">Push "Enter" to progress</h3>
@@ -151,11 +161,7 @@
               </div>
           </div>
       </div>
-      <div>
-        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">          <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
-</button>
-      </div>
-    </div>
+
   <script src="script.js"></script>
 
     <div id="divGraph" style="height: 300px;"></div>
@@ -197,7 +203,8 @@
                 <span>
                   \(f''(x) = e^x  =  \;\)<input id="coef_c2" type="text"><label>\(\;c2 \;+ \;\)</label>
                   <input type="text" id="coef_c3"><label>\(\;c_3\)</label><label>\(\;x\;\)</label>
-                  <input id="power_c3"type="text" class="sequence">\(\;+\ldots\;\)
+                   <!-- position: relative; bottom: 10px; right: 5px; left: 1px; width: 8px;       -->
+                  <input type="text" id="power_c3" style="position: relative; bottom: 10px; left: 1px;">\(\;+\ldots\;\)
                 </span>
                 <span id="coef_cn"></span>
                 <span class="cn"></span>
