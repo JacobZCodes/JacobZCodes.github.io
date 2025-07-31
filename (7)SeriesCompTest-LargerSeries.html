@@ -5,6 +5,7 @@
     <link rel="icon" type="image/png" href="sigma.png">
 
     <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="animations.css">
 
   <title>Calculus II: Sequences & Series</title>
     <!-- Load jQuery first (required for MathQuill) -->
@@ -21,6 +22,7 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <script src="animations.js"></script>
   <style>
     @font-face {
       font-family: 'TangoSans_Bold';
@@ -313,7 +315,8 @@ option {
       document.getElementById("exponent").remove();
       document.getElementById("buttonExponent").remove();      
       // show second series prompt
-      document.getElementById("series2").style.opacity = 1;
+      fadeIn(document.getElementById("series2"));
+      // document.getElementById("series2").style.opacity = 1;
       // update its html
       document.getElementById("secondLatexFraction").innerHTML =  `\\[\\frac{1}{n^{${userExponent}}+4}\\]`;
       MathJax.typeset();
@@ -364,9 +367,9 @@ option {
     })
     
     function doStep1() {
-        const nextLine = document.createElement('div');
+        const nextLine = createTransparentNextLine();
         nextLine.innerHTML = `We know that <span style="color:#ff4444">\\( \\frac{1}{n^{${userExponent}}} \\)</span> > <span style="color:#ffcc00">\\( \\frac{1}{n^{${userExponent}}+${userConstant}} \\)</span>. Now we plot the partial sums of these series.`;
-        mathContainer.appendChild(nextLine);
+        addToContainerAndFadeIn(nextLine, mathContainer);
         MathJax.typeset();
         step = 1;
     }
@@ -380,6 +383,15 @@ option {
   return result;
 }
 
+function addToContainerAndFadeIn(el,container) {
+  container.appendChild(el);
+  fadeIn(el);
+}
+function createTransparentNextLine() {
+  const nextLine = document.createElement('div');
+  nextLine.style.opacity = 0;
+  return nextLine;
+}
 function cleanMathInput(input) {
   let inputCopy = input;
   let factorialFunctionInserted = inputCopy.replace(/(\([^\)]+\)|[a-zA-Z0-9])\*!/g, "factorial($1)");
@@ -395,10 +407,9 @@ function increment_n(input) {
 }
 
 function doStep6() {
-        console.log("do step 6 called");
-        const nextLine = document.createElement('div');
-        nextLine.innerHTML = `Consider the slightly different series \\(${userDivergentSeries2Latex}\\). We know that ${firstSeries} > ${secondSeries} `;
-        rightMath.appendChild(nextLine);
+        const nextLine = createTransparentNextLine();
+        nextLine.innerHTML = `Consider the slightly different series \\(${userDivergentSeries2Latex}\\). We know that ${firstSeries} > ${secondSeries}`;
+        addToContainerAndFadeIn(nextLine,rightMath);
         MathJax.typeset();
 
         step = 6;
@@ -433,7 +444,8 @@ function doStep6() {
         mathContainer.appendChild(nextLine);
         MathJax.typeset();
 
-      } else if (step === 2) { // plotting series
+      } else if (step === 2) { // plotting series 
+        plotDiv.style.opacity = 0;
         plotDiv.innerHTML = '';
         const n = Array.from({ length: 30 }, (_, i) => i + 1);
         let sum1 = 0, sum2 = 0;
@@ -456,18 +468,22 @@ function doStep6() {
           }
         ], darkLayout);
 
+        fadeIn(plotDiv);
+
       } else if (step === 3) {
-        const nextLine = document.createElement('div');
+        const nextLine = createTransparentNextLine();
         nextLine.innerHTML = 'We examine the larger series. The Divergence Test tells us that if a larger series converges, then a series smaller than it must also converge.';
-        mathContainer.appendChild(nextLine);
+        addToContainerAndFadeIn(nextLine, mathContainer);
+        rules.style.opacity = 0;
         rules.style.display = "block";
         rules.innerHTML = `<strong><u>Larger Series</u></strong><br>If a larger series converges, the smaller series converges also.<br>`;
+        fadeIn(rules);
         MathJax.typeset();
 
       }  else if (step === 4) { // now construct a third series 
         let series3 = document.getElementById("series3");
         let thirdLatexFraction = document.getElementById("thirdLatexFraction");
-        series3.style.opacity = 1;
+        fadeIn(series3);
         // thirdLatexFraction.innerHTML += `\\[\\frac{1}{n^{${userExponent}}+4}\\]`;
         MathJax.typeset();
       } 
@@ -519,7 +535,7 @@ function doStep6() {
       } else if (step === 9) {
         rules.innerHTML += `<br>If a larger series diverges, the smaller series can diverge or converge`;
         // place button
-        document.getElementById("next-lesson-btn").style.opacity = 1;
+        fadeIn(document.getElementById("next-lesson-btn"));
 
       } 
     }

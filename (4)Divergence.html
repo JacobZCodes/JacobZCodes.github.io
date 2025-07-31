@@ -84,9 +84,6 @@
       width: 60%;
     }
 
-    .loading {
-  cursor: progress; /* or wait */
-}
     #sentences {
       margin-top: 1em;
     }
@@ -168,7 +165,7 @@
     <div id="sentences"></div>
     <div id="user-input-sequence" style="opacity: 1">
       <p>Enter a sequence of at least 5 numbers, separated by commas (arithmetic only):</p>
-      <input type="text" id="sequenceInput" placeholder="e.g. 2, 4, 8, 16, 32">
+      <input type="text" id="sequenceInput" placeholder="e.g. 1, 2, 3, 4, 5">
       <button onclick="storeSequenceAndShowNext()">Input Sequence</button>
     </div>
     <div id="user-input-series" style="opacity:0">
@@ -424,6 +421,8 @@
           }
 
           if (currentIndex == 7) { // graph user + more points
+            console.log("here");
+            document.body.style.cursor = 'wait';
             const graphMore = document.getElementById('graphMorePoints');
             const graphMorePointsNextBtn = document.getElementById('graphMorePointsNextBtn');
            fadeIn(graphMore);
@@ -474,6 +473,7 @@
               }
             });
             ;
+            document.body.style.cursor = 'default';
           }
           if (currentIndex == 8) { // final explaination
             const nextLessonBtn = document.getElementById("nextLessonBtn");
