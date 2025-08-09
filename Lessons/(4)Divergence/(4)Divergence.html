@@ -2,9 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-      <link rel="icon" type="image/png" href="sigma.png">
+      <link rel="icon" type="image/png" href="../../Images/sigma.png">
+      <link rel="stylesheet" href="../../Styles/modalStyle.css"/>
+      <link rel="stylesheet" href="../../Styles/buttonStyles.css"/>
+      <script src="../../Scripts/animations.js"></script>
 
-      <link rel="stylesheet" href="style.css"/>
 
     <title>Calculus II: Sequences & Series</title>
 
@@ -16,7 +18,8 @@
 
         @font-face {
       font-family: 'TangoSans_Bold';
-      src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+      src: url("../../Font/TangoSans_Bold.ttf") format('truetype');
+      
     }
     body {
       background-color: #000;
@@ -151,14 +154,14 @@
           </div>
       </div>
       <div>
-        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">
-                    <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+        <button id="homeBtn" class="circle" >
+                    <img src="../../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">
 
         </button>
       </div>
     </div>
-      <script src="script.js"></script>
-      <script src="seqChecker.js"></script>
+      <script src="../../Scripts/modalScript.js"></script>
+      <script src="../../Scripts/seqChecker.js"></script>
 
     <h1>Divergence</h1>
     <p id="sentence1"></p>
@@ -214,7 +217,7 @@
       <p>So that is why mathematicians have created a series of tests
         to examine series in order that we do not need to sit all day computing partial sums. The first test is the  divergence test.</p>
     </div>
-    <button id="nextLessonBtn" class="next-lesson" style = "opacity: 0;" onclick="window.location.href='(5)DivergenceTest.html'">Divergence Test</button>
+    <button id="nextLessonBtn" class="next-lesson" style = "opacity: 0;" onclick="window.location.href='../(5)DivergenceTest/(5)DivergenceTest.html'">Divergence Test</button>
     <script>
       const MQ = MathQuill.getInterface(2);
       const mathFieldSpan = document.getElementById('user-input-series-mq');
@@ -228,11 +231,6 @@
       });
 
       let verbosity = 0;
-        function fadeIn(el) {
-        el.style.opacity = "0";    
-
-    el.style.animation = "fadeIn 0.6s forwards";
-  }
 
 
     function fadeOut(el) {
@@ -484,5 +482,6 @@
         }
     </script>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="../../Scripts/buttonScripts.js"></script>
   </body>
 </html>

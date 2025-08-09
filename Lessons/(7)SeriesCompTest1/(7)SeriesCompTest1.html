@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="sigma.png">
 
-    <link rel="stylesheet" href="style.css"/>
-    <link rel="stylesheet" href="animations.css">
+
 
   <title>Calculus II: Sequences & Series</title>
     <!-- Load jQuery first (required for MathQuill) -->
@@ -22,12 +21,7 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
-  <script src="animations.js"></script>
   <style>
-    @font-face {
-      font-family: 'TangoSans_Bold';
-      src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
-    }
     body {
       background-color: #000;
       color: #00ccff;
@@ -139,28 +133,30 @@ option {
   </style>
 </head>
 <body>
-      <div class="navBtns">
+    <div class="navBtns">
       <div>
           <button id="openModal" class="circle">?</button>
           <div class="modal" id="modal">
               <div class="modal-inner">
-                  <h3 style="color: #000;">Push "Enter" to progress</h3>
-                  <h3 style="color: black">Press the home icon at 
-                      any time to return to the landing page.
-                  </h3>
+                  <div id="modal-inner-text">
+                    <h3 style="color: #000;">Push "Enter" to progress</h3>
+                    <h3 style="color: black">Press the home icon at 
+                        any time to return to the landing page.
+                    </h3>
+                  </div>
                   <button id="closeModal">Close</button>
               </div>
           </div>
       </div>
       <div>
-        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">
-                    <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+        <button id="homeBtn" class="circle" >
+                    <img src="../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">
 
         </button>
       </div>
     </div>
 
-  <script src="script.js"></script>
+
 
 <div id="headerspace" style="
   display: flex;
@@ -171,7 +167,7 @@ option {
   left: 160px;
 ">
   <h2 style="margin: 0;">Series Comparison Test: Part I</h2>
-  <button id="next-lesson-btn" onclick="window.location.href=`(9)SeriesCompTest-Pt2.html`">Series Comparison Test: Part II</button>
+  <button id="next-lesson-btn" onclick="window.location.href=`../(8)SeriesCompTest2/(8)SeriesCompTest2.html`">Series Comparison Test: Part II</button>
 </div>
 
 
@@ -545,5 +541,7 @@ function doStep6() {
       nextStep();
     });
   </script>
+  <script src="../../Scripts/srcInjectors.js"></script>
+
 </body>
 </html>

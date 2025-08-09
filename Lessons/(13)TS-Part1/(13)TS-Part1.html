@@ -123,27 +123,32 @@
     <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body>
-      <div class="navBtns" style="z-index: 3;">
-        <div>
-          <button id="openModal" class="circle">?</button>
-        </div>
-        <div>
-          <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">          
-          <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
-          </button>
-        </div>
-      </div>
+    <div class="navBtns" style="z-index: 1;">
       <div>
+          <button id="openModal" class="circle">?</button>
           <div class="modal" id="modal">
               <div class="modal-inner">
-                  <h3 style="color: #000;">Push "Enter" to progress</h3>
-                  <h3 style="color: black">Press the home icon at 
-                      any time to return to the landing page.
-                  </h3>
+                  <div id="modal-inner-text">
+                    <h3 style="color: #000;">Push "Enter" to progress</h3>
+                    <h3 style="color: black">Press the home icon at 
+                        any time to return to the landing page.
+                    </h3>
+                  </div>
                   <button id="closeModal">Close</button>
               </div>
           </div>
       </div>
+      <div>
+        <button id="homeBtn" class="circle" >
+                    <img src="../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+
+        </button>
+      </div>
+    </div>
+  <button id="playBtn" class="circle playButton" style="top: 160px; left: 800px;">
+    <img src="../../Images/playImg.png" alt="Home" style="width: 100%; height: 100%;">
+  </button>
+
 
 
   <script src="script.js"></script>
@@ -169,7 +174,7 @@
         Select the magnifying glass labeled "Zoom" on the graph above and zoom in on the "?" point. Keep zooming in so that you can see the higher degree approximating functions
         get closer to the "?" point.
         </div>
-        <button id="next-lesson" onclick="window.location.href=`(15)TS-Part2.html`">
+        <button id="next-lesson" onclick="window.location.href=`../(14)TS-Part2/(14)TS-Part2.html`">
           Next Lesson
         </button>
       </div>
@@ -228,6 +233,7 @@
         </div>
       </div>
     </div>
+  <script src="../../Scripts/srcInjectors.js"></script>
   </body>
   <script>
     let currentIndex = -1;

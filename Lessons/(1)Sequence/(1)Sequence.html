@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="sigma.png">
-  <link rel="stylesheet" href="style.css"/>
+  <!-- <link rel="icon" type="image/png" href="../../Images/sigma.png">
+  <link rel="stylesheet" href="../../Styles/modalStyle.css"/>
+  <link rel="stylesheet" href="../../Styles/buttonStyles.css"> -->
   <title>Calculus II: Sequences & Series</title>
   <style>
     @font-face {
       font-family: 'TangoSans_Bold';
-      src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+      src: url("../../Font/TangoSans_Bold.ttf") format('truetype');
     }
     .next-lesson {
   width: 300px;
@@ -132,6 +133,7 @@
 </head>
 
 <body>
+    
     <div class="navBtns">
       <div>
           <button id="openModal" class="circle">?</button>
@@ -148,14 +150,16 @@
           </div>
       </div>
       <div>
-        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">
-                    <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+        <button id="homeBtn" class="circle">
+                    <img src="../../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">
 
         </button>
       </div>
     </div>
-  <script src="script.js"></script>
   <h1><b>Intro To Sequences</b></h1>
+  <button id="playBtn" class="circle playButton">
+    <img src="../../Images/playImg.png" alt="Home" style="width: 100%; height: 100%;">
+  </button>
   <div id="sentences">
     <p id="1"  style="display: none;"></p>
     <p id="2" style="display: none;"></p>
@@ -175,7 +179,7 @@
     <br>
     <button onclick="checkGeometric()">Check Sequence</button>
     <br><br>
-<button id="next-lesson-btn" class="next-lesson" style="display: none;" onclick="window.location.href='(2)Series.html'">Next Lesson</button>
+<button id="next-lesson-btn" class="next-lesson" style="display: none;" onclick="window.location.href=`../(2)Series/(2)Series.html`">Next Lesson</button>
   </div>
 
 <script>
@@ -368,6 +372,8 @@ geometricBtn.style.display = "inline-block";
   }
 
 </script>
-
+<!-- <script src="../../Scripts/modalScript.js"></script> -->
+<!-- <script src="../../Scripts/buttonScripts.js"></script> -->
+<script src="../../Scripts/srcInjectors.js"></script>
 </body>
 </html>

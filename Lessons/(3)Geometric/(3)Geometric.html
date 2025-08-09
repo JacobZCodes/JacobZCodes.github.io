@@ -7,10 +7,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
-      <link rel="icon" type="image/png" href="sigma.png">
+      <link rel="icon" type="image/png" href="../../Images/sigma.png">
 
-      <link rel="stylesheet" href="style.css"/>
-      <link rel="stylesheet" href="mqStyle.css">
+      <link rel="stylesheet" href="../../Styles/modalStyle.css"/>
+      <link rel="stylesheet" href="../../Styles/buttonStyles.css">
+      <link rel="stylesheet" href="../../Styles/mqStyle.css">
 
     <title>Calculus II: Sequences & Series</title>
     <script>
@@ -30,7 +31,7 @@
     <style>
       @font-face {
         font-family: 'TangoSans_Bold';
-        src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+        src: url('../../Font/TangoSans_Bold.ttf') format('truetype');
       }
 
       body {
@@ -131,22 +132,24 @@
           <button id="openModal" class="circle">?</button>
           <div class="modal" id="modal">
               <div class="modal-inner">
-                  <h3 style="color: #000;">Push "Enter" to progress</h3>
-                  <h3 style="color: black">Press the home icon at 
-                      any time to return to the landing page.
-                  </h3>
+                  <div id="modal-inner-text">
+                    <h3 style="color: #000;">Push "Enter" to progress</h3>
+                    <h3 style="color: black">Press the home icon at 
+                        any time to return to the landing page.
+                    </h3>
+                  </div>
                   <button id="closeModal">Close</button>
               </div>
           </div>
       </div>
       <div>
-        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">
-                    <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+        <button id="homeBtn" class="circle" >
+                    <img src="../../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">
 
         </button>
       </div>
     </div>
-      <script src="script.js"></script>
+  <script src="../../Scripts/modalScript.js"></script>
 
     <h2>Geometric Series</h2>
     <p>Recall our earlier definition of a <a href="(1)Sequence.html" style="color: white;">
@@ -287,7 +290,7 @@
         <div style="display: flex; gap: 150px;">
             <div>
                 <div id="button-space" style="width:100px; margin: 0 auto; padding-top: 10px;">
-                <button id="next-btn" style="position: relative; right: 90px; bottom: 30px;" class="next-lesson" onclick="window.location.href='(4)Divergence.html'">Next Lesson</button>
+                <button id="next-btn" style="position: relative; right: 90px; bottom: 30px;" class="next-lesson" onclick="window.location.href='../(4)Divergence/(4)Divergence.html'">Next Lesson</button>
                 </div>            
             </div>
         </div>
@@ -297,7 +300,7 @@
 
 
     </div>
-    <script src="mqHandler.js"></script>
+    <script src="./mqHandler.js"></script>
     <script>
 
 
@@ -545,6 +548,7 @@
         return labelList[i];
       }    
   </script>
-  <script src="mqHelper.js"></script>
+  <script src="../../Scripts/mqHelper.js"></script>
+  <script src="../../Scripts/buttonScripts.js"></script>
   </body>
 </html>

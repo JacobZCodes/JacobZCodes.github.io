@@ -139,24 +139,29 @@
     </style>
   </head>
   <body>
-        <div class="navBtns">
+    <div class="navBtns">
       <div>
           <button id="openModal" class="circle">?</button>
           <div class="modal" id="modal">
               <div class="modal-inner">
-                  <h3 style="color: #000;">Push "Enter" to progress</h3>
-                  <h3 style="color: black">Press the home icon at 
-                      any time to return to the landing page.
-                  </h3>
+                  <div id="modal-inner-text">
+                    <h3 style="color: #000;">Push "Enter" to progress</h3>
+                    <h3 style="color: black">Press the home icon at 
+                        any time to return to the landing page.
+                    </h3>
+                  </div>
                   <button id="closeModal">Close</button>
               </div>
           </div>
       </div>
       <div>
-        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">          <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
-</button>
+        <button id="homeBtn" class="circle" >
+                    <img src="../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+
+        </button>
       </div>
     </div>
+
   <script src="script.js"></script>
 
     <h2>Rational Functions as Power Series</h2>
@@ -225,9 +230,10 @@
           </span>
         </span>
         <button id="checkChallengeBtn">Submit</button>
-        <button class="next-lesson"  onclick="window.location.href=`(14)TS-Part1.html`">Next Lesson</button>
+        <button class="next-lesson"  onclick="window.location.href=`../(13)TS-Part1/(13)TS-Part1.html`">Next Lesson</button>
       </div>
     </div>
+  <script src="../../Scripts/srcInjectors.js"></script>
   </body>
   <script>
     

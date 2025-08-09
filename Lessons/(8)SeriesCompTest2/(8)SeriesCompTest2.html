@@ -14,26 +14,29 @@
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   <!-- your styles and fonts here -->
 </head>
-    <div class="navBtns" style="top:40px;">
+    <div class="navBtns" style="top: 40px;">
       <div>
           <button id="openModal" class="circle">?</button>
           <div class="modal" id="modal">
               <div class="modal-inner">
-                  <h3 style="color: #000;">Push "Enter" to progress</h3>
-                  <h3 style="color: black">Press the home icon at 
-                      any time to return to the landing page.
-                  </h3>
+                  <div id="modal-inner-text">
+                    <h3 style="color: #000;">Push "Enter" to progress</h3>
+                    <h3 style="color: black">Press the home icon at 
+                        any time to return to the landing page.
+                    </h3>
+                  </div>
                   <button id="closeModal">Close</button>
               </div>
           </div>
       </div>
       <div>
-        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">
-                    <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+        <button id="homeBtn" class="circle">
+                    <img src="../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">
 
         </button>
       </div>
     </div>
+
   <script src="script.js"></script>
 
 <h2 id="instructions">The left box contains rules you have just learned. If you have time, go back and look at your graph to see if you can prove to yourself why the right box's rules must also be true.</h2>
@@ -59,7 +62,7 @@
   </div>
   
 </div>
-
+<script src="../../Scripts/srcInjectors.js"></script>
 <script> 
  let clickCount = 0;
 
@@ -76,11 +79,12 @@
       } else if (clickCount === 2) {
         document.getElementById("formal").innerHTML += `<br><br>If you are looking for <strong>convergence</strong>, examine the <strong>larger</strong> series.<br>If you are looking for <strong>divergence</strong>, examine the <strong>smaller</strong> series.`;
       } else if (clickCount === 3) {
-document.getElementById("formal").innerHTML += `<div class="button-wrapper"><button id="next-lesson-btn" onclick="window.location.href='(10)AST.html'">Next Lesson</button></div>`;
+document.getElementById("formal").innerHTML += `<div class="button-wrapper"><button id="next-lesson-btn" onclick="window.location.href='../(9)AST/(9)AST.html'">Next Lesson</button></div>`;
       }
       // etc...
     }
   });</script>
+  
 <style>
 .button-wrapper {
   text-align: center;

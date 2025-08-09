@@ -2,15 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-      <link rel="icon" type="image/png" href="sigma.png">
+      <link rel="icon" type="image/png" href="../../Images/sigma.png">
 
-      <link rel="stylesheet" href="style.css"/>
+      <link rel="stylesheet" href="../../Styles/modalStyle.css"/>
+      <link rel="stylesheet" href="../../Styles/buttonStyles.css"/>
 
     <title>Calculus II: Sequences & Series</title>
     <style>
       @font-face {
         font-family: 'TangoSans_Bold';
-        src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+        src: url("../../Font/TangoSans_Bold.ttf") format('truetype');
       }
 
       body {
@@ -143,26 +144,31 @@
           <button id="openModal" class="circle">?</button>
           <div class="modal" id="modal">
               <div class="modal-inner">
-                  <h3 style="color: #000;">Push "Enter" to progress</h3>
-                  <h3 style="color: black">Press the home icon at 
-                      any time to return to the landing page.
-                  </h3>
+                  <div id="modal-inner-text">
+                    <h3 style="color: #000;">Push "Enter" to progress</h3>
+                    <h3 style="color: black">Press the home icon at 
+                        any time to return to the landing page.
+                    </h3>
+                  </div>
                   <button id="closeModal">Close</button>
               </div>
           </div>
       </div>
       <div>
-        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">
-                    <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+        <button id="homeBtn" class="circle" >
+                    <img src="../../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">
 
         </button>
       </div>
     </div>
-    <script src="script.js"></script>
+    <script src="../../Scripts/modalScript.js"></script>
 
     <h1>
       <b>Series</b>
     </h1>
+  <button id="playBtn" class="circle playButton">
+    <img src="../../Images/playImg.png" alt="Home" style="width: 100%; height: 100%;">
+  </button>
     <div id="sentences">
       <p id="0" style="opacity: 0;">A <span style="color: white;">partial sum</span> is the summation of the first n terms of our sequence </p>
       <p id="1" style="opacity: 0;"> Let \(a_n = {10,20,30,40,50,60,70,80,90,100}\). Then a <span style="color: white;">partial sum</span> of the first 3 terms is \(10+20+30=60\) </p>
@@ -210,7 +216,7 @@
         The major focus of studying series is based upon identifiy whether a series will <span style="color: white;">diverge or converge</span>.
         We will explore these concepts later on.
       </p>
-      <button class="next-lesson" onclick="window.location.href='(3)Geometric.html'">Next Lesson</button>
+      <button class="next-lesson" onclick="window.location.href='../(3)Geometric/(3)Geometric.html'">Next Lesson</button>
     </div>
 
     <script>
@@ -227,6 +233,7 @@
     el.style.animation = "fadeIn 0.6s forwards";
   }
   function showNext() {
+    console.log("showNex");
     clickNum++;
     console.log("clicknum: ", clickNum);
     switch (clickNum) {
@@ -371,5 +378,6 @@
         }
       });
     </script>
+    <script src="../../Scripts/buttonScripts.js"></script>
   </body>
 </html>

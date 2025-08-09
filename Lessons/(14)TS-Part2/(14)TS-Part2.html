@@ -140,27 +140,29 @@
     <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body>
-      <div class="navBtns" style="z-index: 3;">
-        <div>
-          <button id="openModal" class="circle">?</button>
-        </div>
-        <div>
-          <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">          
-          <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
-          </button>
-        </div>
-      </div>
+    <div class="navBtns" style="z-index: 1;">
       <div>
+          <button id="openModal" class="circle">?</button>
           <div class="modal" id="modal">
               <div class="modal-inner">
-                  <h3 style="color: #000;">Push "Enter" to progress</h3>
-                  <h3 style="color: black">Press the home icon at 
-                      any time to return to the landing page.
-                  </h3>
+                  <div id="modal-inner-text">
+                    <h3 style="color: #000;">Push "Enter" to progress</h3>
+                    <h3 style="color: black">Press the home icon at 
+                        any time to return to the landing page.
+                    </h3>
+                  </div>
                   <button id="closeModal">Close</button>
               </div>
           </div>
       </div>
+      <div>
+        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">
+                    <img src="../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+
+        </button>
+      </div>
+    </div>
+
 
   <script src="script.js"></script>
 
@@ -196,7 +198,7 @@
       </div>
       <div id="divDeg2" style="max-width: 600px; opacity: 0;">
         <div id="workDeg2">
-          <div id="constants2" style="opacity: 0;">
+          <div id="constants2">
             <h2>\(c_2\)</h2>
             
             <span style="display: inline-flex; align-items: flex-start;">
@@ -220,7 +222,7 @@
       </div>
       <div id="divDeg3" style="max-width: 600px; opacity: 0;">
         <div id="workDeg3">
-          <div id="constants3" style="opacity: 0;">
+          <div id="constants3">
             <h2>\(c_3\)</h2>
             <span style="display: inline-flex; align-items: flex-start;">
               <span>\(f'''(x) = e^x  =  \;\)<input id="coef_c3_1" type="text"><label>\(\;c3 + \ldots \)</label></span>
@@ -238,7 +240,7 @@
       </div>
       <div id="divDeg4" style="max-width: 600px; opacity: 0;">
         <div id="workDeg4">
-          <div id="constants4" style="opacity: 0;">
+          <div id="constants4">
             <h2>\(c_n\)</h2>
             <span style="display: inline-flex; align-items: flex-start;">
               <span>\(f^n(x) = e^x  =  \;\)</span>
@@ -263,7 +265,8 @@
 
       
     </div>
-    <button class="next-lesson" id="4" style="align-self: center; opacity: 0;" onclick="alertFinished()">Next Lesson</button>  
+    <button class="next-lesson" id="4" style="align-self: center; opacity: 0;" onclick="alertFinished()">Next Lesson</button>
+  <script src="../../Scripts/srcInjectors.js"></script>  
   </body>
   <script>
       const MQ = MathQuill.getInterface(2);
@@ -315,6 +318,7 @@
       alert("All lessons completed!")
     }
     function fadeIn(el) {
+      console.log(el)
         el.style.opacity = "0";    
 
     el.style.animation = "fadeIn 0.6s forwards";
@@ -384,7 +388,8 @@
         this.style.color = 'green';
         // show next block + disable btn
         document.getElementById("approx-submit1").disabled = true;
-        fadeIn(document.getElementById("divDeg2"));
+        console.log("fading in");
+        fadeIn(document.getElementById("divDeg2")); 
 
       }
       else {
@@ -430,6 +435,7 @@
             changeCheckAnswersBtnText(1, submitConstants2Btn);
             // show next block + disable btn
             submitConstants2Btn.disabled = true;
+            console.log("fading in deg 3");
             fadeIn(document.getElementById("divDeg3"));
           }        
         })

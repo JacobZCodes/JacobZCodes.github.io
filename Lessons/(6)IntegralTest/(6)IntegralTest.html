@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
       <link rel="icon" type="image/png" href="sigma.png">
 
-      <link rel="stylesheet" href="style.css"/>
+      <link rel="stylesheet" href="../Styles.modalStyle.css"/>
+        <link rel="stylesheet" href="../Styles.buttonStyles.css"/>
+
+      <link rel="stylesheet" href="../Styles/font.css">
 
     <title>Calculus II: Sequences & Series</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -24,10 +27,6 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
     <style>
-    @font-face {
-      font-family: 'TangoSans_Bold';
-      src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
-    }
     body {
       background-color: #000;
       color: #00ccff;
@@ -140,26 +139,30 @@
       </style>
   </head>
   <body>
-        <div class="navBtns">
+    <div class="navBtns">
       <div>
           <button id="openModal" class="circle">?</button>
           <div class="modal" id="modal">
               <div class="modal-inner">
-                  <h3 style="color: #000;">Push "Enter" to progress</h3>
-                  <h3 style="color: black">Press the home icon at 
-                      any time to return to the landing page.
-                  </h3>
+                  <div id="modal-inner-text">
+                    <h3 style="color: #000;">Push "Enter" to progress</h3>
+                    <h3 style="color: black">Press the home icon at 
+                        any time to return to the landing page.
+                    </h3>
+                  </div>
                   <button id="closeModal">Close</button>
               </div>
           </div>
       </div>
       <div>
-        <button id="homeBtn" class="circle" onclick="window.location.href='index.html'">
-          <img src="home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+        <button id="homeBtn" class="circle" >
+                    <img src="../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+
         </button>
       </div>
     </div>
-      <script src="script.js"></script>
+
+      <script src="../Scripts/modalScript.js"></script>
 
     <h2>Integral Test</h2>
     <div id="plots-container">
@@ -1149,7 +1152,7 @@
       border-radius: 8px;
       cursor: pointer;
       box-shadow: 0 0 6px #00ccff88;
-    " onclick="window.location.href='(7)SeriesCompTest-LargerSeries.html'">Next Lesson</button>
+    " onclick="window.location.href='../(7)SeriesCompTest1/(7)SeriesCompTest1.html'">Next Lesson</button>
   </div>
   </div>
 `;
@@ -1158,5 +1161,6 @@ MathJax.typeset();
     }
   });
 </script>
+<script src="../../Scripts/srcInjectors.js"></script>
 </body>
 </html>
