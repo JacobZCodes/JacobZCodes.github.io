@@ -2,16 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-      <link rel="icon" type="image/png" href="sigma.png">
-
-      <link rel="stylesheet" href="style.css"/>
-
     <title>Calculus II: Sequences & Series</title>
     <style>
-      @font-face {
-        font-family: 'TangoSans_Bold';
-        src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
-      }
 
       body {
         background-color: #000;
@@ -30,7 +22,7 @@
       }
 
       .arrow {
-        opacity: 0;
+        opacity: 1;
       }
 
       input[type="text"] {
@@ -101,7 +93,7 @@
   font-weight: bold;
   border-radius: 8px; /* make it rectangular instead of round */
   margin-top: 4rem;   /* space it further down */
-  opacity: 0;
+  opacity: 1;
   animation: fadeIn 1s forwards;
 }
 
@@ -113,7 +105,7 @@
 
       @keyframes fadeOut {
         to {
-          opacity: 0;
+          opacity: 1;
         }
       }
 
@@ -123,7 +115,7 @@
     <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body>
-    <div class="navBtns" style="z-index: 1;">
+    <div class="navBtns">
       <div>
           <button id="openModal" class="circle">?</button>
           <div class="modal" id="modal">
@@ -151,9 +143,8 @@
 
 
 
-  <script src="script.js"></script>
 
-    <div id="divGraph" style="height: 300px;"></div>
+    <div id="divGraph" style="height: 300px; width: 94%;"></div>
     <div id="explanations" style="display: flex;">
       <div id="divExplainApproximation" style="max-width: 400px; opacity: 0;">
         In order to evaluate \(e^{1.2}\), we can build an approximating function at a nearby point, \(x=0\). We choose this 
@@ -239,15 +230,12 @@
     let currentIndex = -1;
     MathJax.typeset();
     document.addEventListener("keydown", function (event) {
-          currentIndex++;
           if (event.key === "Enter") {
-              if (currentIndex === 4) {
-                return;
-              }
               showNext();
           }
         });
     function showNext() {
+      currentIndex++;
       switch (currentIndex) {
         case 0:
           fadeIn(document.getElementById("divExplainApproximation"));
@@ -260,7 +248,10 @@
           break;
         case 3:
           fadeIn(document.getElementById("divDeg1"));
-          break;      }
+          break;     
+        case 4:
+          return; 
+        }
     }    
     document.getElementById("approx-submit1").addEventListener("click", function() {
       let inputs = [];

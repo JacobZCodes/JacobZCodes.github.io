@@ -27,6 +27,15 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
     <style>
+
+      @keyframes fadeOntoScreen {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
     body {
       background-color: #000;
       color: #00ccff;
@@ -166,7 +175,7 @@
 
     <h2>Integral Test</h2>
     <div id="plots-container">
-      <div class="plot-box">
+      <div class="plot-box" id="box1">
         <div style="position: relative; text-align: center;">
           <!-- Explanation box floats far left -->
           <div id="explanation-box" style="
@@ -487,6 +496,13 @@
 
   let button1 = document.getElementById("rectangles");
   let button2 = document.getElementById("rectangles-");
+  let box1 = document.getElementById("box1");
+  let plot1Title = document.getElementById("plot1-title");
+  let plot1Div = document.getElementById("plot1");
+  let plot3Title = document.getElementById("plot3-title");
+  let plot3Div = document.getElementById("plot3");
+
+
 
 
 
@@ -563,6 +579,21 @@
   }], SeriesDarkThemeLayout);
         // MathJax.typeset();
 
+function fadeOntoScreen(el) {
+    if (el.style.visibility == "hidden") {
+        el.style.visibility = "visible";
+    }
+    
+    // Reset animation first
+    el.style.animation = "none";
+    el.style.opacity = "0";
+    
+    // Force a reflow to ensure the reset takes effect
+    el.offsetHeight; // This forces the browser to recalculate
+    
+    // Then apply the animation
+    el.style.animation = "fadeOntoScreen 0.6s forwards";
+}
   function checkRectangles() {
     let isCorrect = true;
     let correcta1value = 1;
@@ -816,10 +847,15 @@
 
 
   function doStep4() {
+        let explanationBox = document.getElementById("explanation-box");
+        plot1Title.opacity = 0;
+        explanationBox.style.opacity = 0;
         document.getElementById("plot1-title").innerHTML = `We see that the area of the rectangles is: \\( \\sum_{n=1}^{6} \\frac{1}{n} \\)`;
         document.getElementById("explanation-box").style.display = "block";
         document.getElementById("explanation-text").innerHTML = 'Area Rectangles: \\( \\sum_{n=1}^{6} \\frac{1}{n} \\)';
         MathJax.typeset();
+        fadeOntoScreen(explanationBox);
+        fadeOntoScreen(plot1Title);
         clickCount = 4;
   }
 
@@ -845,7 +881,10 @@
       // console.log(clickCount);
 
       if (clickCount === 1) {
+        plot1Title.opacity = 0;
+        plot1Div.opacity = 0;
         document.getElementById("plot1-title").innerHTML = `Now we draw the function 1/x which passes through our n points`;
+        // fadeOntoScreen(plot1Title);
         const realX = [], realY = [];
         for (let x = 1; x <= 6; x += 0.05) {
           realX.push(x);
@@ -859,8 +898,12 @@
           line: { color: 'red' },
           type: 'scatter'
         });
+        fadeOntoScreen(plot1Title);
+        fadeOntoScreen(plot1Div);
 
       } else if (clickCount === 2) {
+        plot1Title.opacity = 0;
+        plot1Div.opacity = 0;
         document.getElementById("plot1-title").innerHTML = `Then we draw our left endpoint rectangles and remove the f(x) for visual clarity`;
         const plotDiv = document.getElementById('plot1');
         const traceIndexToRemove = plotDiv.data.findIndex(trace => trace.name === 'f(x) = 1/x (Curve)');
@@ -880,8 +923,11 @@
           width: 1,
           marker: { color: 'green', opacity: 0.4 }
         });
-
+        fadeOntoScreen(plot1Title);
+        fadeOntoScreen(plot1Div);
       } else if (clickCount === 3) {
+        plot1Title.opacity = 0;
+        plot1Div.opacity = 0;
         document.getElementById("plot1-title").innerHTML = `Your Turn: Label the heights and widths of these rectangles (enter fractions as decimals to nearest hundreths place).`;
         let heights = document.getElementById("heights1");
         let widths = document.getElementById("widths1");
@@ -935,15 +981,23 @@
         };
 
         Plotly.addTraces('plot1', [...verticalTraces, ...labelTraces, horizontalTrace]);
+        fadeOntoScreen(plot1Title);
+        fadeOntoScreen(plot1Div);
 
       } else if (clickCount === 4) {
         // should never get called
+        plot1Div.style.opacity = 0;
+        plot1Title.opacity = 0;
         document.getElementById("plot1-title").innerHTML = `We see that the area of the rectangles is: \\( \\sum_{n=1}^{6} \\frac{1}{n} \\)`;
         document.getElementById("explanation-box").style.display = "block";
         document.getElementById("explanation-text").innerHTML = 'Area Rectangles: \\( \\sum_{n=1}^{6} \\frac{1}{n} \\)';
         MathJax.typeset();
+        fadeOntoScreen(plot1Div);
+        fadeOntoScreen(plot1Title);
 
       } else if (clickCount === 5) {
+        plot1Div.style.opacity = 0;
+        plot1Title.opacity = 0;        
         document.getElementById("plot1-title").innerHTML = `Now consider the area under the curve, shaded in purple; it's always less than the area of our rectangles. The area under the curve is \\( \\int_{1}^{6} \\frac{1}{x} \\, dx \\)`;
         MathJax.typeset();
         document.getElementById("explanation-text").innerHTML += `Area Under Curve: \\( \\int_{1}^{6} \\frac{1}{x} \\, dx \\)`
@@ -964,13 +1018,21 @@
           line: { color: 'purple' },
           showlegend: false
         });
+        fadeOntoScreen(plot1Div);
+        fadeOntoScreen(plot1Title);
 
       } else if (clickCount === 6) {
+        plot1Title.opacity = 0;        
+
         document.getElementById("plot1-title").innerHTML = `We now have the inequality in the left-hand box`;
         document.getElementById("explanation-text").innerHTML +=` \\( \\int_{1}^{6} \\frac{1}{x} \\, dx \\) < \\( \\sum_{n=1}^{6} \\frac{1}{n} \\)`
         MathJax.typeset();
+        fadeOntoScreen(plot1Title);
+
 
       } else if (clickCount === 7) {
+          plot1Title.opacity = 0;        
+
         document.getElementById("plot1-title").textContent = 'Left-endpoint Rectangles';
         document.getElementById("plot3-box").style.display = 'block';
         document.getElementById("plot3-title").style.display = 'block';
@@ -994,6 +1056,7 @@
           curve3.y.push(1 / x);
         }
         Plotly.newPlot('plot3', [pointTrace3, curve3], SeriesDarkThemeLayout);
+        fadeOntoScreen(plot1Title);
 
       } else if (clickCount === 8) {
         document.getElementById("plot3-title").innerHTML = `Now we add right-endpoint rectangles to the curve and remove g(x) for visual clarity.`;

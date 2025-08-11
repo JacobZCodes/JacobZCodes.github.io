@@ -170,14 +170,14 @@
     <p>Enter your own arithmetic sequence (at least 5 numbers, separated by commas):</p>
     <input type="text" id="arithmeticInput" placeholder="e.g. 2, 4, 6, 8, 10">
     <br>
-    <button onclick="checkArithmetic()">Check Sequence</button>
+    <button id="aSeqBtn" onclick="checkArithmetic()">Check Sequence</button>
   </div>
 
   <div id="user-input-geometric" style="display: none">
     <p>Enter your own geometric sequence (at least 5 numbers, separated by commas):</p>
     <input type="text" id="geometricInput" placeholder="e.g. 2, 4, 8, 16, 32">  
     <br>
-    <button onclick="checkGeometric()">Check Sequence</button>
+    <button id="gSeqBtn" onclick="checkGeometric()">Check Sequence</button>
     <br><br>
 <button id="next-lesson-btn" class="next-lesson" style="display: none;" onclick="window.location.href=`../(2)Series/(2)Series.html`">Next Lesson</button>
   </div>
@@ -205,13 +205,13 @@ const p3 = document.getElementById("3");
 const sentences = document.getElementById("sentences");
 let keyCooldown = false;
     document.addEventListener("keydown", function (event) {
-        if (keyCooldown) return;
+    //     if (keyCooldown) return;
 
-    keyCooldown = true;
+    // keyCooldown = true;
 
-    setTimeout(() => {
-      keyCooldown = false;
-    }, 500); 
+    // setTimeout(() => {
+    //   keyCooldown = false;
+    // }, 500); 
       if (event.key === "Enter") {
         if (event.target.tagName === 'INPUT' && event.key === "Enter") {
           event.preventDefault(); 
@@ -342,6 +342,11 @@ geometricBtn.style.display = "inline-block";
         return;
       }
     }
+    // change button text + color
+    aSeqBtn = document.getElementById("aSeqBtn");
+    aSeqBtn.textContent = "Correct"
+    aSeqBtn.style.color = "green";
+    aSeqBtn.disabled = true;
     showNext();
 
   }
@@ -367,6 +372,12 @@ geometricBtn.style.display = "inline-block";
         return;
       }
     }
+    //change btn text + color
+    gSeqBtn = document.getElementById("gSeqBtn");
+    gSeqBtn.textContent = "Correct";
+    gSeqBtn.style.color = "green";
+    gSeqBtn.disabled = true;
+
     showNext();
     // show next lesson
   }

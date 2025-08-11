@@ -236,6 +236,7 @@ function getFunctionFromCleanMathInput(cleanInput) {
         }
       });
 
+
       let sequenceRawInput;
       let evaluatePolynomialBtnHasNotBeenClicked = true;
       let latexSection = document.getElementById("latexSection");
@@ -273,7 +274,26 @@ function getFunctionFromCleanMathInput(cleanInput) {
           }
         }
         })
+
+      function showNext() {
+          // enterCount caps at 5
+          if (enterCount < 5) {
+            enterCount++;
+          }
+          if (enterCount === 5) {
+
+              if (evaluatePolynomialBtnHasNotBeenClicked === false) {
+                revealNextStatement();
+              }
+          }
+          else {
+            revealNextStatement();
+          }
+        }
+        
+
       
+
       document.getElementById("evaluate-polynomial-btn").addEventListener("click", function() {
         if (evaluatePolynomialBtnHasNotBeenClicked === true) {
           alert("Once you are done playing around with different x and n-values, push 'Enter' to progress");
