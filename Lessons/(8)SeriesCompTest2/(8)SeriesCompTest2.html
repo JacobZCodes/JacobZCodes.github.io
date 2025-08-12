@@ -1,138 +1,156 @@
 <head>
   <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="sigma.png">
-
-    <link rel="stylesheet" href="style.css"/>
-
+  <link rel="icon" type="image/png" href="sigma.png">
+  <link rel="stylesheet" href="style.css" />
   <title>Calculus II: Sequences & Series</title>
   <script>
     window.MathJax = {
-      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-      svg: { fontCache: 'global' }
+      tex: {
+        inlineMath: [
+          ['$', '$'],
+          ['\\(', '\\)']
+        ]
+      },
+      svg: {
+        fontCache: 'global'
+      }
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   <!-- your styles and fonts here -->
 </head>
-    <div class="navBtns" style="top: 40px;">
-      <div>
-          <button id="openModal" class="circle">?</button>
-          <div class="modal" id="modal">
-              <div class="modal-inner">
-                  <div id="modal-inner-text">
-                    <h3 style="color: #000;">Push "Enter" to progress</h3>
-                    <h3 style="color: black">Press the home icon at 
-                        any time to return to the landing page.
-                    </h3>
-                  </div>
-                  <button id="closeModal">Close</button>
-              </div>
-          </div>
-      </div>
-      <div>
-        <button id="homeBtn" class="circle">
-                    <img src="../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">
-
-        </button>
+<div class="navBtns" style="top: 40px;">
+  <div>
+    <button id="openModal" class="circle">?</button>
+    <div class="modal" id="modal">
+      <div class="modal-inner">
+        <div id="modal-inner-text">
+          <h3 style="color: #000;">Push "Enter" to progress</h3>
+          <h3 style="color: black">Press the home icon at any time to return to the landing page. </h3>
+        </div>
+        <button id="closeModal">Close</button>
       </div>
     </div>
-
-  <script src="script.js"></script>
-
+  </div>
+  <div>
+    <button id="homeBtn" class="circle">
+      <img src="../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">
+    </button>
+  </div>
+</div>
+<script src="script.js"></script>
 <h2 id="instructions">The left box contains rules you have just learned. If you have time, go back and look at your graph to see if you can prove to yourself why the right box's rules must also be true.</h2>
 <div class="container">
   <div class="box">
-    <strong>Larger Series:</strong><br><br>
-    If a larger series converges, the smaller series converges also.<br><br>
-    If a larger series diverges, the smaller series can diverge or converge.
+    <strong>Larger Series:</strong>
+    <br>
+    <br> If a larger series converges, the smaller series converges also. <br>
+    <br> If a larger series diverges, the smaller series can diverge or converge.
   </div>
   <div class="box">
-    <strong>Smaller Series:</strong><br><br>
-    If a smaller series converges, the larger series can diverge or converge.<br><br>
-    If a smaller series diverges, the larger series must diverge as well.
+    <strong>Smaller Series:</strong>
+    <br>
+    <br> If a smaller series converges, the larger series can diverge or converge. <br>
+    <br> If a smaller series diverges, the larger series must diverge as well.
   </div>
 </div>
 <!-- Hidden summary box, revealed with clickCount === 1 -->
 <div class="container" id="summary-box" style="display: none;">
-  <div class="box" id = "formal" style="flex: 1 1 100%; max-width: 700px;">
-    <strong>Formal Statement:</strong><br><br>
-    For series with positive terms, if \( 0 \leq a_n \leq b_n \), then:<br>
-    - If \( \sum b_n \) converges, so does \( \sum a_n \).<br>
-    - If \( \sum a_n \) diverges, so does \( \sum b_n \).
+  <div class="box" id="formal" style="flex: 1 1 100%; max-width: 700px;">
+    <strong>Formal Statement:</strong>
+    <br>
+    <br> For series with positive terms, if \( 0 \leq a_n \leq b_n \), then: <br> - If \( \sum b_n \) converges, so does \( \sum a_n \). <br> - If \( \sum a_n \) diverges, so does \( \sum b_n \). ` <br>
+    <div id="formalStatement2" style="opacity: 0;">
+      <br><br>
+      If you are looking for <strong>convergence</strong>, examine the <strong>larger</strong> series. <br>If you are looking for <strong>divergence</strong>, examine the <strong>smaller</strong> series. 
+    </div>
+    <div id="formalStatement3" class="button-wrapper" style="opacity: 0;">
+      <button id="next-lesson-btn" onclick="window.location.href='../(9)AST/(9)AST.html'">Next Lesson</button>
+    </div>
   </div>
-  
 </div>
 <script src="../../Scripts/srcInjectors.js"></script>
-<script> 
- let clickCount = 0;
-
+<script>
+  let clickCount = 0;
   document.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
       clickCount++;
       console.log("Click count is now:", clickCount);
-
       // 🔧 You can use this block to trigger actions per step
       if (clickCount === 1) {
+        let instructions = document.getElementById("instructions");
+        let summaryBox = document.getElementById("summary-box");
+        instructions.style.opacity = 0;
+        summaryBox.style.opacity = 0;
         document.getElementById("instructions").innerText = "We can combine and formalize these rules";
         document.getElementById("summary-box").style.display = "flex";
+        fadeIn(instructions);
+        fadeIn(summaryBox);
         MathJax.typeset();
       } else if (clickCount === 2) {
-        document.getElementById("formal").innerHTML += `<br><br>If you are looking for <strong>convergence</strong>, examine the <strong>larger</strong> series.<br>If you are looking for <strong>divergence</strong>, examine the <strong>smaller</strong> series.`;
+        let formalStatement2 = document.getElementById("formalStatement2");
+
+        fadeIn(formalStatement2);
       } else if (clickCount === 3) {
-document.getElementById("formal").innerHTML += `<div class="button-wrapper"><button id="next-lesson-btn" onclick="window.location.href='../(9)AST/(9)AST.html'">Next Lesson</button></div>`;
-      }
+        let formalStatement3 = document.getElementById("formalStatement3");
+
+        fadeIn(formalStatement3);
       // etc...
+      }
     }
-  });</script>
-  
+  });
+</script>
 <style>
-.button-wrapper {
-  text-align: center;
-  margin-top: 2em;
-}
+  .button-wrapper {
+    text-align: center;
+    margin-top: 2em;
+  }
 
-#next-lesson-btn {
-  display: block;
-  width: 250px;
-  border-radius: 12px;
-  padding: 16px 20px;
-  font-size: 18px;
-  font-weight: bold;
-  background-color: #00ccff;
-  color: #000;
-  cursor: pointer;
-  border: none;
-  margin: 0 auto;
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-}
+  #next-lesson-btn {
+    display: block;
+    width: 250px;
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #00ccff;
+    color: #000;
+    cursor: pointer;
+    border: none;
+    margin: 0 auto;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
 
+  #next-lesson-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00ccff;
+  }
 
-#next-lesson-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px #00ccff;
-}
+  #next-lesson-btn:active {
+    transform: scale(0.95);
+  }
 
-#next-lesson-btn:active {
-  transform: scale(0.95);
-}
-      @font-face {
-      font-family: 'TangoSans_Bold';
-      src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
-    }
-    body {
-      background-color: #000;
-      color: #00ccff;
-      font-family: 'TangoSans_Bold', sans-serif;
-      text-align: center;
-      padding: 2em;
-    }
+  @font-face {
+    font-family: 'TangoSans_Bold';
+    src: url('tangosans/TangoSans_Bold.ttf') format('truetype');
+  }
+
+  body {
+    background-color: #000;
+    color: #00ccff;
+    font-family: 'TangoSans_Bold', sans-serif;
+    text-align: center;
+    padding: 2em;
+  }
+
   .container {
     display: flex;
     gap: 40px;
     justify-content: center;
     align-items: flex-start;
     padding: 1em;
-    flex-wrap: wrap; /* allow responsive stacking on narrow screens */
+    flex-wrap: wrap;
+    /* allow responsive stacking on narrow screens */
   }
 
   .box {

@@ -860,11 +860,16 @@ function fadeOntoScreen(el) {
   }
 
   function doStep10() {
+        let explanationBox3 = document.getElementById("explanation-box3");
+        plot3Title.opacity = 0;
+        explanationBox3.style.opacity = 0;
         document.getElementById("explanation-box3").style.display = "block";
         document.getElementById("explanation-text3").innerHTML = `Area Rectangles: \\( \\sum_{n=2}^{6} \\frac{1}{n} \\)`;
         document.getElementById("plot3-title").innerHTML = `We see that the area of the rectangles is: \\( \\sum_{n=2}^{6} \\frac{1}{n} \\)`;
         document.getElementById("plot3-title").style="margin-left: 120px;";
         // shift plot3-title over to the right a little bit
+        fadeOntoScreen(explanationBox3);
+        fadeOntoScreen(plot3Title);
         MathJax.typeset();  
         clickCount = 10;
   }
@@ -1059,6 +1064,8 @@ function fadeOntoScreen(el) {
         fadeOntoScreen(plot1Title);
 
       } else if (clickCount === 8) {
+        plot3Div.style.opacity = 0;
+        plot3Title.opacity = 0;
         document.getElementById("plot3-title").innerHTML = `Now we add right-endpoint rectangles to the curve and remove g(x) for visual clarity.`;
                 const plotDiv = document.getElementById('plot3');
         const traceIndexToRemove = plotDiv.data.findIndex(trace => trace.name === 'g(x) = 1/x');
@@ -1078,8 +1085,12 @@ function fadeOntoScreen(el) {
           width: 1,
           marker: { color: 'orange', opacity: 0.4 }
         });
+        fadeOntoScreen(plot3Div);
+        fadeOntoScreen(plot3Title);
 
       } else if (clickCount === 9) { // WORKING HERE
+        plot3Title.opacity = 0;
+        plot3Div.style.opacity = 0;
         document.getElementById("plot3-title").innerHTML = `Your Turn: Label the heights & widths for each rectangle (round fractions to decimals to nearest hundreths place).`;
         let heights = document.getElementById("heights2");
         let widths = document.getElementById("widths2");
@@ -1138,17 +1149,28 @@ function fadeOntoScreen(el) {
         };
 
         Plotly.addTraces('plot3', [...verticalTraces,  horizontalTrace]);
+        fadeOntoScreen(plot3Div);
+        fadeOntoScreen(plot3Title);
 
       } else if (clickCount === 10) { 
+        let explanationBox = document.getElementById("explanation-box3");
+        explanationBox.style.opacity = 0;
+        plot3Title.style.opacity = 0;
         document.getElementById("explanation-box3").style.display = "block";
         document.getElementById("explanation-text3").innerHTML = `Area Rectangles: \\( \\sum_{n=2}^{6} \\frac{1}{n} \\)`;
         document.getElementById("plot3-title").innerHTML = `We see that the area of the rectangles is: \\( \\sum_{n=2}^{6} \\frac{1}{n} \\)`;
         document.getElementById("plot3-title").style="margin-left: 120px;";
 
         // shift plot3-title over to the right a little bit
+        fadeOntoScreen(explanationBox);
+        fadeOntoScreen(plot3Title);
         MathJax.typeset();
 
       } else if (clickCount === 11) {
+        plot3Title.opacity = 0;
+        plot3Div.style.opacity = 0;
+        let explanationText = document.getElementById("explanation-text3");
+        explanationText.style.opacity = 0;
         document.getElementById("plot3-title").innerHTML = `Again we shade the region under the curve, which has area  \\( \\int_{1}^{6} \\frac{1}{x} \\, dx \\)`;
         document.getElementById("explanation-text3").innerHTML += `Area Under Curve:  \\( \\int_{1}^{6} \\frac{1}{x} \\, dx \\)`;
         document.getElementById("plot3-title").style="margin-left: 270px;";
@@ -1169,25 +1191,43 @@ function fadeOntoScreen(el) {
           line: { color: 'purple' },
           showlegend: false
         });
+        fadeOntoScreen(explanationText);
+        fadeOntoScreen(plot3Div);
+        fadeOntoScreen(plot3Title);
 
       } else if (clickCount === 12) {
+        let explanationText = document.getElementById("explanation-text3");
+        explanationText.style.opacity = 0;
+        plot3Title.opactiy = 0;
         document.getElementById("plot3-title").innerHTML = `Now we form this inequality`;
         document.getElementById("plot3-title").style="margin-left: 120px;";
         document.getElementById("explanation-text3").innerHTML += '\\( \\sum_{n=2}^{6} \\frac{1}{n} < \\int_{1}^{6} \\frac{1}{x} \\, dx \\)';
         
         MathJax.typeset();
+        fadeOntoScreen(explanationText);
+        fadeOntoScreen(plot3Title);
 
       } else if (clickCount === 13) {
+        let step13Text = document.getElementById("step13-text");
+        step13Text.style.opacity = 0;
+        plot3Title.style.opacity = 0;
         document.getElementById("plot3-title").innerHTML = `Right-Endpoint Rectangles`;
         document.getElementById("step13-text").style.display = 'block';
         document.getElementById("step13-text").innerHTML = 'We combine both inequalities to form: <br>\\( \\int_{1}^{6} \\frac{1}{x} \\, dx < \\sum_{n=1}^{6} \\frac{1}{n} < \\int_{1}^{6} \\frac{1}{x} \\, dx \\)';
         MathJax.typeset();
+        fadeOntoScreen(step13Text);
+        fadeOntoScreen(plot3Title);
 
       } else if (clickCount === 14) {
-        document.getElementById("step13-text").innerHTML += `<br>We generalize this to form: <br>\\( \\int_{1}^{\\infty} f(x) \\, dx < \\sum_{n=1}^{\\infty} a_n < \\int_{1}^{\\infty} f(x) \\, dx \\)`;
+        let step13Text = document.getElementById("step13-text");
+        step13Text.style.opacity = 0;
+        document.getElementById("step13-text").innerHTML += `<br><br><br>We generalize this to form: <br>\\( \\int_{1}^{\\infty} f(x) \\, dx < \\sum_{n=1}^{\\infty} a_n < \\int_{1}^{\\infty} f(x) \\, dx \\)`;
         MathJax.typeset();
+        fadeOntoScreen(step13Text);
 
       } else if (clickCount === 15) {
+        let step13Text = document.getElementById("step13-text");
+        step13Text.style.opacity = 0;
         document.getElementById("step13-text").innerHTML = `
   <div style="
     background-color: #111;
@@ -1219,7 +1259,9 @@ function fadeOntoScreen(el) {
   </div>
   </div>
 `;
-MathJax.typeset();        
+
+MathJax.typeset();   
+fadeOntoScreen(step13Text);     
       }
     }
   });

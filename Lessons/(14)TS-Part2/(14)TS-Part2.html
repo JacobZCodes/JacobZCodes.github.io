@@ -265,7 +265,7 @@
 
       
     </div>
-    <button class="next-lesson" id="4" style="align-self: center; opacity: 0;" onclick="alertFinished()">Next Lesson</button>
+    <!-- <button class="next-lesson" id="4" style="align-self: center; opacity: 0; position: relative;" onclick="alertFinished()">Next Lesson</button> -->
   <script src="../../Scripts/srcInjectors.js"></script>  
   </body>
   <script>
@@ -273,7 +273,7 @@
 
 
       const coef_cn = document.getElementById('coef_cn');
-      coef_cn_mf = MQ.MathField(coef_cn, {
+      let coef_cn_mf = MQ.MathField(coef_cn, {
         spaceBehavesLikeTab: true,
       });
 
@@ -300,7 +300,7 @@
       })
 
       const power_cn = document.getElementById("power_cn");
-      power_cn_mf = MQ.MathField(power_cn, {spaceBehavesLikeTab: true,});
+      let power_cn_mf = MQ.MathField(power_cn, {spaceBehavesLikeTab: true,});
 
       const final_coef = document.getElementById("final_coef");
       final_coef_mf = MQ.MathField(final_coef, {
@@ -315,7 +315,8 @@
 
 
     function alertFinished() {
-      alert("All lessons completed!")
+      updateInnerModalHTML(`<h3 style="color: #000;">All lessons completed!</h3>`);
+      openModal();
     }
     function fadeIn(el) {
       console.log(el)
@@ -404,16 +405,16 @@
         const coef_c2 = document.getElementById("coef_c2");
         const coef_c3 = document.getElementById("coef_c3");
         const power_c3 = document.getElementById("power_c3");
-        const coef_cn = coef_cn_mf.text();
-        const power_cn = power_cn_mf.text();
         const c2 = document.getElementById("c2");
+        const coef_cn = document.getElementById("coef_cn");
+        const power_cn = document.getElementById("power_cn");
 
 
         const coef_c2Val = parseInt(coef_c2.value);
         const coef_c3Val = parseInt(coef_c3.value);
         const power_c3Val = parseInt(power_c3.value);
-        const coef_cnVal = coef_cn;
-        const power_cnVal = power_cn;
+        const coef_cnVal = coef_cn_mf.text();
+        const power_cnVal = power_cn_mf.text();
         const c2Val = parseFloat(c2.value);
           
         let labelList = [coef_c2, coef_c3, power_c3, coef_cn, power_cn, c2];
@@ -424,13 +425,13 @@
           checkAnswers(answers, correctAnswers, wrongAnswers);
           if (isWrong(wrongAnswers)) {
             // change S4's text color
-            // changeQuestionColors(wrongAnswers, labelList);
+            changeQuestionColors(wrongAnswers, labelList);
             // change button text + color to Wrong
             changeCheckAnswersBtnText(-1, submitConstants2Btn);
           }
           else if (!isWrong(wrongAnswers)) {
             // reset all labels to green
-            // changeQuestionColors(wrongAnswers, labelList);
+            changeQuestionColors(wrongAnswers, labelList);
             // change buttont to say correct
             changeCheckAnswersBtnText(1, submitConstants2Btn);
             // show next block + disable btn
@@ -445,13 +446,13 @@
     submitConstants3Btn = document.getElementById("submitConstants3Btn");
         submitConstants3Btn.addEventListener("click", function() {
         const coef_c3_1 = document.getElementById("coef_c3_1");
-        const coef_cn_1 = coef_cn_1_mf.text();
-        const power_cn_1 = power_cn_1_mf.text()
+        const coef_cn_1 = document.getElementById("coef_cn_1");
+        const power_cn_1 = document.getElementById("power_cn_1");
         const c3 = document.getElementById("c3");
 
         const coef_c3_1Val = parseInt (coef_c3_1.value);
-        const coef_cn_1Val = coef_cn_1;
-        const power_cn_1Val = power_cn_1;
+        const coef_cn_1Val = coef_cn_1_mf.text();
+        const power_cn_1Val = power_cn_1_mf.text();
         const c3Val = parseFloat(c3.value)
           
         let labelList = [coef_c3_1, coef_cn_1, power_cn_1, c3];
@@ -462,13 +463,13 @@
           checkAnswers(answers, correctAnswers, wrongAnswers);
           if (isWrong(wrongAnswers)) {
             // change S4's text color
-            // changeQuestionColors(wrongAnswers, labelList);
+            changeQuestionColors(wrongAnswers, labelList);
             // change button text + color to Wrong
             changeCheckAnswersBtnText(-1, submitConstants3Btn);
           }
           else if (!isWrong(wrongAnswers)) {
             // reset all labels to green
-            // changeQuestionColors(wrongAnswers, labelList);
+            changeQuestionColors(wrongAnswers, labelList);
             // change buttont to say correct
             changeCheckAnswersBtnText(1, submitConstants3Btn);
             submitConstants3Btn.disabled = true;
@@ -480,30 +481,32 @@
 
             submitConstants4Btn = document.getElementById("submitConstants4Btn");
         submitConstants4Btn.addEventListener("click", async function() {
-        const final_coef =  cleanSpacesAndParens(final_coef_mf.text());
-        const final_constant = cleanSpacesAndParens(final_constant_mf.text());
+        const final_coef = document.getElementById("final_coef");
+        const final_constant = document.getElementById("final_constant");
+        const final_coef_val =  cleanSpacesAndParens(final_coef_mf.text());
+        const final_constant_val = cleanSpacesAndParens(final_constant_mf.text());
 
 
         let labelList = [final_coef, final_constant];
           let wrongAnswers = [0,0];
           const correctAnswers = ["n*!", "1/n*!"];
-          const answers = [final_coef, final_constant]
+          const answers = [final_coef_val, final_constant_val]
           // check for wrong answers
           checkAnswers(answers, correctAnswers, wrongAnswers);
           if (isWrong(wrongAnswers)) {
             // change S4's text color
-            // changeQuestionColors(wrongAnswers, labelList);
+            changeQuestionColors(wrongAnswers, labelList);
             // change button text + color to Wrong
             changeCheckAnswersBtnText(-1, submitConstants4Btn);
           }
           else if (!isWrong(wrongAnswers)) {
             // reset all labels to green
-            // changeQuestionColors(wrongAnswers, labelList);
+            changeQuestionColors(wrongAnswers, labelList);
             // change buttont to say correct
             changeCheckAnswersBtnText(1, submitConstants4Btn);
             submitConstants4Btn.disabled = true;
             // slowly loop thru
-            for (let i=1; i<5; ++i) {
+            for (let i=1; i<4; ++i) {
               console.log("here!"); // this block not working...
               // convert int to string
               let intAsString = i.toString();
@@ -511,6 +514,7 @@
               fadeIn(document.getElementById(intAsString));
                await new Promise(resolve => setTimeout(resolve, 500)); // This pauses the loop
             }
+            alertFinished();
           }        
         })
 
@@ -699,9 +703,16 @@ el.style.animation = "fadeOut 0.6s forwards";
         }
       }
 
-      function setElementColor(el,color) {
+      function setElementColor(el, color) {
+      try {
         el.style.color = color;
-      }      
+      } catch (error) {
+        console.log('Element that caused error:', el);
+        console.log('Error:', error.message);
+        // Optionally re-throw the error if you want it to propagate
+        // throw error;
+      }
+    }
 
       function getLabelElementGivenIndex(i, labelList) {
         console.log("Returning label: ", labelList[i]);

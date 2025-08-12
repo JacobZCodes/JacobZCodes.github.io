@@ -296,7 +296,8 @@ function getFunctionFromCleanMathInput(cleanInput) {
 
       document.getElementById("evaluate-polynomial-btn").addEventListener("click", function() {
         if (evaluatePolynomialBtnHasNotBeenClicked === true) {
-          alert("Once you are done playing around with different x and n-values, push 'Enter' to progress");
+          updateInnerModalHTML(`<h3 style="color: #000;">Once you are done playing around with different x and n-values, push 'Enter' to progress </h3>`);
+          openModal();
           evaluatePolynomialBtnHasNotBeenClicked = false;
         }
         xVal = parseInt(document.getElementById("x").value);

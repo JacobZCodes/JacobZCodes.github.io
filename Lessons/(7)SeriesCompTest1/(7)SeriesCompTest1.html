@@ -22,6 +22,14 @@
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
   <style>
+          @keyframes fadeInAndResetAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
     body {
       background-color: #000;
       color: #00ccff;
@@ -246,7 +254,17 @@ option {
   </div>
 
   <script>
-
+    function fadeInAndResetAnimation(el) {
+    // Reset animation first
+    el.style.animation = "none";
+    el.style.opacity = "0";
+    
+    // Force a reflow to ensure the reset takes effect
+    el.offsetHeight; // This forces the browser to recalculate
+    
+    // Then apply the animation
+    el.style.animation = "fadeInAndResetAnimation 0.6s forwards";
+}
             const MQ = MathQuill.getInterface(2);
       const mathFieldSpan = document.getElementById('thirdLatexFraction');
       mathField = MQ.MathField(mathFieldSpan, {
@@ -491,19 +509,23 @@ function doStep6() {
         console.log("userEXPOENNT", userExponent);
         let thirdSeries = `\\(\\frac{1}{n^{{${userExponent}}}}\\)`;
         const nextLine = document.createElement('div');
-        
+        nextLine.style.opacity = 0;
         nextLine.innerHTML = `Now consider your first series ${thirdSeries}. Combining with the above inequality, we know that <span style="color:#88ff00">${firstSeries}</span> > <span style="color:#9f00ff">${secondSeries}</span> > <span style="color:#ff4444">${thirdSeries}</span>`;
         rightMath.appendChild(nextLine);
+        fadeIn(nextLine);
         MathJax.typeset();
       }
       else if (step === 8) {
         const nextLine = document.createElement('div');
+        nextLine.style.opacity = 0;
         nextLine.innerHTML = 'We again plot the partial sums of our three series. The Divergence Tests tells us that if the larger series diverges, the smaller series can either converge or diverge.';
         rightMath.appendChild(nextLine);
+        fadeIn(nextLine);
         MathJax.typeset();
 
         // also append plotDiv2
         const plot2Div = document.createElement('div');
+        plot2Div.style.opacity = 0;
         rightMath.appendChild(plot2Div);
   
         const n = Array.from({ length: 20 }, (_, i) => i + 1);
@@ -528,11 +550,14 @@ function doStep6() {
         ], darkLayout);
         
         MathJax.typeset();
+        fadeIn(plot2Div);
 
       } else if (step === 9) {
+        rules.style.opacity = 0;
         rules.innerHTML += `<br>If a larger series diverges, the smaller series can diverge or converge`;
-        // place button
+        // fadeIn(rules);
         fadeIn(document.getElementById("next-lesson-btn"));
+        fadeInAndResetAnimation(rules);
 
       } 
     }
