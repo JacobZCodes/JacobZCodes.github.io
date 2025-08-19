@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="Images/sigma.png"> 
+  <title>Feedback - Math Lessons</title>
+  <style>
+    @font-face {
+      font-family: 'TangoSans_Bold';
+      src: url("Font/TangoSans_Bold.ttf") format('truetype');
+    }
+
+    body {
+      background-color: #000;
+      color: #00ccff;
+      font-family: 'TangoSans_Bold', sans-serif;
+      text-align: center;
+      padding: 3em;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 1em;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #00ccff;
+      border-radius: 10px;
+      background-color: #111;
+      color: #00ccff;
+      font-family: 'TangoSans_Bold', sans-serif;
+      font-size: 1em;
+      resize: vertical;
+    }
+
+    textarea {
+      min-height: 150px;
+    }
+
+    .submit-button {
+      font-size: 1.2em;
+      color: #00ccff;
+      background-color: transparent;
+      border: 2px solid #00ccff;
+      border-radius: 12px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-button:hover {
+      background-color: #00ccff;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00ccff;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 2em;
+      font-size: 1.2em;
+      text-decoration: none;
+      color: #00ccff;
+      border: 2px solid #00ccff;
+      padding: 10px 20px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+      background-color: #00ccff;
+      color: #000;
+      box-shadow: 0 0 15px #00ccff;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>Leave Your Feedback</h1>
+
+  <form action="https://formspree.io/f/mqaljlbp" method="POST">
+    <input type="text" name="name" placeholder="Your Name (optional)">
+    <input type="email" name="email" placeholder="Your Email (optional)">
+    <textarea name="message" placeholder="Write your feedback here..." required></textarea>
+    <button type="submit" class="submit-button">Submit Feedback</button>
+  </form>
+
+  <a href="index.html" class="back-link">Back to Homepage</a>
+
+</body>
+</html>

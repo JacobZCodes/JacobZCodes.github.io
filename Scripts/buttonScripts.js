@@ -18,3 +18,16 @@ homeButton.addEventListener("click", function() {
 
 homeButton.innerHTML = homeBtn.innerHTML = '<img src="../../Images/home.jpeg" alt="Home" style="width: 48px; height: 24px;">';
 
+// feedback btn insertion
+let nav = document.getElementsByClassName("navBtns");
+nav = nav[0];
+let feedbackBtnHTML = `<button id="feedbackBtn" class="circle" onclick=" window.open('../../feedback.html','_blank')">
+<img src="../../Images/testing.png" alt="F" style="width: 48px; height: 24px;"></button>`;
+
+let tempDiv = document.createElement("div");
+tempDiv.innerHTML = feedbackBtnHTML;
+
+nav.appendChild(tempDiv);
+
+
+
