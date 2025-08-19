@@ -20,7 +20,7 @@
 .playButton {
     width: 300px;
     height: 300px;
-    position: absolute;
+    position: relative;
     justify-self: center;
     z-index: 3;
 }
